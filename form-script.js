@@ -489,6 +489,37 @@ function downloadAsImage() {
     });
 }
 
+// Function to handle assignee fields sequential enabling
+function setupAssigneeFields() {
+    // Get all assignee input fields
+    const assigneeInputs = document.querySelectorAll('.assignees-inputs input[type="text"]');
+    
+    // Disable all except the first one
+    assigneeInputs.forEach((input, index) => {
+        if (index > 0) {
+            input.disabled = true;
+        }
+    });
+    
+    // Add input event listeners to enable next field when text is entered
+    assigneeInputs.forEach((input, index) => {
+        if (index < assigneeInputs.length - 1) { // Skip the last one
+            input.addEventListener('input', function() {
+                // If current field has text, enable the next field
+                if (this.value.trim() !== '') {
+                    assigneeInputs[index + 1].disabled = false;
+                } else {
+                    // If current field is empty, disable all subsequent fields
+                    for (let i = index + 1; i < assigneeInputs.length; i++) {
+                        assigneeInputs[i].disabled = true;
+                        assigneeInputs[i].value = ''; // Clear the value
+                    }
+                }
+            });
+        }
+    });
+}
+
 // Save form data to localStorage
 mediaForm.addEventListener('input', () => {
     const formData = new FormData(mediaForm);
@@ -526,43 +557,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const event = new Event('change');
         dateInput.dispatchEvent(event);
     }
-});
-
-// Save form data to localStorage
-mediaForm.addEventListener('input', () => {
-    const formData = new FormData(mediaForm);
-    const formValues = {};
     
-    for (const [key, value] of formData.entries()) {
-        formValues[key] = value;
-    }
+    // Setup assignee fields sequential enabling
+    setupAssigneeFields();
     
-    localStorage.setItem('mediaFormData', JSON.stringify(formValues));
-});
-
-// Load saved form data on page load
-document.addEventListener('DOMContentLoaded', () => {
-    const savedData = localStorage.getItem('mediaFormData');
-    
-    if (savedData) {
-        const formValues = JSON.parse(savedData);
-        
-        for (const [key, value] of Object.entries(formValues)) {
-            const field = mediaForm.elements[key];
-            if (field) {
-                if (field.type === 'radio') {
-                    const radio = mediaForm.querySelector(`input[name="${key}"][value="${value}"]`);
-                    if (radio) radio.checked = true;
-                } else {
-                    field.value = value;
-                }
+    // After loading saved data, we need to check if we should enable subsequent assignee fields
+    const assigneeInputs = document.querySelectorAll('.assignees-inputs input[type="text"]');
+    assigneeInputs.forEach((input, index) => {
+        if (index > 0 && index < assigneeInputs.length) {
+            // If the previous field has a value, enable this field
+            if (assigneeInputs[index - 1].value.trim() !== '') {
+                input.disabled = false;
             }
         }
-    }
-    
-    // If date is set, update day automatically
-    if (dateInput.value) {
-        const event = new Event('change');
-        dateInput.dispatchEvent(event);
-    }
+    });
 });
