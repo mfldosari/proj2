@@ -17,11 +17,21 @@ const fieldPositions = {
     'assignees': { top: '60%', right: '25%', grid: true }
 };
 
-// Format date to Arabic format
-function formatDateToArabic(dateString) {
-    const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('ar-SA', options);
+// Format time from time input
+function formatTime(timeString) {
+    if (!timeString) return '';
+    
+    const [hours, minutes] = timeString.split(':');
+    let formattedHours = parseInt(hours);
+    const period = formattedHours >= 12 ? 'م' : 'ص';
+    
+    if (formattedHours > 12) {
+        formattedHours -= 12;
+    } else if (formattedHours === 0) {
+        formattedHours = 12;
+    }
+    
+    return `${formattedHours}:${minutes} ${period}`;
 }
 
 // Generate template with form data

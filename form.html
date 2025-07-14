@@ -34,7 +34,10 @@
                             <label for="subject">الموضوع</label>
                             <input type="text" id="subject" name="subject" required>
                         </div>
-                        
+                    </div>
+                    
+                    <!-- Second Column -->
+                    <div class="form-column">
                         <div class="form-group">
                             <label for="day">اليوم</label>
                             <select id="day" name="day" required>
@@ -53,57 +56,62 @@
                             <label for="date">التاريخ</label>
                             <input type="date" id="date" name="date" required>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="required">المطلوب</label>
-                            <div class="radio-group">
-                                <label class="radio-label">
-                                    <input type="radio" name="required" value="صوت" required>
-                                    <span>صوت 🔊</span>
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="required" value="فيديو">
-                                    <span>فيديو 🎥</span>
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="required" value="فوتوغرافي">
-                                    <span>فوتوغرافي 📷</span>
-                                </label>
-                            </div>
-                        </div>
                     </div>
                     
-                    <!-- Second Column -->
+                    <!-- Third Column -->
                     <div class="form-column">
                         <div class="form-group">
                             <label for="location">الموقع</label>
                             <input type="text" id="location" name="location" required>
                         </div>
-                        
+                    </div>
+                    
+                    <!-- Fourth Column -->
+                    <div class="form-column">
                         <div class="form-group">
                             <label for="time">الوقت</label>
-                            <input type="time" id="time" name="time" required>
+                            <input type="text" id="time" name="time" placeholder="أدخل الوقت" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="hour">الساعة</label>
-                            <select id="hour" name="hour" required>
-                                <option value="">اختر نظام الساعة</option>
-                                <option value="12">12 ساعة</option>
-                                <option value="24">24 ساعة</option>
-                            </select>
+                            <input type="time" id="hour" name="hour" required>
                         </div>
-                        
-                        <div class="form-group">
-                            <label>المكلفون</label>
-                            <div class="assignees-inputs">
-                                <input type="text" name="assignee1" placeholder="المكلف 1">
-                                <input type="text" name="assignee2" placeholder="المكلف 2">
-                                <input type="text" name="assignee3" placeholder="المكلف 3">
-                                <input type="text" name="assignee4" placeholder="المكلف 4">
-                                <input type="text" name="assignee5" placeholder="المكلف 5">
-                                <input type="text" name="assignee6" placeholder="المكلف 6">
-                            </div>
+                    </div>
+                </div>
+                
+                <!-- Required Media Type -->
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="required">المطلوب</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="required" value="صوت" required>
+                                <span>صوت 🔊</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="required" value="فيديو">
+                                <span>فيديو 🎥</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="required" value="فوتوغرافي">
+                                <span>فوتوغرافي 📷</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Assignees -->
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>المكلفون</label>
+                        <div class="assignees-inputs">
+                            <input type="text" name="assignee1" placeholder="المكلف 1">
+                            <input type="text" name="assignee2" placeholder="المكلف 2">
+                            <input type="text" name="assignee3" placeholder="المكلف 3">
+                            <input type="text" name="assignee4" placeholder="المكلف 4">
+                            <input type="text" name="assignee5" placeholder="المكلف 5">
+                            <input type="text" name="assignee6" placeholder="المكلف 6">
                         </div>
                     </div>
                 </div>
