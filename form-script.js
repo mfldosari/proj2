@@ -7,6 +7,56 @@ const dateInput = document.getElementById('date');
 const templateResult = document.getElementById('templateResult');
 const loadingOverlay = document.getElementById('loadingOverlay');
 
+// Function to validate Arabic text input
+function isArabicText(text) {
+    // Arabic Unicode range: \u0600-\u06FF
+    // Additional Arabic characters: \u0750-\u077F, \u08A0-\u08FF
+    // Arabic presentation forms: \uFB50-\uFDFF, \uFE70-\uFEFF
+    // Allow spaces, commas, and periods
+    const arabicRegex = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\s.,]+$/;
+    return arabicRegex.test(text);
+}
+
+// Add Arabic-only validation to text inputs
+function addArabicValidation() {
+    // Get all text inputs
+    const textInputs = document.querySelectorAll('input[type="text"]');
+    
+    textInputs.forEach(input => {
+        // Add input event listener
+        input.addEventListener('input', function() {
+            // If the input is not empty and not Arabic
+            if (this.value && !isArabicText(this.value)) {
+                // Remove non-Arabic characters
+                this.value = this.value.split('').filter(char => 
+                    isArabicText(char) || char === ' ' || char === '.' || char === ','
+                ).join('');
+                
+                // Add error class
+                this.classList.add('arabic-error');
+                
+                // Show error message
+                let errorMsg = this.parentNode.querySelector('.arabic-error-msg');
+                if (!errorMsg) {
+                    errorMsg = document.createElement('div');
+                    errorMsg.className = 'arabic-error-msg';
+                    errorMsg.textContent = 'يرجى إدخال حروف عربية فقط';
+                    this.parentNode.appendChild(errorMsg);
+                }
+            } else {
+                // Remove error class
+                this.classList.remove('arabic-error');
+                
+                // Remove error message
+                const errorMsg = this.parentNode.querySelector('.arabic-error-msg');
+                if (errorMsg) {
+                    errorMsg.remove();
+                }
+            }
+        });
+    });
+}
+
 // Template positions for form fields
 const fieldPositions = {
     'subject': { top: '20%', right: '25%' },
@@ -112,7 +162,7 @@ function showLoadingOverlay(text) {
 
 // Back button functionality
 backBtn.addEventListener('click', () => {
-    window.location.href = 'index.html';
+    window.location.href = '/';
 });
 
 // Generate template with form data
@@ -171,9 +221,6 @@ generateBtn.addEventListener('click', () => {
             <div class="template-header">
                 <h2>النموذج المولد</h2>
                 <div class="template-actions">
-                    <button id="printBtn" class="action-btn print-btn">
-                        <i class="fas fa-print"></i> طباعة
-                    </button>
                     <button id="downloadPdfBtn" class="action-btn download-pdf-btn">
                         <i class="fas fa-file-pdf"></i> حفظ كـ PDF
                     </button>
@@ -184,7 +231,7 @@ generateBtn.addEventListener('click', () => {
             </div>
             <div class="template-container" id="templateContainer">
                 <div class="template-image-container">
-                    <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
+                    <img src="/static/tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
                     
                     <!-- Overlay form data on the template -->
                     <div class="data-overlay">
@@ -213,8 +260,7 @@ generateBtn.addEventListener('click', () => {
         // Show the template result section
         templateResult.classList.add('visible');
         
-        // Add event listeners for print and download buttons
-        document.getElementById('printBtn').addEventListener('click', printTemplate);
+        // Add event listeners for download buttons
         document.getElementById('downloadPdfBtn').addEventListener('click', downloadAsPdf);
         document.getElementById('downloadImgBtn').addEventListener('click', downloadAsImage);
         
@@ -302,66 +348,94 @@ function printTemplate() {
 function downloadAsPdf() {
     const templateContainer = document.getElementById('templateContainer');
     
-    // Use html2canvas to capture the template
+    // Show loading message
+    const loadingMsg = document.createElement('div');
+    loadingMsg.className = 'pdf-loading-msg';
+    loadingMsg.textContent = 'جاري إنشاء ملف PDF...';
+    loadingMsg.style.position = 'fixed';
+    loadingMsg.style.top = '50%';
+    loadingMsg.style.left = '50%';
+    loadingMsg.style.transform = 'translate(-50%, -50%)';
+    loadingMsg.style.background = 'rgba(0, 0, 0, 0.7)';
+    loadingMsg.style.color = 'white';
+    loadingMsg.style.padding = '20px';
+    loadingMsg.style.borderRadius = '10px';
+    loadingMsg.style.zIndex = '9999';
+    document.body.appendChild(loadingMsg);
+    
+    // Use html2canvas to capture the template with fixed dimensions
     html2canvas(templateContainer, {
         scale: 2,
         useCORS: true,
-        logging: false
+        allowTaint: true,
+        logging: false,
+        width: 800, // Fixed width
+        height: templateContainer.offsetHeight // Maintain aspect ratio
     }).then(canvas => {
-        // Check if jsPDF is available in the window object
-        if (typeof window.jspdf === 'undefined') {
-            // Try to use jsPDF directly if available
-            if (typeof jsPDF === 'undefined') {
-                alert('مكتبة jsPDF غير متوفرة. يرجى التحقق من اتصال الإنترنت وإعادة تحميل الصفحة.');
-                return;
+        try {
+            // Check if jsPDF is available in the window object
+            if (typeof window.jspdf === 'undefined') {
+                // Try to use jsPDF directly if available
+                if (typeof jsPDF === 'undefined') {
+                    alert('مكتبة jsPDF غير متوفرة. يرجى التحقق من اتصال الإنترنت وإعادة تحميل الصفحة.');
+                    document.body.removeChild(loadingMsg);
+                    return;
+                }
+                
+                // Create a new jsPDF instance
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                
+                // Calculate dimensions
+                const imgData = canvas.toDataURL('image/png');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20; // Margins
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                // Add the image to the PDF
+                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                
+                // Save the PDF
+                pdf.save('نموذج_الإنتاج_الفني.pdf');
+            } else {
+                // Use window.jspdf if available
+                const { jsPDF } = window.jspdf;
+                
+                // Create a new jsPDF instance
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                
+                // Calculate dimensions
+                const imgData = canvas.toDataURL('image/png');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20; // Margins
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                // Add the image to the PDF
+                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                
+                // Save the PDF
+                pdf.save('نموذج_الإنتاج_الفني.pdf');
             }
-            
-            // Create a new jsPDF instance
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4'
-            });
-            
-            // Calculate dimensions
-            const imgData = canvas.toDataURL('image/png');
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const imgWidth = pageWidth - 20; // Margins
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            
-            // Add the image to the PDF
-            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-            
-            // Save the PDF
-            pdf.save('نموذج_الإنتاج_الفني.pdf');
-        } else {
-            // Use window.jspdf if available
-            const { jsPDF } = window.jspdf;
-            
-            // Create a new jsPDF instance
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4'
-            });
-            
-            // Calculate dimensions
-            const imgData = canvas.toDataURL('image/png');
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const imgWidth = pageWidth - 20; // Margins
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            
-            // Add the image to the PDF
-            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-            
-            // Save the PDF
-            pdf.save('نموذج_الإنتاج_الفني.pdf');
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
+        } finally {
+            // Remove loading message
+            document.body.removeChild(loadingMsg);
         }
     }).catch(error => {
         console.error('Error generating PDF:', error);
         alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
+        document.body.removeChild(loadingMsg);
     });
 }
 
@@ -369,12 +443,29 @@ function downloadAsPdf() {
 function downloadAsImage() {
     const templateContainer = document.getElementById('templateContainer');
     
-    // Use html2canvas to capture the template
+    // Show loading message
+    const loadingMsg = document.createElement('div');
+    loadingMsg.className = 'img-loading-msg';
+    loadingMsg.textContent = 'جاري إنشاء الصورة...';
+    loadingMsg.style.position = 'fixed';
+    loadingMsg.style.top = '50%';
+    loadingMsg.style.left = '50%';
+    loadingMsg.style.transform = 'translate(-50%, -50%)';
+    loadingMsg.style.background = 'rgba(0, 0, 0, 0.7)';
+    loadingMsg.style.color = 'white';
+    loadingMsg.style.padding = '20px';
+    loadingMsg.style.borderRadius = '10px';
+    loadingMsg.style.zIndex = '9999';
+    document.body.appendChild(loadingMsg);
+    
+    // Use html2canvas to capture the template with fixed dimensions
     html2canvas(templateContainer, {
         scale: 2,
         useCORS: true,
         allowTaint: true,
-        logging: false
+        logging: false,
+        width: 800, // Fixed width
+        height: templateContainer.offsetHeight // Maintain aspect ratio
     }).then(canvas => {
         try {
             // Create a download link
@@ -387,10 +478,14 @@ function downloadAsImage() {
         } catch (error) {
             console.error('Error downloading image:', error);
             alert('حدث خطأ أثناء حفظ الصورة. يرجى المحاولة مرة أخرى.');
+        } finally {
+            // Remove loading message
+            document.body.removeChild(loadingMsg);
         }
     }).catch(error => {
         console.error('Error generating image:', error);
         alert('حدث خطأ أثناء إنشاء الصورة. يرجى المحاولة مرة أخرى.');
+        document.body.removeChild(loadingMsg);
     });
 }
 
