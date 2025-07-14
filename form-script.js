@@ -189,22 +189,22 @@ generateBtn.addEventListener('click', () => {
                     <!-- Overlay form data on the template -->
                     <div class="data-overlay">
                         <!-- You can adjust these positions as needed -->
-                        <div class="data-field" style="top: 20.5%; right: 50%;">${formValues.subject || ''}</div>
+                        <div class="data-field" style="top: 20.5%; right: 30%;">${formValues.subject || ''}</div>
                         <div class="data-field" style="top: 28%; right: 31%;">${formValues.day || ''}</div>
                         <div class="data-field" style="top: 28%; right: 70%;">${formValues.formattedDate || formValues.date || ''}</div>
                         <div class="data-field" style="top: 35%; right: 31%;">${formValues.location || ''}</div>
                         <div class="data-field" style="top: 41.5%; right: 70%;">${formValues.time || ''}</div>
                         <div class="data-field" style="top: 41.5%; right: 30%;">${formValues.formattedHour || formValues.hour || ''}</div>
+                        <div class="data-field" style="top: 48%; right: 50%;">${formValues.required || ''}</div>
                         
-                        <!-- Assignees -->
-                        <div class="assignees-container" style="top: 70%; right: 40%;">
-                            ${formValues.assignee1 ? `<div class="assignee-item">${formValues.assignee1}</div>` : ''}
-                            ${formValues.assignee2 ? `<div class="assignee-item">${formValues.assignee2}</div>` : ''}
-                            ${formValues.assignee3 ? `<div class="assignee-item">${formValues.assignee3}</div>` : ''}
-                            ${formValues.assignee4 ? `<div class="assignee-item">${formValues.assignee4}</div>` : ''}
-                            ${formValues.assignee5 ? `<div class="assignee-item">${formValues.assignee5}</div>` : ''}
-                            ${formValues.assignee6 ? `<div class="assignee-item">${formValues.assignee6}</div>` : ''}
-                        </div>
+                        <!-- Assignees with individual positioning -->
+                        ${formValues.assignee1 ? `<div class="assignee-item" style="position: absolute; top: 71%; right: 13%;">${formValues.assignee1}</div>` : ''}
+                        ${formValues.assignee2 ? `<div class="assignee-item" style="position: absolute; top: 71%; right: 51%;">${formValues.assignee2}</div>` : ''}
+                        ${formValues.assignee3 ? `<div class="assignee-item" style="position: absolute; top: 76%; right: 13%;">${formValues.assignee3}</div>` : ''}
+                        ${formValues.assignee4 ? `<div class="assignee-item" style="position: absolute; top: 76%; right: 51%;">${formValues.assignee4}</div>` : ''}
+                        ${formValues.assignee5 ? `<div class="assignee-item" style="position: absolute; top: 81%; right: 13%;">${formValues.assignee5}</div>` : ''}
+                        ${formValues.assignee6 ? `<div class="assignee-item" style="position: absolute; top: 81%; right: 51%;">${formValues.assignee6}</div>` : ''}
+                    </div>
                     </div>
                 </div>
             </div>
@@ -273,14 +273,8 @@ function printTemplate() {
                     font-weight: bold;
                     background-color: transparent;
                 }
-                .assignees-container {
-                    position: absolute;
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 10px;
-                    width: 60%;
-                }
                 .assignee-item {
+                    position: absolute;
                     font-family: Arial, sans-serif;
                     font-size: 12px;
                     background-color: transparent;
@@ -314,25 +308,60 @@ function downloadAsPdf() {
         useCORS: true,
         logging: false
     }).then(canvas => {
-        // Create a new jsPDF instance
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a4'
-        });
-        
-        // Calculate dimensions
-        const imgData = canvas.toDataURL('image/png');
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const imgWidth = pageWidth - 20; // Margins
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        
-        // Add the image to the PDF
-        pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-        
-        // Save the PDF
-        pdf.save('نموذج_الإنتاج_الفني.pdf');
+        // Check if jsPDF is available in the window object
+        if (typeof window.jspdf === 'undefined') {
+            // Try to use jsPDF directly if available
+            if (typeof jsPDF === 'undefined') {
+                alert('مكتبة jsPDF غير متوفرة. يرجى التحقق من اتصال الإنترنت وإعادة تحميل الصفحة.');
+                return;
+            }
+            
+            // Create a new jsPDF instance
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+            
+            // Calculate dimensions
+            const imgData = canvas.toDataURL('image/png');
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = pageWidth - 20; // Margins
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            
+            // Add the image to the PDF
+            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+            
+            // Save the PDF
+            pdf.save('نموذج_الإنتاج_الفني.pdf');
+        } else {
+            // Use window.jspdf if available
+            const { jsPDF } = window.jspdf;
+            
+            // Create a new jsPDF instance
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+            
+            // Calculate dimensions
+            const imgData = canvas.toDataURL('image/png');
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = pageWidth - 20; // Margins
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            
+            // Add the image to the PDF
+            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+            
+            // Save the PDF
+            pdf.save('نموذج_الإنتاج_الفني.pdf');
+        }
+    }).catch(error => {
+        console.error('Error generating PDF:', error);
+        alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
     });
 }
 
@@ -344,13 +373,24 @@ function downloadAsImage() {
     html2canvas(templateContainer, {
         scale: 2,
         useCORS: true,
+        allowTaint: true,
         logging: false
     }).then(canvas => {
-        // Create a download link
-        const link = document.createElement('a');
-        link.download = 'نموذج_الإنتاج_الفني.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
+        try {
+            // Create a download link
+            const link = document.createElement('a');
+            link.download = 'نموذج_الإنتاج_الفني.png';
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link); // Append to body to work in Firefox
+            link.click();
+            document.body.removeChild(link); // Clean up
+        } catch (error) {
+            console.error('Error downloading image:', error);
+            alert('حدث خطأ أثناء حفظ الصورة. يرجى المحاولة مرة أخرى.');
+        }
+    }).catch(error => {
+        console.error('Error generating image:', error);
+        alert('حدث خطأ أثناء إنشاء الصورة. يرجى المحاولة مرة أخرى.');
     });
 }
 

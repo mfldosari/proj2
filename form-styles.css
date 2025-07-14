@@ -333,6 +333,7 @@ main {
     padding: 3px 6px;
     border-radius: 3px;
     text-align: center;
+    /* Position is now set inline for each item */
 }
 
 /* Hijri Calendar */
