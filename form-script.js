@@ -17,6 +17,13 @@ const fieldPositions = {
     'assignees': { top: '60%', right: '25%', grid: true }
 };
 
+// Format date to Arabic format
+function formatDateToArabic(dateString) {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('ar-SA', options);
+}
+
 // Format time from time input
 function formatTime(timeString) {
     if (!timeString) return '';
@@ -55,6 +62,11 @@ generateBtn.addEventListener('click', () => {
         formValues.date = formatDateToArabic(formValues.date);
     }
     
+    // Format hour if available
+    if (formValues.hour) {
+        formValues.hour = formatTime(formValues.hour);
+    }
+    
     // Create template HTML
     let templateHTML = `
         <div class="generated-template">
@@ -84,7 +96,7 @@ generateBtn.addEventListener('click', () => {
                 </div>
                 <div class="template-field">
                     <span class="field-label">الساعة:</span>
-                    <span class="field-value">${formValues.hour || ''} ساعة</span>
+                    <span class="field-value">${formValues.hour || ''}</span>
                 </div>
                 <div class="template-field">
                     <span class="field-label">المطلوب:</span>
