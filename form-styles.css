@@ -264,6 +264,77 @@ main {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* Template Actions */
+.template-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.print-btn {
+    background-color: #4caf50;
+    color: white;
+}
+
+.download-pdf-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.download-img-btn {
+    background-color: #2196f3;
+    color: white;
+}
+
+/* Template Container with Data Overlay */
+.template-container {
+    position: relative;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+.template-image-container {
+    position: relative;
+}
+
+.data-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.data-field {
+    position: absolute;
+    font-family: 'Cairo', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    background-color: transparent;
+    padding: 3px 6px;
+    border-radius: 3px;
+}
+
+.assignees-container {
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 60%;
+}
+
+.assignee-item {
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    background-color: transparent;
+    padding: 3px 6px;
+    border-radius: 3px;
+    text-align: center;
+}
+
 /* Hijri Calendar */
 .hijri-date-container {
     position: relative;

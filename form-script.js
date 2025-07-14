@@ -166,18 +166,57 @@ generateBtn.addEventListener('click', () => {
     
     // Wait for loading to complete before showing the template
     setTimeout(() => {
-        // Display the template image
+        // Create template with data overlaid
         templateResult.innerHTML = `
             <div class="template-header">
                 <h2>النموذج المولد</h2>
+                <div class="template-actions">
+                    <button id="printBtn" class="action-btn print-btn">
+                        <i class="fas fa-print"></i> طباعة
+                    </button>
+                    <button id="downloadPdfBtn" class="action-btn download-pdf-btn">
+                        <i class="fas fa-file-pdf"></i> حفظ كـ PDF
+                    </button>
+                    <button id="downloadImgBtn" class="action-btn download-img-btn">
+                        <i class="fas fa-image"></i> حفظ كصورة
+                    </button>
+                </div>
             </div>
-            <div class="template-image-container">
-                <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
+            <div class="template-container" id="templateContainer">
+                <div class="template-image-container">
+                    <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
+                    
+                    <!-- Overlay form data on the template -->
+                    <div class="data-overlay">
+                        <!-- You can adjust these positions as needed -->
+                        <div class="data-field" style="top: 20.5%; right: 50%;">${formValues.subject || ''}</div>
+                        <div class="data-field" style="top: 28%; right: 31%;">${formValues.day || ''}</div>
+                        <div class="data-field" style="top: 28%; right: 70%;">${formValues.formattedDate || formValues.date || ''}</div>
+                        <div class="data-field" style="top: 35%; right: 31%;">${formValues.location || ''}</div>
+                        <div class="data-field" style="top: 41.5%; right: 70%;">${formValues.time || ''}</div>
+                        <div class="data-field" style="top: 41.5%; right: 30%;">${formValues.formattedHour || formValues.hour || ''}</div>
+                        
+                        <!-- Assignees -->
+                        <div class="assignees-container" style="top: 70%; right: 40%;">
+                            ${formValues.assignee1 ? `<div class="assignee-item">${formValues.assignee1}</div>` : ''}
+                            ${formValues.assignee2 ? `<div class="assignee-item">${formValues.assignee2}</div>` : ''}
+                            ${formValues.assignee3 ? `<div class="assignee-item">${formValues.assignee3}</div>` : ''}
+                            ${formValues.assignee4 ? `<div class="assignee-item">${formValues.assignee4}</div>` : ''}
+                            ${formValues.assignee5 ? `<div class="assignee-item">${formValues.assignee5}</div>` : ''}
+                            ${formValues.assignee6 ? `<div class="assignee-item">${formValues.assignee6}</div>` : ''}
+                        </div>
+                    </div>
+                </div>
             </div>
         `;
         
         // Show the template result section
         templateResult.classList.add('visible');
+        
+        // Add event listeners for print and download buttons
+        document.getElementById('printBtn').addEventListener('click', printTemplate);
+        document.getElementById('downloadPdfBtn').addEventListener('click', downloadAsPdf);
+        document.getElementById('downloadImgBtn').addEventListener('click', downloadAsImage);
         
         // Scroll to the template result
         templateResult.scrollIntoView({ behavior: 'smooth' });
@@ -192,6 +231,128 @@ generateBtn.addEventListener('click', () => {
         }
     }, 2500); // Wait a bit longer than the loading animation
 });
+
+// Print the template
+function printTemplate() {
+    const templateContainer = document.getElementById('templateContainer');
+    const printWindow = window.open('', '_blank');
+    
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>طباعة النموذج</title>
+            <style>
+                @media print {
+                    body {
+                        margin: 0;
+                        padding: 0;
+                    }
+                }
+                .template-container {
+                    position: relative;
+                }
+                .template-image-container {
+                    position: relative;
+                }
+                .template-image {
+                    width: 100%;
+                    max-width: 800px;
+                    height: auto;
+                }
+                .data-overlay {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+                .data-field {
+                    position: absolute;
+                    font-family: Arial, sans-serif;
+                    font-size: 14px;
+                    font-weight: bold;
+                    background-color: transparent;
+                }
+                .assignees-container {
+                    position: absolute;
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 10px;
+                    width: 60%;
+                }
+                .assignee-item {
+                    font-family: Arial, sans-serif;
+                    font-size: 12px;
+                    background-color: transparent;
+                }
+            </style>
+        </head>
+        <body>
+            ${templateContainer.outerHTML}
+            <script>
+                window.onload = function() {
+                    window.print();
+                    window.setTimeout(function() {
+                        window.close();
+                    }, 500);
+                };
+            </script>
+        </body>
+        </html>
+    `);
+    
+    printWindow.document.close();
+}
+
+// Download as PDF
+function downloadAsPdf() {
+    const templateContainer = document.getElementById('templateContainer');
+    
+    // Use html2canvas to capture the template
+    html2canvas(templateContainer, {
+        scale: 2,
+        useCORS: true,
+        logging: false
+    }).then(canvas => {
+        // Create a new jsPDF instance
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+        
+        // Calculate dimensions
+        const imgData = canvas.toDataURL('image/png');
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = pageWidth - 20; // Margins
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        
+        // Add the image to the PDF
+        pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+        
+        // Save the PDF
+        pdf.save('نموذج_الإنتاج_الفني.pdf');
+    });
+}
+
+// Download as image
+function downloadAsImage() {
+    const templateContainer = document.getElementById('templateContainer');
+    
+    // Use html2canvas to capture the template
+    html2canvas(templateContainer, {
+        scale: 2,
+        useCORS: true,
+        logging: false
+    }).then(canvas => {
+        // Create a download link
+        const link = document.createElement('a');
+        link.download = 'نموذج_الإنتاج_الفني.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    });
+}
 
 // Save form data to localStorage
 mediaForm.addEventListener('input', () => {
