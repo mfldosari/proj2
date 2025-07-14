@@ -15,7 +15,7 @@ selectButtons.forEach(button => {
         // Store the selected template in localStorage
         localStorage.setItem('selectedTemplate', templateName);
         
-        // Redirect to the form page after a short delay
+        // Redirect directly to form.html
         setTimeout(() => {
             window.location.href = 'form.html';
         }, 300);

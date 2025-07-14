@@ -9,12 +9,130 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Loading overlay styles */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 156, 222, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loading-container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-container {
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+        
+        .logo {
+            max-width: 150px;
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        .progress-bar {
+            width: 300px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            width: 0%;
+            background-color: white;
+            border-radius: 5px;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+        
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: white;
+            color: var(--primary-color);
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
 </head>
 <body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-container">
+            <div class="logo-container">
+                <img src="logo.png" alt="شعار المركز الإعلامي" class="logo">
+            </div>
+            <div class="loading-text">جاري تحميل النموذج...</div>
+            <div class="loading-spinner"></div>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <header>
             <div class="logo">
-                <!-- You can add your logo image here -->
                 <img src="logo.png" alt="شعار المركز الإعلامي" class="logo-img">
             </div>
             <div class="title-container">
@@ -118,6 +236,9 @@
                     <button type="button" id="generateBtn" class="action-btn generate-btn">
                         <i class="fas fa-magic"></i> توليد النموذج
                     </button>
+                    <button type="button" id="backBtn" class="action-btn back-btn">
+                        <i class="fas fa-arrow-right"></i> العودة للقوالب
+                    </button>
                 </div>
             </form>
             
@@ -138,5 +259,32 @@
     </div>
 
     <script src="form-script.js"></script>
+    <script>
+        // Loading overlay functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const progressBar = document.getElementById('progress');
+            
+            // Progress bar animation
+            let width = 0;
+            const interval = 40; // Update every 40ms
+            const duration = 4000; // 4 seconds
+            const increment = 100 / (duration / interval);
+            
+            const timer = setInterval(() => {
+                width += increment;
+                progressBar.style.width = width + '%';
+                
+                if (width >= 100) {
+                    clearInterval(timer);
+                    // Hide loading overlay with fade effect
+                    loadingOverlay.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                    }, 500);
+                }
+            }, interval);
+        });
+    </script>
 </body>
 </html>

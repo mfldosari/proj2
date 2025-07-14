@@ -1,8 +1,11 @@
 // DOM Elements
 const mediaForm = document.getElementById('mediaForm');
 const generateBtn = document.getElementById('generateBtn');
+const backBtn = document.getElementById('backBtn');
 const daySelect = document.getElementById('day');
 const dateInput = document.getElementById('date');
+const templateResult = document.getElementById('templateResult');
+const loadingOverlay = document.getElementById('loadingOverlay');
 
 // Template positions for form fields
 const fieldPositions = {
@@ -62,6 +65,56 @@ function formatTime(timeString) {
     return `${formattedHours}:${minutes} ${period}`;
 }
 
+// Check if all required fields are filled
+function areAllRequiredFieldsFilled() {
+    const requiredFields = mediaForm.querySelectorAll('[required]');
+    return Array.from(requiredFields).every(field => field.value.trim() !== '');
+}
+
+// Show loading overlay with custom text
+function showLoadingOverlay(text) {
+    // Update loading text if provided
+    if (text) {
+        const loadingText = loadingOverlay.querySelector('.loading-text');
+        if (loadingText) {
+            loadingText.textContent = text;
+        }
+    }
+    
+    // Reset progress bar
+    const progressBar = document.getElementById('progress');
+    progressBar.style.width = '0%';
+    
+    // Show overlay
+    loadingOverlay.style.display = 'flex';
+    loadingOverlay.style.opacity = '1';
+    
+    // Start progress animation
+    let width = 0;
+    const interval = 20; // Update every 20ms
+    const duration = 2000; // 2 seconds
+    const increment = 100 / (duration / interval);
+    
+    const timer = setInterval(() => {
+        width += increment;
+        progressBar.style.width = width + '%';
+        
+        if (width >= 100) {
+            clearInterval(timer);
+            // Hide loading overlay with fade effect
+            loadingOverlay.style.opacity = '0';
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+            }, 500);
+        }
+    }, interval);
+}
+
+// Back button functionality
+backBtn.addEventListener('click', () => {
+    window.location.href = 'index.html';
+});
+
 // Generate template with form data
 generateBtn.addEventListener('click', () => {
     // Check form validity
@@ -84,6 +137,12 @@ generateBtn.addEventListener('click', () => {
         return;
     }
     
+    // Double check that all required fields are filled
+    if (!areAllRequiredFieldsFilled()) {
+        alert('الرجاء ملء جميع الحقول المطلوبة');
+        return;
+    }
+    
     // Get form data
     const formData = new FormData(mediaForm);
     const formValues = {};
@@ -102,27 +161,71 @@ generateBtn.addEventListener('click', () => {
         formValues.formattedHour = formatTime(formValues.hour);
     }
     
-    // Display the template image
-    const templateResult = document.getElementById('templateResult');
-    templateResult.innerHTML = `
-        <div class="template-header">
-            <h2>النموذج المولد</h2>
-        </div>
-        <div class="template-image-container">
-            <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
-        </div>
-    `;
+    // Show loading overlay with generating template message
+    showLoadingOverlay('جاري توليد النموذج بالبيانات المدخلة...');
     
-    // Show the template result section
-    templateResult.classList.add('visible');
+    // Wait for loading to complete before showing the template
+    setTimeout(() => {
+        // Display the template image
+        templateResult.innerHTML = `
+            <div class="template-header">
+                <h2>النموذج المولد</h2>
+            </div>
+            <div class="template-image-container">
+                <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
+            </div>
+        `;
+        
+        // Show the template result section
+        templateResult.classList.add('visible');
+        
+        // Scroll to the template result
+        templateResult.scrollIntoView({ behavior: 'smooth' });
+        
+        // Reset form to default values
+        mediaForm.reset();
+        
+        // Update day field after reset
+        if (dateInput.value) {
+            const event = new Event('change');
+            dateInput.dispatchEvent(event);
+        }
+    }, 2500); // Wait a bit longer than the loading animation
+});
+
+// Save form data to localStorage
+mediaForm.addEventListener('input', () => {
+    const formData = new FormData(mediaForm);
+    const formValues = {};
     
-    // Scroll to the template result
-    templateResult.scrollIntoView({ behavior: 'smooth' });
+    for (const [key, value] of formData.entries()) {
+        formValues[key] = value;
+    }
     
-    // Reset form to default values
-    mediaForm.reset();
+    localStorage.setItem('mediaFormData', JSON.stringify(formValues));
+});
+
+// Load saved form data on page load
+document.addEventListener('DOMContentLoaded', () => {
+    const savedData = localStorage.getItem('mediaFormData');
     
-    // Update day field after reset
+    if (savedData) {
+        const formValues = JSON.parse(savedData);
+        
+        for (const [key, value] of Object.entries(formValues)) {
+            const field = mediaForm.elements[key];
+            if (field) {
+                if (field.type === 'radio') {
+                    const radio = mediaForm.querySelector(`input[name="${key}"][value="${value}"]`);
+                    if (radio) radio.checked = true;
+                } else {
+                    field.value = value;
+                }
+            }
+        }
+    }
+    
+    // If date is set, update day automatically
     if (dateInput.value) {
         const event = new Event('change');
         dateInput.dispatchEvent(event);
