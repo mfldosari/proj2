@@ -62,6 +62,26 @@
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
+        
+        /* Header logo styles */
+        .header-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .header-logo {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .header-logo-img {
+            width: 80px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -75,7 +95,12 @@
     </div>
 
     <header>
-        <h1>مركز إدارة القوالب الإعلامية</h1>
+        <div class="header-content">
+            <div class="header-logo">
+                <img src="/static/logo.png" alt="شعار المركز الإعلامي" class="header-logo-img">
+            </div>
+            <h1>مركز إدارة القوالب الإعلامية</h1>
+        </div>
     </header>
 
     <main>
