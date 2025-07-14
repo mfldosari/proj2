@@ -57,6 +57,39 @@ function addArabicValidation() {
     });
 }
 
+
+
+// Function to handle assignee fields sequential enabling
+function setupAssigneeFields() {
+    // Get all assignee input fields
+    const assigneeInputs = document.querySelectorAll('.assignees-inputs input[type="text"]');
+    
+    // Disable all except the first one
+    assigneeInputs.forEach((input, index) => {
+        if (index > 0) {
+            input.disabled = true;
+        }
+    });
+    
+    // Add input event listeners to enable next field when text is entered
+    assigneeInputs.forEach((input, index) => {
+        if (index < assigneeInputs.length - 1) { // Skip the last one
+            input.addEventListener('input', function() {
+                // If current field has text, enable the next field
+                if (this.value.trim() !== '') {
+                    assigneeInputs[index + 1].disabled = false;
+                } else {
+                    // If current field is empty, disable all subsequent fields
+                    for (let i = index + 1; i < assigneeInputs.length; i++) {
+                        assigneeInputs[i].disabled = true;
+                        assigneeInputs[i].value = ''; // Clear the value
+                    }
+                }
+            });
+        }
+    });
+}
+
 // Template positions for form fields
 const fieldPositions = {
     'subject': { top: '20%', right: '25%' },
@@ -65,7 +98,6 @@ const fieldPositions = {
     'location': { top: '35%', right: '25%' },
     'time': { top: '40%', right: '25%' },
     'hour': { top: '45%', right: '25%' },
-    'required': { top: '50%', right: '25%' },
     'assignees': { top: '60%', right: '25%', grid: true }
 };
 
@@ -242,7 +274,6 @@ generateBtn.addEventListener('click', () => {
                         <div class="data-field" style="top: 35%; right: 31%;">${formValues.location || ''}</div>
                         <div class="data-field" style="top: 41.5%; right: 70%;">${formValues.time || ''}</div>
                         <div class="data-field" style="top: 41.5%; right: 30%;">${formValues.formattedHour || formValues.hour || ''}</div>
-                        <div class="data-field" style="top: 48%; right: 50%;">${formValues.required || ''}</div>
                         
                         <!-- Assignees with individual positioning -->
                         ${formValues.assignee1 ? `<div class="assignee-item" style="position: absolute; top: 71%; right: 13%;">${formValues.assignee1}</div>` : ''}
@@ -489,37 +520,6 @@ function downloadAsImage() {
     });
 }
 
-// Function to handle assignee fields sequential enabling
-function setupAssigneeFields() {
-    // Get all assignee input fields
-    const assigneeInputs = document.querySelectorAll('.assignees-inputs input[type="text"]');
-    
-    // Disable all except the first one
-    assigneeInputs.forEach((input, index) => {
-        if (index > 0) {
-            input.disabled = true;
-        }
-    });
-    
-    // Add input event listeners to enable next field when text is entered
-    assigneeInputs.forEach((input, index) => {
-        if (index < assigneeInputs.length - 1) { // Skip the last one
-            input.addEventListener('input', function() {
-                // If current field has text, enable the next field
-                if (this.value.trim() !== '') {
-                    assigneeInputs[index + 1].disabled = false;
-                } else {
-                    // If current field is empty, disable all subsequent fields
-                    for (let i = index + 1; i < assigneeInputs.length; i++) {
-                        assigneeInputs[i].disabled = true;
-                        assigneeInputs[i].value = ''; // Clear the value
-                    }
-                }
-            });
-        }
-    });
-}
-
 // Save form data to localStorage
 mediaForm.addEventListener('input', () => {
     const formData = new FormData(mediaForm);
@@ -545,6 +545,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (field.type === 'radio') {
                     const radio = mediaForm.querySelector(`input[name="${key}"][value="${value}"]`);
                     if (radio) radio.checked = true;
+                } else if (field.type === 'checkbox') {
+                    field.checked = value === 'on';
                 } else {
                     field.value = value;
                 }

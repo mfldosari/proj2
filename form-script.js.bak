@@ -1,0 +1,67 @@
+// Function to handle checkbox validation for required media types
+function setupRequiredCheckboxes() {
+    const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
+    const validationField = document.getElementById('requiredValidation');
+    
+    // Function to update validation field based on checkbox selection
+    function updateValidation() {
+        const isAnyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+        validationField.setCustomValidity(isAnyChecked ? '' : 'يرجى اختيار نوع واحد على الأقل');
+        validationField.value = isAnyChecked ? 'valid' : '';
+    }
+    
+    // Add event listeners to all checkboxes
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateValidation);
+    });
+    
+    // Initial validation check
+    updateValidation();
+}
+
+// Function to get selected media types as a string
+function getSelectedMediaTypes() {
+    const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]:checked');
+    const selectedValues = Array.from(checkboxes).map(checkbox => checkbox.value);
+    
+    if (selectedValues.length === 0) {
+        return '';
+    } else if (selectedValues.length === 1) {
+        return selectedValues[0];
+    } else {
+        // Join all but the last with commas, and add "و" before the last one
+        const lastValue = selectedValues.pop();
+        return selectedValues.join('، ') + ' و' + lastValue;
+    }
+}
+
+// Function to handle assignee fields sequential enabling
+function setupAssigneeFields() {
+    // Get all assignee input fields
+    const assigneeInputs = document.querySelectorAll('.assignees-inputs input[type="text"]');
+    
+    // Disable all except the first one
+    assigneeInputs.forEach((input, index) => {
+        if (index > 0) {
+            input.disabled = true;
+        }
+    });
+    
+    // Add input event listeners to enable next field when text is entered
+    assigneeInputs.forEach((input, index) => {
+        if (index < assigneeInputs.length - 1) { // Skip the last one
+            input.addEventListener('input', function() {
+                // If current field has text, enable the next field
+                if (this.value.trim() !== '') {
+                    assigneeInputs[index + 1].disabled = false;
+                } else {
+                    // If current field is empty, disable all subsequent fields
+                    for (let i = index + 1; i < assigneeInputs.length; i++) {
+                        assigneeInputs[i].disabled = true;
+                        assigneeInputs[i].value = ''; // Clear the value
+                    }
+                }
+            });
+        }
+    });
+}
