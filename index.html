@@ -1,104 +1,41 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>المركز الإعلامي - الإنتاج الفني</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مركز إدارة القوالب الإعلامية</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <div class="center-card">
-    <div class="logo-container">
-      <img src="logo.png" alt="Logo" class="logo">
-    </div>
-    <div class="header">
-      <div class="header-titles">
-        <div class="main-title">المركز الإعلامي</div>
-        <div class="subtitle">الإنتاج الفني</div>
-      </div>
-    </div>
-    <form id="requestForm" autocomplete="off">
-      <div class="form-grid">
-        <div class="form-group">
-          <label for="subject">الموضوع</label>
-          <input type="text" id="subject" name="subject" required>
+    <header>
+        <h1>مركز إدارة القوالب الإعلامية</h1>
+    </header>
+
+    <main>
+        <h2>القوالب المتاحة</h2>
+        <div class="templates-grid">
+            <!-- Template Card -->
+            <div class="template-card">
+                <div class="template-preview">
+                    <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني">
+                </div>
+                <h3>نموذج الإنتاج الفني</h3>
+                <button class="select-btn">اختيار القالب</button>
+            </div>
+            <!-- More template cards would be added here in the future -->
         </div>
-        <div class="form-group">
-          <label for="day">اليوم</label>
-          <input type="text" id="day" name="day" required>
+    </main>
+
+    <footer>
+        <div class="name-card">
+            <p>مدير المركز الإعلامي - رفيدي الاسمري</p>
         </div>
-        <div class="form-group">
-          <label for="date">التاريخ</label>
-          <input type="date" id="date" name="date" required>
+        <div class="name-card">
+            <p>رئيس قسم الإنتاج - أحمد راجحي</p>
         </div>
-        <div class="form-group">
-          <label for="location">الموقع</label>
-          <input type="text" id="location" name="location" required>
-        </div>
-        <div class="form-group">
-          <label for="time">الوقت</label>
-          <input type="text" id="time" name="time" required>
-        </div>
-        <div class="form-group">
-          <label for="hour">الساعة</label>
-          <input type="text" id="hour" name="hour" required>
-        </div>
-        <div class="form-group media-group" style="grid-column: 1 / span 2;">
-          <label>المطلوب</label>
-          <div class="media-types">
-            <label><input type="radio" name="mediaType" value="صوت" required> 🔊 صوت</label>
-            <label><input type="radio" name="mediaType" value="فيديو"> 🎥 فيديو</label>
-            <label><input type="radio" name="mediaType" value="فوتوغرافي"> 📷 فوتوغرافي</label>
-          </div>
-        </div>
-        <div class="form-group persons-group" style="grid-column: 1 / span 2;">
-          <label>المكلفون</label>
-          <div class="persons-inputs">
-            <input type="text" name="person1" placeholder="اسم 1" required>
-            <input type="text" name="person2" placeholder="اسم 2" required>
-            <input type="text" name="person3" placeholder="اسم 3" required>
-          </div>
-        </div>
-      </div>
-      <div class="buttons-row">
-        <button type="button" id="generateBtn">توليد النموذج</button>
-      </div>
-    </form>
-    <div id="template" class="template" style="display:none">
-      <div class="logo-container">
-        <img src="logo.png" alt="Logo" class="logo">
-      </div>
-      <div class="header">
-        <div class="header-titles">
-          <div class="main-title">المركز الإعلامي</div>
-          <div class="subtitle">الإنتاج الفني</div>
-        </div>
-      </div>
-      <div class="template-grid">
-        <div><span class="label">الموضوع:</span> <span id="t_subject"></span></div>
-        <div><span class="label">اليوم:</span> <span id="t_day"></span></div>
-        <div><span class="label">التاريخ:</span> <span id="t_date"></span></div>
-        <div><span class="label">الموقع:</span> <span id="t_location"></span></div>
-        <div><span class="label">الوقت:</span> <span id="t_time"></span></div>
-        <div><span class="label">الساعة:</span> <span id="t_hour"></span></div>
-        <div><span class="label">المطلوب:</span> <span id="t_mediaType"></span></div>
-        <div><span class="label">المكلفون:</span> <span id="t_persons"></span></div>
-      </div>
-      <div class="footer">
-        <div>مدير المركز الإعلامي: رفيدي الأسمري</div>
-        <div>رئيس قسم الإنتاج: أحمد راجحي</div>
-      </div>
-    </div>
-    <div id="exportBtns" style="display:none">
-      <button id="downloadPdf">🧾 تحميل PDF</button>
-      <button id="downloadImg">🖼️ تحميل صورة</button>
-      <button id="printBtn">طباعة</button>
-      <button id="backBtn">رجوع للتعديل</button>
-    </div>
-  </div>
-  <script src="main.js"></script>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

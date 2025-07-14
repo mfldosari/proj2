@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نموذج الإنتاج الفني</title>
+    <link rel="stylesheet" href="form-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <!-- You can add your logo image here -->
+                <img src="logo.png" alt="شعار المركز الإعلامي" class="logo-img">
+            </div>
+            <div class="title-container">
+                <h1 class="main-title">المركز الإعلامي</h1>
+                <h2 class="subtitle">الإنتاج الفني</h2>
+            </div>
+        </header>
+
+        <main>
+            <form id="mediaForm" class="media-form">
+                <div class="form-grid">
+                    <!-- First Column -->
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="subject">الموضوع</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="day">اليوم</label>
+                            <select id="day" name="day" required>
+                                <option value="">اختر اليوم</option>
+                                <option value="الأحد">الأحد</option>
+                                <option value="الإثنين">الإثنين</option>
+                                <option value="الثلاثاء">الثلاثاء</option>
+                                <option value="الأربعاء">الأربعاء</option>
+                                <option value="الخميس">الخميس</option>
+                                <option value="الجمعة">الجمعة</option>
+                                <option value="السبت">السبت</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="date">التاريخ</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="required">المطلوب</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="required" value="صوت" required>
+                                    <span>صوت 🔊</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="required" value="فيديو">
+                                    <span>فيديو 🎥</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="required" value="فوتوغرافي">
+                                    <span>فوتوغرافي 📷</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Second Column -->
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="location">الموقع</label>
+                            <input type="text" id="location" name="location" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="time">الوقت</label>
+                            <input type="time" id="time" name="time" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="hour">الساعة</label>
+                            <select id="hour" name="hour" required>
+                                <option value="">اختر نظام الساعة</option>
+                                <option value="12">12 ساعة</option>
+                                <option value="24">24 ساعة</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>المكلفون</label>
+                            <div class="assignees-inputs">
+                                <input type="text" name="assignee1" placeholder="المكلف 1">
+                                <input type="text" name="assignee2" placeholder="المكلف 2">
+                                <input type="text" name="assignee3" placeholder="المكلف 3">
+                                <input type="text" name="assignee4" placeholder="المكلف 4">
+                                <input type="text" name="assignee5" placeholder="المكلف 5">
+                                <input type="text" name="assignee6" placeholder="المكلف 6">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="buttons-container">
+                    <button type="button" id="generateBtn" class="action-btn generate-btn">
+                        <i class="fas fa-magic"></i> توليد النموذج
+                    </button>
+                    <button type="button" id="downloadPdfBtn" class="action-btn download-pdf-btn" disabled>
+                        <i class="fas fa-file-pdf"></i> تحميل PDF
+                    </button>
+                    <button type="button" id="downloadImgBtn" class="action-btn download-img-btn" disabled>
+                        <i class="fas fa-image"></i> تحميل صورة
+                    </button>
+                </div>
+            </form>
+            
+            <div id="templateResult" class="template-result">
+                <!-- Template result will be displayed here -->
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-card">
+                <p>مدير المركز الإعلامي: رفيدي الأسمري</p>
+            </div>
+            <div class="footer-card">
+                <p>رئيس قسم الإنتاج: أحمد راجحي</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="form-script.js"></script>
+</body>
+</html>

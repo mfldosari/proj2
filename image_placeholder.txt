@@ -1,0 +1,9 @@
+PLACEHOLDER FOR TEMPLATE IMAGE
+
+To complete this project, you need to add an image file named "tamplet1.jpg" to this directory.
+
+This should be your media center template image that will be used as the background for the form data.
+
+Until you add this image, the web application will show a broken image placeholder.
+
+You can replace this with any image of your choice, but remember to update the field positions in the JavaScript code if you plan to add form functionality later.

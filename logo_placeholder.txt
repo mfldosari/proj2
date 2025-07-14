@@ -1,0 +1,7 @@
+PLACEHOLDER FOR LOGO IMAGE
+
+To complete this project, you need to add an image file named "logo.png" to this directory.
+
+This should be your media center logo that will appear in the top-right corner of the form page.
+
+Until you add this image, the web application will show a broken image placeholder.
