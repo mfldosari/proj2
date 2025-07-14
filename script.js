@@ -2,6 +2,44 @@
 const templateCards = document.querySelectorAll('.template-card');
 const selectButtons = document.querySelectorAll('.select-btn');
 
+// Function to show loading overlay with logo animation
+function showLogoLoadingOverlay() {
+    // Create loading overlay
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'loading-overlay';
+    loadingOverlay.id = 'templateLoadingOverlay';
+    loadingOverlay.style.opacity = '0';
+    
+    // Create logo spinner
+    const logoSpinner = document.createElement('div');
+    logoSpinner.className = 'logo-spinner';
+    
+    // Create logo container
+    const logoContainer = document.createElement('div');
+    logoContainer.className = 'logo-container';
+    
+    // Create logo image
+    const logoImg = document.createElement('img');
+    logoImg.src = '/static/logo.png';
+    logoImg.alt = 'شعار المركز الإعلامي';
+    logoImg.className = 'logo-img';
+    
+    // Assemble the elements
+    logoContainer.appendChild(logoImg);
+    logoSpinner.appendChild(logoContainer);
+    loadingOverlay.appendChild(logoSpinner);
+    
+    // Add to document
+    document.body.appendChild(loadingOverlay);
+    
+    // Show with fade in
+    setTimeout(() => {
+        loadingOverlay.style.opacity = '1';
+    }, 10);
+    
+    return loadingOverlay;
+}
+
 // Add click event listeners to select buttons
 selectButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -15,10 +53,13 @@ selectButtons.forEach(button => {
         // Store the selected template in localStorage
         localStorage.setItem('selectedTemplate', templateName);
         
-        // Redirect to the loading page after a short delay
+        // Show loading overlay
+        showLogoLoadingOverlay();
+        
+        // Redirect to the form page after a short delay
         setTimeout(() => {
-            window.location.href = '/loading';
-        }, 300);
+            window.location.href = '/form';
+        }, 1500);
     });
 });
 

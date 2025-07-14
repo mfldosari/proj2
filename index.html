@@ -6,8 +6,74 @@
     <title>مركز إدارة القوالب الإعلامية</title>
     <link rel="stylesheet" href="/static/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Loading overlay styles */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .logo-spinner {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .logo-spinner::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            border-top-color: #009CDE;
+            border-bottom-color: #D4A62D;
+            animation: spin 1.5s linear infinite;
+        }
+        
+        .logo-container {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .logo-img {
+            width: 100px;
+            height: auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
 </head>
 <body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="logo-spinner">
+            <div class="logo-container">
+                <img src="/static/logo.png" alt="شعار المركز الإعلامي" class="logo-img">
+            </div>
+        </div>
+    </div>
+
     <header>
         <h1>مركز إدارة القوالب الإعلامية</h1>
     </header>
@@ -37,5 +103,19 @@
     </footer>
 
     <script src="/static/script.js"></script>
+    <script>
+        // Loading overlay functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            // Hide loading overlay after a short delay
+            setTimeout(() => {
+                loadingOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+    </script>
 </body>
 </html>

@@ -5,7 +5,6 @@ const backBtn = document.getElementById('backBtn');
 const daySelect = document.getElementById('day');
 const dateInput = document.getElementById('date');
 const templateResult = document.getElementById('templateResult');
-const loadingOverlay = document.getElementById('loadingOverlay');
 
 // Function to validate Arabic text input
 function isArabicText(text) {
@@ -57,7 +56,51 @@ function addArabicValidation() {
     });
 }
 
+// Function to show loading overlay with logo animation
+function showLogoLoadingOverlay() {
+    // Create loading overlay
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'loading-overlay';
+    loadingOverlay.id = 'templateLoadingOverlay';
+    loadingOverlay.style.opacity = '0';
+    
+    // Create logo spinner
+    const logoSpinner = document.createElement('div');
+    logoSpinner.className = 'logo-spinner';
+    
+    // Create logo container
+    const logoContainer = document.createElement('div');
+    logoContainer.className = 'logo-container';
+    
+    // Create logo image
+    const logoImg = document.createElement('img');
+    logoImg.src = '/static/logo.png';
+    logoImg.alt = 'شعار المركز الإعلامي';
+    logoImg.className = 'logo-img';
+    
+    // Assemble the elements
+    logoContainer.appendChild(logoImg);
+    logoSpinner.appendChild(logoContainer);
+    loadingOverlay.appendChild(logoSpinner);
+    
+    // Add to document
+    document.body.appendChild(loadingOverlay);
+    
+    // Show with fade in
+    setTimeout(() => {
+        loadingOverlay.style.opacity = '1';
+    }, 10);
+    
+    return loadingOverlay;
+}
 
+// Function to hide loading overlay
+function hideLogoLoadingOverlay(overlay) {
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+        document.body.removeChild(overlay);
+    }, 500);
+}
 
 // Function to handle assignee fields sequential enabling
 function setupAssigneeFields() {
@@ -153,45 +196,6 @@ function areAllRequiredFieldsFilled() {
     return Array.from(requiredFields).every(field => field.value.trim() !== '');
 }
 
-// Show loading overlay with custom text
-function showLoadingOverlay(text) {
-    // Update loading text if provided
-    if (text) {
-        const loadingText = loadingOverlay.querySelector('.loading-text');
-        if (loadingText) {
-            loadingText.textContent = text;
-        }
-    }
-    
-    // Reset progress bar
-    const progressBar = document.getElementById('progress');
-    progressBar.style.width = '0%';
-    
-    // Show overlay
-    loadingOverlay.style.display = 'flex';
-    loadingOverlay.style.opacity = '1';
-    
-    // Start progress animation
-    let width = 0;
-    const interval = 20; // Update every 20ms
-    const duration = 2000; // 2 seconds
-    const increment = 100 / (duration / interval);
-    
-    const timer = setInterval(() => {
-        width += increment;
-        progressBar.style.width = width + '%';
-        
-        if (width >= 100) {
-            clearInterval(timer);
-            // Hide loading overlay with fade effect
-            loadingOverlay.style.opacity = '0';
-            setTimeout(() => {
-                loadingOverlay.style.display = 'none';
-            }, 500);
-        }
-    }, interval);
-}
-
 // Back button functionality
 backBtn.addEventListener('click', () => {
     window.location.href = '/';
@@ -243,10 +247,10 @@ generateBtn.addEventListener('click', () => {
         formValues.formattedHour = formatTime(formValues.hour);
     }
     
-    // Show loading overlay with generating template message
-    showLoadingOverlay('جاري توليد النموذج بالبيانات المدخلة...');
+    // Show loading overlay
+    const loadingOverlay = showLogoLoadingOverlay();
     
-    // Wait for loading to complete before showing the template
+    // Wait a moment before showing the template
     setTimeout(() => {
         // Create template with data overlaid
         templateResult.innerHTML = `
@@ -283,10 +287,12 @@ generateBtn.addEventListener('click', () => {
                         ${formValues.assignee5 ? `<div class="assignee-item" style="position: absolute; top: 81%; right: 13%;">${formValues.assignee5}</div>` : ''}
                         ${formValues.assignee6 ? `<div class="assignee-item" style="position: absolute; top: 81%; right: 51%;">${formValues.assignee6}</div>` : ''}
                     </div>
-                    </div>
                 </div>
             </div>
         `;
+        
+        // Hide loading overlay
+        hideLogoLoadingOverlay(loadingOverlay);
         
         // Show the template result section
         templateResult.classList.add('visible');
@@ -306,7 +312,7 @@ generateBtn.addEventListener('click', () => {
             const event = new Event('change');
             dateInput.dispatchEvent(event);
         }
-    }, 2500); // Wait a bit longer than the loading animation
+    }, 1500);
 });
 
 // Print the template
@@ -379,20 +385,8 @@ function printTemplate() {
 function downloadAsPdf() {
     const templateContainer = document.getElementById('templateContainer');
     
-    // Show loading message
-    const loadingMsg = document.createElement('div');
-    loadingMsg.className = 'pdf-loading-msg';
-    loadingMsg.textContent = 'جاري إنشاء ملف PDF...';
-    loadingMsg.style.position = 'fixed';
-    loadingMsg.style.top = '50%';
-    loadingMsg.style.left = '50%';
-    loadingMsg.style.transform = 'translate(-50%, -50%)';
-    loadingMsg.style.background = 'rgba(0, 0, 0, 0.7)';
-    loadingMsg.style.color = 'white';
-    loadingMsg.style.padding = '20px';
-    loadingMsg.style.borderRadius = '10px';
-    loadingMsg.style.zIndex = '9999';
-    document.body.appendChild(loadingMsg);
+    // Show loading overlay
+    const loadingOverlay = showLogoLoadingOverlay();
     
     // Use html2canvas to capture the template with fixed dimensions
     html2canvas(templateContainer, {
@@ -409,7 +403,7 @@ function downloadAsPdf() {
                 // Try to use jsPDF directly if available
                 if (typeof jsPDF === 'undefined') {
                     alert('مكتبة jsPDF غير متوفرة. يرجى التحقق من اتصال الإنترنت وإعادة تحميل الصفحة.');
-                    document.body.removeChild(loadingMsg);
+                    hideLogoLoadingOverlay(loadingOverlay);
                     return;
                 }
                 
@@ -460,13 +454,13 @@ function downloadAsPdf() {
             console.error('Error generating PDF:', error);
             alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
         } finally {
-            // Remove loading message
-            document.body.removeChild(loadingMsg);
+            // Hide loading overlay
+            hideLogoLoadingOverlay(loadingOverlay);
         }
     }).catch(error => {
         console.error('Error generating PDF:', error);
         alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
-        document.body.removeChild(loadingMsg);
+        hideLogoLoadingOverlay(loadingOverlay);
     });
 }
 
@@ -474,20 +468,8 @@ function downloadAsPdf() {
 function downloadAsImage() {
     const templateContainer = document.getElementById('templateContainer');
     
-    // Show loading message
-    const loadingMsg = document.createElement('div');
-    loadingMsg.className = 'img-loading-msg';
-    loadingMsg.textContent = 'جاري إنشاء الصورة...';
-    loadingMsg.style.position = 'fixed';
-    loadingMsg.style.top = '50%';
-    loadingMsg.style.left = '50%';
-    loadingMsg.style.transform = 'translate(-50%, -50%)';
-    loadingMsg.style.background = 'rgba(0, 0, 0, 0.7)';
-    loadingMsg.style.color = 'white';
-    loadingMsg.style.padding = '20px';
-    loadingMsg.style.borderRadius = '10px';
-    loadingMsg.style.zIndex = '9999';
-    document.body.appendChild(loadingMsg);
+    // Show loading overlay
+    const loadingOverlay = showLogoLoadingOverlay();
     
     // Use html2canvas to capture the template with fixed dimensions
     html2canvas(templateContainer, {
@@ -510,13 +492,13 @@ function downloadAsImage() {
             console.error('Error downloading image:', error);
             alert('حدث خطأ أثناء حفظ الصورة. يرجى المحاولة مرة أخرى.');
         } finally {
-            // Remove loading message
-            document.body.removeChild(loadingMsg);
+            // Hide loading overlay
+            hideLogoLoadingOverlay(loadingOverlay);
         }
     }).catch(error => {
         console.error('Error generating image:', error);
         alert('حدث خطأ أثناء إنشاء الصورة. يرجى المحاولة مرة أخرى.');
-        document.body.removeChild(loadingMsg);
+        hideLogoLoadingOverlay(loadingOverlay);
     });
 }
 
