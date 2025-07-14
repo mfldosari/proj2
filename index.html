@@ -2,10 +2,13 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>مركز إدارة القوالب الإعلامية</title>
     <link rel="stylesheet" href="/static/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         /* Loading overlay styles */
         .loading-overlay {
@@ -63,12 +66,13 @@
             100% { transform: scale(1); }
         }
         
-        /* Header logo styles */
+        /* Responsive header styles */
         .header-content {
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
+            padding: 0 10px;
         }
         
         .header-logo {
@@ -81,6 +85,82 @@
         .header-logo-img {
             width: 80px;
             height: auto;
+        }
+        
+        /* Additional responsive styles */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        main {
+            flex: 1;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header-content h1 {
+                font-size: 1.5rem;
+                padding-right: 70px; /* Make space for logo */
+            }
+            
+            .header-logo-img {
+                width: 60px;
+            }
+            
+            .header-logo {
+                right: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header-content h1 {
+                font-size: 1.2rem;
+                padding-right: 60px;
+            }
+            
+            .header-logo-img {
+                width: 50px;
+            }
+            
+            footer {
+                padding: 1rem;
+            }
+            
+            .name-card {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            body {
+                padding-bottom: 120px; /* Increase space for stacked footer items */
+            }
+        }
+        
+        /* Fix for iOS Safari 100vh issue */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                min-height: -webkit-fill-available;
+            }
+        }
+        
+        /* Ensure template cards are responsive */
+        .template-card {
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        /* Ensure footer stays at bottom even with minimal content */
+        html {
+            height: 100%;
+        }
+        
+        /* Fix for footer on small screens */
+        @media (max-height: 600px) {
+            body {
+                padding-bottom: 130px;
+            }
         }
     </style>
 </head>
@@ -141,6 +221,19 @@
                 }, 500);
             }, 1500);
         });
+        
+        // Fix for iOS viewport height issues
+        function setViewportHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        
+        // Set initial viewport height
+        setViewportHeight();
+        
+        // Update on resize and orientation change
+        window.addEventListener('resize', setViewportHeight);
+        window.addEventListener('orientationchange', setViewportHeight);
     </script>
 </body>
 </html>
