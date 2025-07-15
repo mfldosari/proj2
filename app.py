@@ -125,6 +125,77 @@ async def get_template(template_id: str):
     
     return JSONResponse(content={"error": "Template not found"}, status_code=404)
 
+@app.delete("/api/template/{template_id}")
+async def delete_template(template_id: str):
+    """Delete a specific template"""
+    print(f"Delete request received for template ID: {template_id}")
+    
+    # Prevent deletion of the default template
+    if template_id == 'default':
+        print("Attempted to delete default template - forbidden")
+        return JSONResponse(content={"error": "Cannot delete the default template"}, status_code=403)
+    
+    template_dir = os.path.join("templates", template_id)
+    print(f"Looking for template directory: {template_dir}")
+    
+    # Check if template exists
+    if not os.path.exists(template_dir):
+        print(f"Template directory not found: {template_dir}")
+        return JSONResponse(content={"error": "Template not found"}, status_code=404)
+    
+    try:
+        print(f"Attempting to remove template directory: {template_dir}")
+        # Remove template directory
+        shutil.rmtree(template_dir)
+        print(f"Template directory removed successfully")
+        
+        # Update templates index
+        templates_index_path = "templates/index.json"
+        print(f"Updating templates index: {templates_index_path}")
+        
+        if os.path.exists(templates_index_path):
+            with open(templates_index_path, "r", encoding="utf-8") as f:
+                templates_index = json.load(f)
+            
+            # Filter out the deleted template
+            templates_index = [t for t in templates_index if t.get("id") != template_id]
+            print(f"Updated templates index, removed template ID: {template_id}")
+            
+            # Save updated index
+            with open(templates_index_path, "w", encoding="utf-8") as f:
+                json.dump(templates_index, f, ensure_ascii=False, indent=2)
+            print(f"Templates index saved successfully")
+        
+        print(f"Template deletion completed successfully")
+        return JSONResponse(content={"success": True})
+    
+    except Exception as e:
+        print(f"Error during template deletion: {str(e)}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+    
+    try:
+        # Remove template directory
+        shutil.rmtree(template_dir)
+        
+        # Update templates index
+        templates_index_path = "templates/index.json"
+        
+        if os.path.exists(templates_index_path):
+            with open(templates_index_path, "r", encoding="utf-8") as f:
+                templates_index = json.load(f)
+            
+            # Filter out the deleted template
+            templates_index = [t for t in templates_index if t.get("id") != template_id]
+            
+            # Save updated index
+            with open(templates_index_path, "w", encoding="utf-8") as f:
+                json.dump(templates_index, f, ensure_ascii=False, indent=2)
+        
+        return JSONResponse(content={"success": True})
+    
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
 @app.get("/api/hijri-calendar/{year}/{month}")
 async def get_hijri_calendar_month(year: int, month: int):
     """Get Hijri calendar data for a specific month and year"""
@@ -327,6 +398,11 @@ async def get_full_hijri_calendar(year: int):
     """
 
     return HTMLResponse(content=html_content)
+
+@app.get("/api/test-delete/{template_id}")
+async def test_delete(template_id: str):
+    """Test endpoint for template deletion"""
+    return JSONResponse(content={"message": f"Test delete endpoint for template ID: {template_id}"})
 
 @app.get("/hijri-calendar-view", response_class=HTMLResponse)
 async def view_hijri_calendar(request: Request):

@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const fieldsList = document.getElementById('fieldsList');
     const addFieldBtn = document.getElementById('addFieldBtn');
     const backToStep1Btn = document.getElementById('backToStep1Btn');
+    const goToHomeFromStep2Btn = document.getElementById('goToHomeFromStep2Btn');
     const saveTemplateBtn = document.getElementById('saveTemplateBtn');
     
     // Modal elements
@@ -125,6 +126,10 @@ document.addEventListener('DOMContentLoaded', function() {
         step1.style.display = 'block';
     });
     
+    goToHomeFromStep2Btn.addEventListener('click', () => {
+        window.location.href = '/';
+    });
+    
     // Field type change handler
     fieldType.addEventListener('change', () => {
         if (fieldType.value === 'select') {
@@ -175,42 +180,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Save template button
     saveTemplateBtn.addEventListener('click', () => {
-        if (templateData.fields.length === 0) {
-            alert('يرجى إضافة حقل واحد على الأقل');
-            return;
+        // Show "Coming soon..." notification
+        showSuccessModal();
+        
+        // Hide any loading overlay if it's visible
+        if (loadingOverlay.style.display === 'flex') {
+            loadingOverlay.style.display = 'none';
         }
-        
-        // Convert template data to JSON
-        const templateJson = JSON.stringify(templateData);
-        
-        // Create a FormData object to send the image file and JSON data
-        const formData = new FormData();
-        formData.append('templateData', templateJson);
-        formData.append('templateImage', templateData.imageFile);
-        
-        // Show loading overlay
-        loadingOverlay.style.display = 'flex';
-        loadingOverlay.style.opacity = '1';
-        
-        // Send the data to the server
-        fetch('/api/save-template', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            loadingOverlay.style.display = 'none';
-            if (data.success) {
-                showSuccessModal();
-            } else {
-                alert('حدث خطأ أثناء حفظ القالب: ' + data.error);
-            }
-        })
-        .catch(error => {
-            loadingOverlay.style.display = 'none';
-            console.error('Error:', error);
-            alert('حدث خطأ أثناء حفظ القالب');
-        });
     });
     
     goToHomeBtn.addEventListener('click', () => {

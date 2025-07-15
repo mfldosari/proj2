@@ -45,16 +45,18 @@ main {
 
 h2 {
     color: var(--primary-color);
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
     text-align: center;
     font-size: 1.8rem;
 }
 
 .templates-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     justify-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 /* Template Card */
@@ -68,6 +70,12 @@ h2 {
     max-width: 350px;
     opacity: 0;
     transform: translateY(30px);
+    position: relative;
+}
+
+.template-card:hover {
+    transform: translateY(-15px) scale(1.03);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
 /* Add Template Card */
@@ -78,6 +86,8 @@ h2 {
     align-items: center;
     background-color: rgba(255, 255, 255, 0.9);
     border: 2px dashed var(--primary-color);
+    height: 100%;
+    min-height: 400px;
 }
 
 .add-template-icon {
@@ -165,10 +175,19 @@ h2 {
     font-size: 1.3rem;
 }
 
+/* Template buttons */
+.template-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 0 auto 1.5rem;
+    width: 80%;
+}
+
 .select-btn {
     display: block;
-    width: 80%;
-    margin: 0 auto 1.5rem;
+    flex: 1;
     padding: 0.9rem;
     background-color: var(--primary-color);
     color: white;
@@ -180,6 +199,57 @@ h2 {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+}
+
+.delete-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #f44336;
+    border: 1px solid #f44336;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.delete-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(244, 67, 54, 0.1);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #f44336;
+    color: var(--white);
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+}
+
+.delete-btn:hover::before {
+    transform: scale(1.5);
+}
+
+.delete-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(244, 67, 54, 0.4);
+}
+
+.delete-btn i {
+    font-size: 1.2rem;
+    position: relative;
+    z-index: 2;
 }
 
 .select-btn::before {
@@ -242,9 +312,15 @@ footer {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+    .templates-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
     .templates-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: 1fr;
     }
     
     footer {
