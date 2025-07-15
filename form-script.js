@@ -195,7 +195,7 @@ generateBtn.addEventListener('click', () => {
                 <title>النموذج المولد</title>
                 <link rel="preconnect" href="https://fonts.googleapis.com">
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-                <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+                <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Lateef&family=Reem+Kufi:wght@400;700&family=Scheherazade+New:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
                 <style>
                     body {
@@ -247,13 +247,90 @@ generateBtn.addEventListener('click', () => {
                         transition: all 0.3s ease;
                     }
                     
-                    .download-pdf-btn {
+                    .help-btn {
+                        background-color: #4CAF50;
+                        color: white;
+                    }
+                    
+                    .help-btn:hover {
+                        background-color: #388E3C;
+                    }
+                    
+                    .help-modal {
+                        display: none;
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, 0.7);
+                        z-index: 1000;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    
+                    .help-modal-content {
+                        background-color: white;
+                        padding: 20px;
+                        border-radius: 10px;
+                        max-width: 500px;
+                        width: 90%;
+                        max-height: 80vh;
+                        overflow-y: auto;
+                        direction: rtl;
+                    }
+                    
+                    .help-modal-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 15px;
+                    }
+                    
+                    .help-modal-close {
+                        font-size: 24px;
+                        cursor: pointer;
+                        color: #666;
+                    }
+                    
+                    .help-modal-title {
+                        font-size: 20px;
+                        font-weight: bold;
+                        color: #009CDE;
+                    }
+                    
+                    .help-style-example {
+                        margin: 10px 0;
+                        padding: 8px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                    }
                         background-color: #f44336;
                         color: white;
                     }
                     
                     .download-img-btn {
                         background-color: #2196f3;
+                        color: white;
+                    }
+                    
+                    .font-size-btn {
+                        background-color: #4CAF50;
+                        color: white;
+                    }
+                    
+                    .font-family-btn {
+                        background-color: #FF9800;
+                        color: white;
+                    }
+                    
+                    .font-size-btn {
+                        background-color: #4CAF50;
+                        color: white;
+                    }
+                    
+                    .font-family-btn {
+                        background-color: #FF9800;
                         color: white;
                     }
                     
@@ -317,8 +394,16 @@ generateBtn.addEventListener('click', () => {
                         font-weight: bold;
                     }
                     
+                    .font-normal {
+                        font-size: 100%;
+                    }
+                    
                     .font-large {
                         font-size: 120%;
+                    }
+                    
+                    .font-larger {
+                        font-size: 140%;
                     }
                     
                     .font-underline {
@@ -331,6 +416,50 @@ generateBtn.addEventListener('click', () => {
                     
                     .font-color-secondary {
                         color: #D4A62D;
+                    }
+                    
+                    .font-color-red {
+                        color: #E53935;
+                    }
+                    
+                    .font-color-green {
+                        color: #43A047;
+                    }
+                    
+                    .text-align-right {
+                        text-align: right;
+                    }
+                    
+                    .text-align-center {
+                        text-align: center;
+                    }
+                    
+                    .text-align-left {
+                        text-align: left;
+                    }
+                    
+                    .font-family-cairo {
+                        font-family: 'Cairo', sans-serif;
+                    }
+                    
+                    .font-family-tajawal {
+                        font-family: 'Tajawal', sans-serif;
+                    }
+                    
+                    .font-family-amiri {
+                        font-family: 'Amiri', serif;
+                    }
+                    
+                    .font-family-scheherazade {
+                        font-family: 'Scheherazade New', serif;
+                    }
+                    
+                    .font-family-lateef {
+                        font-family: 'Lateef', cursive;
+                    }
+                    
+                    .font-family-reem-kufi {
+                        font-family: 'Reem Kufi', sans-serif;
                     }
                     
                     .assignee-item {
@@ -401,6 +530,12 @@ generateBtn.addEventListener('click', () => {
                             <button id="downloadImgBtn" class="action-btn download-img-btn">
                                 <i class="fas fa-image"></i> حفظ كصورة
                             </button>
+                            <button id="fontSizeBtn" class="action-btn font-size-btn">
+                                <i class="fas fa-text-height"></i> تغيير حجم الخط
+                            </button>
+                            <button id="fontFamilyBtn" class="action-btn font-family-btn">
+                                <i class="fas fa-font"></i> تغيير نوع الخط
+                            </button>
                         </div>
                     </div>
                     <div class="template-container" id="templateContainer">
@@ -410,20 +545,20 @@ generateBtn.addEventListener('click', () => {
                             <!-- Overlay form data on the template -->
                             <div class="data-overlay">
                                 <!-- You can adjust these positions as needed -->
-                                <div class="data-field clickable" style="top: 20.5%; right: 30%;" onclick="changeFontStyle(this)">${formValues.subject || ''}</div>
-                                <div class="data-field" style="top: 28%; right: 31%; font-weight: bold;">${formValues.day || ''}</div>
-                                <div class="data-field" style="top: 28%; right: 70%;">${formValues.hijriDate || ''}</div>
-                                <div class="data-field clickable" style="top: 35%; right: 31%;" onclick="changeFontStyle(this)">${formValues.location || ''}</div>
-                                <div class="data-field" style="top: 42%; right: 70%;">${formValues.time || ''}</div>
-                                <div class="data-field clickable" style="top: 42%; right: 30%;" onclick="changeFontStyle(this)">${formValues.formattedHour || formValues.hour || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 20.5%; right: 30%;">${formValues.subject || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 31%; font-weight: bold;">${formValues.day || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 70%;">${formValues.hijriDate || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 35%; right: 31%;">${formValues.location || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 70%;">${formValues.time || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 30%;">${formValues.formattedHour || formValues.hour || ''}</div>
                                 
                                 <!-- Assignees with individual positioning -->
-                                ${formValues.assignee1 ? `<div class="assignee-item clickable" style="position: absolute; top: 71.5%; right: 13.5%;" onclick="changeFontStyle(this)">${formValues.assignee1}</div>` : ''}
-                                ${formValues.assignee2 ? `<div class="assignee-item clickable" style="position: absolute; top: 71.5%; right: 51%;" onclick="changeFontStyle(this)">${formValues.assignee2}</div>` : ''}
-                                ${formValues.assignee3 ? `<div class="assignee-item clickable" style="position: absolute; top: 76.5%; right: 13.5%;" onclick="changeFontStyle(this)">${formValues.assignee3}</div>` : ''}
-                                ${formValues.assignee4 ? `<div class="assignee-item clickable" style="position: absolute; top: 76.5%; right: 51%;" onclick="changeFontStyle(this)">${formValues.assignee4}</div>` : ''}
-                                ${formValues.assignee5 ? `<div class="assignee-item clickable" style="position: absolute; top: 81.5%; right: 13.5%;" onclick="changeFontStyle(this)">${formValues.assignee5}</div>` : ''}
-                                ${formValues.assignee6 ? `<div class="assignee-item clickable" style="position: absolute; top: 81.5%; right: 51%;" onclick="changeFontStyle(this)">${formValues.assignee6}</div>` : ''}
+                                ${formValues.assignee1 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 13.5%;">${formValues.assignee1}</div>` : ''}
+                                ${formValues.assignee2 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 51%;">${formValues.assignee2}</div>` : ''}
+                                ${formValues.assignee3 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 13.5%;">${formValues.assignee3}</div>` : ''}
+                                ${formValues.assignee4 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 51%;">${formValues.assignee4}</div>` : ''}
+                                ${formValues.assignee5 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 13.5%;">${formValues.assignee5}</div>` : ''}
+                                ${formValues.assignee6 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 51%;">${formValues.assignee6}</div>` : ''}
                             </div>
                         </div>
                     </div>
@@ -439,6 +574,140 @@ generateBtn.addEventListener('click', () => {
                         // Add event listeners for buttons
                         document.getElementById('downloadPdfBtn').addEventListener('click', downloadAsPdf);
                         document.getElementById('downloadImgBtn').addEventListener('click', downloadAsImage);
+                        document.getElementById('fontSizeBtn').addEventListener('click', changeFontSize);
+                        document.getElementById('fontFamilyBtn').addEventListener('click', changeFontFamily);
+                        
+                        // Function to change font size for all text elements
+                        function changeFontSize() {
+                            // Get all data fields and assignee items
+                            const textElements = document.querySelectorAll('.data-field, .assignee-item');
+                            
+                            // Current font size classes
+                            const fontSizeClasses = ['font-normal', 'font-large', 'font-larger'];
+                            
+                            // Find current font size class
+                            let currentSizeIndex = -1;
+                            
+                            // Check the first element to determine current size
+                            if (textElements.length > 0) {
+                                for (let i = 0; i < fontSizeClasses.length; i++) {
+                                    if (textElements[0].classList.contains(fontSizeClasses[i])) {
+                                        currentSizeIndex = i;
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            // Calculate next size index
+                            const nextSizeIndex = (currentSizeIndex + 1) % fontSizeClasses.length;
+                            
+                            // Remove current size class and add next size class to all elements
+                            textElements.forEach(element => {
+                                // Remove all font size classes
+                                fontSizeClasses.forEach(cls => {
+                                    element.classList.remove(cls);
+                                });
+                                
+                                // Add next size class
+                                element.classList.add(fontSizeClasses[nextSizeIndex]);
+                            });
+                            
+                            // Show tooltip with current size
+                            const sizeNames = {
+                                'font-normal': 'حجم عادي',
+                                'font-large': 'حجم كبير',
+                                'font-larger': 'حجم أكبر'
+                            };
+                            
+                            showTooltip(sizeNames[fontSizeClasses[nextSizeIndex]]);
+                        }
+                        
+                        // Function to change font family for all text elements
+                        function changeFontFamily() {
+                            // Get all data fields and assignee items
+                            const textElements = document.querySelectorAll('.data-field, .assignee-item');
+                            
+                            // Font family classes
+                            const fontFamilyClasses = [
+                                'font-family-cairo',
+                                'font-family-tajawal',
+                                'font-family-amiri',
+                                'font-family-scheherazade',
+                                'font-family-lateef',
+                                'font-family-reem-kufi'
+                            ];
+                            
+                            // Find current font family class
+                            let currentFamilyIndex = -1;
+                            
+                            // Check the first element to determine current family
+                            if (textElements.length > 0) {
+                                for (let i = 0; i < fontFamilyClasses.length; i++) {
+                                    if (textElements[0].classList.contains(fontFamilyClasses[i])) {
+                                        currentFamilyIndex = i;
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            // Calculate next family index
+                            const nextFamilyIndex = (currentFamilyIndex + 1) % fontFamilyClasses.length;
+                            
+                            // Remove current family class and add next family class to all elements
+                            textElements.forEach(element => {
+                                // Remove all font family classes
+                                fontFamilyClasses.forEach(cls => {
+                                    element.classList.remove(cls);
+                                });
+                                
+                                // Add next family class
+                                element.classList.add(fontFamilyClasses[nextFamilyIndex]);
+                            });
+                            
+                            // Show tooltip with current family
+                            const familyNames = {
+                                'font-family-cairo': 'خط القاهرة',
+                                'font-family-tajawal': 'خط تجوال',
+                                'font-family-amiri': 'خط أميري',
+                                'font-family-scheherazade': 'خط شهرزاد',
+                                'font-family-lateef': 'خط لطيف',
+                                'font-family-reem-kufi': 'خط ريم كوفي'
+                            };
+                            
+                            showTooltip(familyNames[fontFamilyClasses[nextFamilyIndex]]);
+                        }
+                        
+                        // Function to show tooltip
+                        function showTooltip(text) {
+                            // Create or update tooltip
+                            let tooltip = document.getElementById('style-tooltip');
+                            if (!tooltip) {
+                                tooltip = document.createElement('div');
+                                tooltip.id = 'style-tooltip';
+                                tooltip.style.position = 'fixed';
+                                tooltip.style.padding = '5px 10px';
+                                tooltip.style.backgroundColor = '#333';
+                                tooltip.style.color = 'white';
+                                tooltip.style.borderRadius = '4px';
+                                tooltip.style.fontSize = '14px';
+                                tooltip.style.zIndex = '1000';
+                                tooltip.style.opacity = '0';
+                                tooltip.style.transition = 'opacity 0.3s';
+                                tooltip.style.top = '50%';
+                                tooltip.style.left = '50%';
+                                tooltip.style.transform = 'translate(-50%, -50%)';
+                                document.body.appendChild(tooltip);
+                            }
+                            
+                            // Show tooltip with text
+                            tooltip.textContent = text;
+                            tooltip.style.opacity = '1';
+                            
+                            // Hide tooltip after 1.5 seconds
+                            setTimeout(() => {
+                                tooltip.style.opacity = '0';
+                            }, 1500);
+                        }
                         
                         // Ensure proper sizing on mobile devices
                         const templateContainer = document.getElementById('templateContainer');
@@ -456,9 +725,21 @@ generateBtn.addEventListener('click', () => {
                         const styleClasses = [
                             'font-bold',
                             'font-large',
+                            'font-larger',
                             'font-underline',
                             'font-color-primary',
-                            'font-color-secondary'
+                            'font-color-secondary',
+                            'font-color-red',
+                            'font-color-green',
+                            'text-align-right',
+                            'text-align-center',
+                            'text-align-left',
+                            'font-family-cairo',
+                            'font-family-tajawal',
+                            'font-family-amiri',
+                            'font-family-scheherazade',
+                            'font-family-lateef',
+                            'font-family-reem-kufi'
                         ];
                         
                         // Get current style index or start at -1
@@ -485,9 +766,21 @@ generateBtn.addEventListener('click', () => {
                         const styleNames = {
                             'font-bold': 'خط عريض',
                             'font-large': 'خط كبير',
+                            'font-larger': 'خط أكبر',
                             'font-underline': 'خط تحته',
                             'font-color-primary': 'لون أزرق',
-                            'font-color-secondary': 'لون ذهبي'
+                            'font-color-secondary': 'لون ذهبي',
+                            'font-color-red': 'لون أحمر',
+                            'font-color-green': 'لون أخضر',
+                            'text-align-right': 'محاذاة لليمين',
+                            'text-align-center': 'محاذاة للوسط',
+                            'text-align-left': 'محاذاة لليسار',
+                            'font-family-cairo': 'خط القاهرة',
+                            'font-family-tajawal': 'خط تجوال',
+                            'font-family-amiri': 'خط أميري',
+                            'font-family-scheherazade': 'خط شهرزاد',
+                            'font-family-lateef': 'خط لطيف',
+                            'font-family-reem-kufi': 'خط ريم كوفي'
                         };
                         
                         // Create or update tooltip
