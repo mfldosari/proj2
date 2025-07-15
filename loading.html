@@ -31,6 +31,22 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        .fade-out {
+            animation: fadeOut 0.8s ease-in forwards;
+        }
+        
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.95); }
         }
         
         .logo-spinner::before {
@@ -39,14 +55,16 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 6px solid transparent;
+            border: 6px solid rgba(255, 255, 255, 0.1);
             border-top-color: white;
             border-bottom-color: var(--secondary-color);
-            animation: spin 1.5s linear infinite;
+            animation: spin 1.2s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
         
         .logo-container {
             animation: pulse 2s ease-in-out infinite;
+            transform-origin: center center;
         }
         
         .logo {
@@ -67,27 +85,43 @@
         }
         
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
         }
     </style>
 </head>
 <body>
-    <div class="logo-spinner">
+    <div class="logo-spinner" id="logoSpinner">
         <div class="logo-container">
             <img src="/static/logo.png" alt="شعار المركز الإعلامي" class="logo">
         </div>
     </div>
 
     <script>
-        // Store the destination page in session storage
+        // Store the destination page
         const destination = '/form';
         
-        // Redirect to the destination page after a delay
-        setTimeout(() => {
-            window.location.href = destination;
-        }, 2000);
+        // Smooth transition to the next page
+        window.onload = function() {
+            const logoSpinner = document.getElementById('logoSpinner');
+            
+            // Start the fade-out process after 2.5 seconds
+            setTimeout(function() {
+                // Add the fade-out animation class
+                logoSpinner.classList.add('fade-out');
+                
+                // Redirect after the fade-out animation completes
+                setTimeout(function() {
+                    window.location.href = destination;
+                }, 800); // Match this to the fadeOut animation duration
+            }, 2200);
+            
+            // Failsafe: ensure redirect happens after 3.5 seconds total
+            setTimeout(function() {
+                window.location.href = destination;
+            }, 3500);
+        };
     </script>
 </body>
 </html>

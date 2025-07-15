@@ -17,12 +17,27 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.95);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s ease;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        .fade-out {
+            animation: fadeOut 0.8s ease-in forwards;
+        }
+        
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
         }
         
         .logo-spinner {
@@ -40,19 +55,21 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 4px solid transparent;
+            border: 4px solid rgba(0, 0, 0, 0.05);
             border-top-color: #009CDE;
             border-bottom-color: #D4A62D;
-            animation: spin 1.5s linear infinite;
+            animation: spin 1.2s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
         }
         
         .logo-container {
             animation: pulse 2s ease-in-out infinite;
+            transform-origin: center center;
         }
         
         .logo-img {
             width: 100px;
             height: auto;
+            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.1));
         }
         
         @keyframes spin {
@@ -61,7 +78,9 @@
         }
         
         @keyframes pulse {
-            0% { transform: scale(1); }
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
@@ -174,6 +193,39 @@
         </div>
     </div>
 
+    <script>
+        // Improved loading overlay handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            // Ensure the overlay is visible initially
+            loadingOverlay.style.display = 'flex';
+            
+            // Start the fade-out process after 2.5 seconds
+            setTimeout(function() {
+                // Add the fade-out animation class
+                loadingOverlay.classList.add('fade-out');
+                
+                // Remove the overlay from DOM after animation completes
+                setTimeout(function() {
+                    if (loadingOverlay.parentNode) {
+                        loadingOverlay.parentNode.removeChild(loadingOverlay);
+                    }
+                }, 800); // Match this to the fadeOut animation duration
+            }, 2500);
+            
+            // Failsafe: ensure overlay is removed after 4 seconds total
+            setTimeout(function() {
+                const overlays = document.querySelectorAll('.loading-overlay');
+                overlays.forEach(overlay => {
+                    if (overlay && overlay.parentNode) {
+                        overlay.parentNode.removeChild(overlay);
+                    }
+                });
+            }, 4000);
+        });
+    </script>
+
     <header>
         <div class="header-content">
             <div class="header-logo">
@@ -213,13 +265,16 @@
         document.addEventListener('DOMContentLoaded', () => {
             const loadingOverlay = document.getElementById('loadingOverlay');
             
-            // Hide loading overlay after a short delay
+            // Force complete removal after 3 seconds
             setTimeout(() => {
-                loadingOverlay.style.opacity = '0';
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none';
-                }, 500);
-            }, 1500);
+                // Immediately hide the overlay
+                loadingOverlay.style.display = 'none';
+                
+                // Also remove it from the DOM completely
+                if (loadingOverlay.parentNode) {
+                    loadingOverlay.parentNode.removeChild(loadingOverlay);
+                }
+            }, 3000);
         });
         
         // Fix for iOS viewport height issues

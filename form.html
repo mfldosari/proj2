@@ -33,12 +33,27 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.95);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s ease;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        .fade-out {
+            animation: fadeOut 0.8s ease-in forwards;
+        }
+        
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
         }
         
         .logo-spinner {
@@ -56,19 +71,21 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 4px solid transparent;
+            border: 4px solid rgba(0, 0, 0, 0.05);
             border-top-color: #009CDE;
             border-bottom-color: #D4A62D;
-            animation: spin 1.5s linear infinite;
+            animation: spin 1.2s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
         }
         
         .logo-container {
             animation: pulse 2s ease-in-out infinite;
+            transform-origin: center center;
         }
         
         .logo-img {
             width: 100px;
             height: auto;
+            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.1));
         }
         
         @keyframes spin {
@@ -77,7 +94,9 @@
         }
         
         @keyframes pulse {
-            0% { transform: scale(1); }
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
@@ -102,6 +121,24 @@
             margin-top: 5px;
         }
         
+        /* Character counter styles */
+        .char-counter {
+            font-size: 12px;
+            color: #666;
+            text-align: left;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .assignees-inputs .char-counter {
+            margin-bottom: 15px;
+        }
+        
+        .char-limit-reached {
+            color: #ff3333;
+            font-weight: bold;
+        }
+        
         /* Disabled select styling */
         select:disabled {
             background-color: #f9f9f9;
@@ -119,6 +156,39 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Improved loading overlay handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            // Ensure the overlay is visible initially
+            loadingOverlay.style.display = 'flex';
+            
+            // Start the fade-out process after 2.5 seconds
+            setTimeout(function() {
+                // Add the fade-out animation class
+                loadingOverlay.classList.add('fade-out');
+                
+                // Remove the overlay from DOM after animation completes
+                setTimeout(function() {
+                    if (loadingOverlay.parentNode) {
+                        loadingOverlay.parentNode.removeChild(loadingOverlay);
+                    }
+                }, 800); // Match this to the fadeOut animation duration
+            }, 2500);
+            
+            // Failsafe: ensure overlay is removed after 4 seconds total
+            setTimeout(function() {
+                const overlays = document.querySelectorAll('.loading-overlay');
+                overlays.forEach(overlay => {
+                    if (overlay && overlay.parentNode) {
+                        overlay.parentNode.removeChild(overlay);
+                    }
+                });
+            }, 4000);
+        });
+    </script>
 
     <div class="container">
         <header>
@@ -138,8 +208,9 @@
                     <div class="form-column">
                         <div class="form-group">
                             <label for="subject">الموضوع</label>
-                            <input type="text" id="subject" name="subject" required placeholder="أدخل الموضوع">
+                            <input type="text" id="subject" name="subject" required placeholder="أدخل الموضوع" maxlength="40">
                             <div class="arabic-error-msg" id="subjectError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                            <div class="char-counter" id="subjectCounter">0/40</div>
                         </div>
                     </div>
                     
@@ -173,8 +244,9 @@
                     <div class="form-column">
                         <div class="form-group">
                             <label for="location">الموقع</label>
-                            <input type="text" id="location" name="location" required placeholder="أدخل الموقع">
+                            <input type="text" id="location" name="location" required placeholder="أدخل الموقع" maxlength="40">
                             <div class="arabic-error-msg" id="locationError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                            <div class="char-counter" id="locationCounter">0/40</div>
                         </div>
                     </div>
                     
@@ -182,8 +254,9 @@
                     <div class="form-column">
                         <div class="form-group">
                             <label for="time">الوقت</label>
-                            <input type="text" id="time" name="time" placeholder="أدخل الوقت" required>
+                            <input type="text" id="time" name="time" placeholder="أدخل الوقت" required maxlength="30">
                             <div class="arabic-error-msg" id="timeError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                            <div class="char-counter" id="timeCounter">0/30</div>
                         </div>
                         
                         <div class="form-group">
@@ -198,18 +271,29 @@
                     <div class="form-group">
                         <label>المكلفون</label>
                         <div class="assignees-inputs">
-                            <input type="text" name="assignee1" id="assignee1" placeholder="المكلف 1">
+                            <input type="text" name="assignee1" id="assignee1" placeholder="المكلف 1" maxlength="30">
                             <div class="arabic-error-msg" id="assignee1Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <input type="text" name="assignee2" id="assignee2" placeholder="المكلف 2">
+                            <div class="char-counter" id="assignee1Counter">0/30</div>
+                            
+                            <input type="text" name="assignee2" id="assignee2" placeholder="المكلف 2" maxlength="30">
                             <div class="arabic-error-msg" id="assignee2Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <input type="text" name="assignee3" id="assignee3" placeholder="المكلف 3">
+                            <div class="char-counter" id="assignee2Counter">0/30</div>
+                            
+                            <input type="text" name="assignee3" id="assignee3" placeholder="المكلف 3" maxlength="30">
                             <div class="arabic-error-msg" id="assignee3Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <input type="text" name="assignee4" id="assignee4" placeholder="المكلف 4">
+                            <div class="char-counter" id="assignee3Counter">0/30</div>
+                            
+                            <input type="text" name="assignee4" id="assignee4" placeholder="المكلف 4" maxlength="30">
                             <div class="arabic-error-msg" id="assignee4Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <input type="text" name="assignee5" id="assignee5" placeholder="المكلف 5">
+                            <div class="char-counter" id="assignee4Counter">0/30</div>
+                            
+                            <input type="text" name="assignee5" id="assignee5" placeholder="المكلف 5" maxlength="30">
                             <div class="arabic-error-msg" id="assignee5Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <input type="text" name="assignee6" id="assignee6" placeholder="المكلف 6">
+                            <div class="char-counter" id="assignee5Counter">0/30</div>
+                            
+                            <input type="text" name="assignee6" id="assignee6" placeholder="المكلف 6" maxlength="30">
                             <div class="arabic-error-msg" id="assignee6Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                            <div class="char-counter" id="assignee6Counter">0/30</div>
                         </div>
                     </div>
                 </div>
@@ -243,14 +327,19 @@
     <script>
         // Form functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Hide loading overlay after a short delay
+            // Hide loading overlay after exactly 3 seconds
             const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            // Force complete removal after 3 seconds
             setTimeout(() => {
-                loadingOverlay.style.opacity = '0';
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none';
-                }, 500);
-            }, 1500);
+                // Immediately hide the overlay
+                loadingOverlay.style.display = 'none';
+                
+                // Also remove it from the DOM completely
+                if (loadingOverlay.parentNode) {
+                    loadingOverlay.parentNode.removeChild(loadingOverlay);
+                }
+            }, 3000);
             
             // DOM Elements
             const dateInput = document.getElementById('date');
@@ -259,6 +348,112 @@
             const daySelect = document.getElementById('day');
             const timeInput = document.getElementById('time');
             const hourInput = document.getElementById('hour');
+            
+            // Character counter elements
+            const subjectInput = document.getElementById('subject');
+            const subjectCounter = document.getElementById('subjectCounter');
+            const locationInput = document.getElementById('location');
+            const locationCounter = document.getElementById('locationCounter');
+            const timeCounter = document.getElementById('timeCounter');
+            const assignee1Input = document.getElementById('assignee1');
+            const assignee1Counter = document.getElementById('assignee1Counter');
+            const assignee2Input = document.getElementById('assignee2');
+            const assignee2Counter = document.getElementById('assignee2Counter');
+            const assignee3Input = document.getElementById('assignee3');
+            const assignee3Counter = document.getElementById('assignee3Counter');
+            const assignee4Input = document.getElementById('assignee4');
+            const assignee4Counter = document.getElementById('assignee4Counter');
+            const assignee5Input = document.getElementById('assignee5');
+            const assignee5Counter = document.getElementById('assignee5Counter');
+            const assignee6Input = document.getElementById('assignee6');
+            const assignee6Counter = document.getElementById('assignee6Counter');
+            
+            // Character counter function
+            function updateCharCounter(input, counter, maxLength) {
+                if (!input || !counter) return;
+                const currentLength = input.value.length;
+                counter.textContent = `${currentLength}/${maxLength}`;
+                
+                if (currentLength >= maxLength) {
+                    counter.classList.add('char-limit-reached');
+                } else {
+                    counter.classList.remove('char-limit-reached');
+                }
+            }
+            
+            // Initialize all character counters
+            function initializeCounters() {
+                updateCharCounter(subjectInput, subjectCounter, 40);
+                updateCharCounter(locationInput, locationCounter, 40);
+                updateCharCounter(timeInput, timeCounter, 30);
+                updateCharCounter(assignee1Input, assignee1Counter, 30);
+                updateCharCounter(assignee2Input, assignee2Counter, 30);
+                updateCharCounter(assignee3Input, assignee3Counter, 30);
+                updateCharCounter(assignee4Input, assignee4Counter, 30);
+                updateCharCounter(assignee5Input, assignee5Counter, 30);
+                updateCharCounter(assignee6Input, assignee6Counter, 30);
+            }
+            
+            // Add event listeners for character counting
+            function setupCharCounters() {
+                if (subjectInput) {
+                    subjectInput.addEventListener('input', function() {
+                        updateCharCounter(this, subjectCounter, 40);
+                    });
+                }
+                
+                if (locationInput) {
+                    locationInput.addEventListener('input', function() {
+                        updateCharCounter(this, locationCounter, 40);
+                    });
+                }
+                
+                if (timeInput) {
+                    timeInput.addEventListener('input', function() {
+                        updateCharCounter(this, timeCounter, 30);
+                    });
+                }
+                
+                if (assignee1Input) {
+                    assignee1Input.addEventListener('input', function() {
+                        updateCharCounter(this, assignee1Counter, 30);
+                    });
+                }
+                
+                if (assignee2Input) {
+                    assignee2Input.addEventListener('input', function() {
+                        updateCharCounter(this, assignee2Counter, 30);
+                    });
+                }
+                
+                if (assignee3Input) {
+                    assignee3Input.addEventListener('input', function() {
+                        updateCharCounter(this, assignee3Counter, 30);
+                    });
+                }
+                
+                if (assignee4Input) {
+                    assignee4Input.addEventListener('input', function() {
+                        updateCharCounter(this, assignee4Counter, 30);
+                    });
+                }
+                
+                if (assignee5Input) {
+                    assignee5Input.addEventListener('input', function() {
+                        updateCharCounter(this, assignee5Counter, 30);
+                    });
+                }
+                
+                if (assignee6Input) {
+                    assignee6Input.addEventListener('input', function() {
+                        updateCharCounter(this, assignee6Counter, 30);
+                    });
+                }
+            }
+            
+            // Initialize counters and set up event listeners
+            initializeCounters();
+            setupCharCounters();
             
             // Arabic day names
             const arabicDays = [
@@ -315,43 +510,19 @@
             }
             timeInput.value = `${formattedHours}:${minutes} ${period}`;
             
-            // Convert Gregorian to Hijri
-            function convertToHijri(date) {
-                try {
-                    // Use moment.js to convert
-                    const m = moment(date);
-                    
-                    // Debug
-                    console.log('Converting date:', date);
-                    console.log('Moment object:', m.format('YYYY-MM-DD'));
-                    
-                    // Convert to Hijri
-                    const hijriYear = m.iYear();
-                    const hijriMonth = m.iMonth();
-                    const hijriDay = m.iDate();
-                    
-                    console.log('Hijri date:', hijriDay, hijriMonth, hijriYear);
-                    
-                    return {
-                        day: hijriDay,
-                        month: hijriMonth,
-                        year: hijriYear
-                    };
-                } catch (error) {
-                    console.error('Error converting to Hijri:', error);
-                    return null;
-                }
-            }
-            
-            // Fallback method using Aladhan API
-            async function getHijriDateFromAPI(gregorianDate) {
+            // Improved Hijri date conversion using Aladhan API
+            async function getHijriDate(gregorianDate) {
                 try {
                     const [year, month, day] = gregorianDate.split('-');
-                    const url = `http://api.aladhan.com/v1/gToH/${day}-${month}-${year}`;
+                    const url = `https://api.aladhan.com/v1/gToH/${day}-${month}-${year}`;
                     
-                    console.log('Fetching from API:', url);
+                    console.log('Fetching Hijri date from API:', url);
                     
                     const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`API request failed with status ${response.status}`);
+                    }
+                    
                     const data = await response.json();
                     
                     if (data.code === 200 && data.data) {
@@ -360,62 +531,72 @@
                         
                         return {
                             day: parseInt(hijri.day),
-                            month: hijriMonths.indexOf(hijri.month.ar),
-                            monthName: hijri.month.ar,
+                            month: hijri.month.ar,
                             year: parseInt(hijri.year)
                         };
+                    } else {
+                        throw new Error('Invalid API response format');
                     }
-                    
-                    return null;
                 } catch (error) {
-                    console.error('Error fetching from API:', error);
+                    console.error('Error fetching Hijri date:', error);
                     return null;
                 }
             }
             
-            // Update Hijri date display with API fallback
-            async function updateHijriDateWithFallback() {
+            // Update Hijri date display
+            async function updateHijriDate() {
                 const date = dateInput.value;
-                console.log('Updating Hijri date for:', date);
-                
                 if (!date) {
                     hijriDateText.textContent = 'التاريخ الهجري: ';
                     hijriDateInput.value = '';
                     return;
                 }
                 
-                // Try using moment-hijri first
-                const hijriDate = convertToHijri(date);
+                // Show loading state
+                hijriDateText.textContent = 'التاريخ الهجري: جاري التحميل...';
                 
-                if (hijriDate && hijriDate.day && hijriDate.year) {
-                    // Make sure we're using the correct month index (0-based to 1-based)
-                    const monthIndex = hijriDate.month;
-                    const monthName = hijriMonths[monthIndex];
+                try {
+                    // Get Hijri date from API
+                    const hijriDate = await getHijriDate(date);
                     
-                    console.log('Month index:', monthIndex, 'Month name:', monthName);
-                    
-                    const formattedDate = `${hijriDate.day} ${monthName} ${hijriDate.year} هـ`;
-                    console.log('Formatted Hijri date:', formattedDate);
-                    
-                    hijriDateText.textContent = `التاريخ الهجري: ${formattedDate}`;
-                    hijriDateInput.value = formattedDate;
-                } else {
-                    // Fallback to API
-                    console.log('Falling back to API');
-                    const apiDate = await getHijriDateFromAPI(date);
-                    
-                    if (apiDate) {
-                        const formattedDate = `${apiDate.day} ${apiDate.monthName} ${apiDate.year} هـ`;
-                        console.log('API Formatted Hijri date:', formattedDate);
-                        
+                    if (hijriDate) {
+                        const formattedDate = `${hijriDate.day} ${hijriDate.month} ${hijriDate.year} هـ`;
                         hijriDateText.textContent = `التاريخ الهجري: ${formattedDate}`;
                         hijriDateInput.value = formattedDate;
                     } else {
-                        console.error('Failed to convert date to Hijri');
-                        hijriDateText.textContent = 'التاريخ الهجري: (خطأ في التحويل)';
-                        hijriDateInput.value = '';
+                        // Fallback to a simple calculation if API fails
+                        const fallbackDate = getFallbackHijriDate(date);
+                        hijriDateText.textContent = `التاريخ الهجري: ${fallbackDate}`;
+                        hijriDateInput.value = fallbackDate;
                     }
+                } catch (error) {
+                    console.error('Error updating Hijri date:', error);
+                    hijriDateText.textContent = 'التاريخ الهجري: (خطأ في التحويل)';
+                    hijriDateInput.value = '';
                 }
+            }
+            
+            // Simple fallback calculation (approximate)
+            function getFallbackHijriDate(gregorianDateStr) {
+                const gregorianDate = new Date(gregorianDateStr);
+                
+                // Approximate conversion (Hijri year is about 354 days)
+                const gregorianYear = gregorianDate.getFullYear();
+                const gregorianMonth = gregorianDate.getMonth();
+                const gregorianDay = gregorianDate.getDate();
+                
+                // Approximate Hijri year (622 CE is year 1 in Hijri calendar)
+                const yearDiff = gregorianYear - 622;
+                const hijriYear = Math.floor(yearDiff + (yearDiff / 32));
+                
+                // Approximate month and day (very rough estimate)
+                const dayOfYear = Math.floor((gregorianDate - new Date(gregorianYear, 0, 1)) / (24 * 60 * 60 * 1000));
+                const hijriDayOfYear = (dayOfYear + 10) % 354; // Offset by 10 days as a rough adjustment
+                
+                const hijriMonth = Math.floor(hijriDayOfYear / 29.5);
+                const hijriDay = Math.floor(hijriDayOfYear % 29.5) + 1;
+                
+                return `${hijriDay} ${hijriMonths[hijriMonth % 12]} ${hijriYear} هـ`;
             }
             
             // Update day of week based on selected date
@@ -426,19 +607,13 @@
                     daySelect.value = arabicDays[dayIndex];
                     
                     // Update Hijri date
-                    updateHijriDateWithFallback();
+                    updateHijriDate();
                 }
             });
             
-            // Set default Hijri date for today (July 15, 2025 = 15 Muharram 1447)
-            const defaultHijriDate = "15 محرم 1447 هـ";
-            hijriDateText.textContent = `التاريخ الهجري: ${defaultHijriDate}`;
-            hijriDateInput.value = defaultHijriDate;
-            
             // Initial update of Hijri date
-            console.log('Setting initial Hijri date');
             setTimeout(() => {
-                updateHijriDateWithFallback();
+                updateHijriDate();
             }, 500);
             
             // Arabic validation for text inputs
@@ -469,6 +644,14 @@
                 if (!field.input) return;
                 
                 field.input.addEventListener('input', function() {
+                    // Update character counter first
+                    const counter = document.getElementById(field.input.id + 'Counter');
+                    const maxLength = field.input.id === 'subject' || field.input.id === 'location' ? 40 : 30;
+                    if (counter) {
+                        updateCharCounter(field.input, counter, maxLength);
+                    }
+                    
+                    // Then check Arabic validation
                     if (this.value && !isArabicText(this.value)) {
                         this.classList.add('arabic-error');
                         field.error.style.display = 'block';
