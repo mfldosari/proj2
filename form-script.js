@@ -276,16 +276,16 @@ generateBtn.addEventListener('click', () => {
                         <div class="data-field" style="top: 28%; right: 31%;">${formValues.day || ''}</div>
                         <div class="data-field" style="top: 28%; right: 70%;">${formValues.formattedDate || formValues.date || ''}</div>
                         <div class="data-field" style="top: 35%; right: 31%;">${formValues.location || ''}</div>
-                        <div class="data-field" style="top: 41.5%; right: 70%;">${formValues.time || ''}</div>
-                        <div class="data-field" style="top: 41.5%; right: 30%;">${formValues.formattedHour || formValues.hour || ''}</div>
+                        <div class="data-field" style="top: 42%; right: 70%;">${formValues.time || ''}</div>
+                        <div class="data-field" style="top: 42%; right: 30%;">${formValues.formattedHour || formValues.hour || ''}</div>
                         
                         <!-- Assignees with individual positioning -->
-                        ${formValues.assignee1 ? `<div class="assignee-item" style="position: absolute; top: 71%; right: 13%;">${formValues.assignee1}</div>` : ''}
-                        ${formValues.assignee2 ? `<div class="assignee-item" style="position: absolute; top: 71%; right: 51%;">${formValues.assignee2}</div>` : ''}
-                        ${formValues.assignee3 ? `<div class="assignee-item" style="position: absolute; top: 76%; right: 13%;">${formValues.assignee3}</div>` : ''}
-                        ${formValues.assignee4 ? `<div class="assignee-item" style="position: absolute; top: 76%; right: 51%;">${formValues.assignee4}</div>` : ''}
-                        ${formValues.assignee5 ? `<div class="assignee-item" style="position: absolute; top: 81%; right: 13%;">${formValues.assignee5}</div>` : ''}
-                        ${formValues.assignee6 ? `<div class="assignee-item" style="position: absolute; top: 81%; right: 51%;">${formValues.assignee6}</div>` : ''}
+                        ${formValues.assignee1 ? `<div class="assignee-item" style="position: absolute; top: 71.5%; right: 13.5%;">${formValues.assignee1}</div>` : ''}
+                        ${formValues.assignee2 ? `<div class="assignee-item" style="position: absolute; top: 71.5%; right: 51%;">${formValues.assignee2}</div>` : ''}
+                        ${formValues.assignee3 ? `<div class="assignee-item" style="position: absolute; top: 76.5%; right: 13.5%;">${formValues.assignee3}</div>` : ''}
+                        ${formValues.assignee4 ? `<div class="assignee-item" style="position: absolute; top: 76.5%; right: 51%;">${formValues.assignee4}</div>` : ''}
+                        ${formValues.assignee5 ? `<div class="assignee-item" style="position: absolute; top: 81.5%; right: 13.5%;">${formValues.assignee5}</div>` : ''}
+                        ${formValues.assignee6 ? `<div class="assignee-item" style="position: absolute; top: 81.5%; right: 51%;">${formValues.assignee6}</div>` : ''}
                     </div>
                 </div>
             </div>
