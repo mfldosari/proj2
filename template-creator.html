@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>إنشاء قالب جديد</title>
+    <link rel="stylesheet" href="/static/template-creator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="logo-spinner">
+            <div class="logo-container">
+                <img src="/static/logo.png" alt="شعار المركز الإعلامي" class="logo-img">
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <div class="header-logo">
+                <img src="/static/logo.png" alt="شعار المركز الإعلامي" class="header-logo-img">
+            </div>
+            <h1>إنشاء قالب جديد</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="creator-container">
+            <!-- Step 1: Upload Template -->
+            <div class="creator-step" id="step1">
+                <h2>الخطوة 1: رفع صورة القالب</h2>
+                <div class="template-upload-area">
+                    <div class="upload-placeholder" id="uploadPlaceholder">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>اسحب صورة القالب هنا أو انقر للاختيار</p>
+                    </div>
+                    <div class="template-preview" id="templatePreview" style="display: none;">
+                        <img id="previewImage" src="" alt="معاينة القالب">
+                        <button class="change-template-btn" id="changeTemplateBtn">تغيير الصورة</button>
+                    </div>
+                    <input type="file" id="templateFileInput" accept="image/*" style="display: none;">
+                </div>
+                <div class="template-info">
+                    <div class="form-group">
+                        <label for="templateName">اسم القالب:</label>
+                        <input type="text" id="templateName" placeholder="أدخل اسم القالب" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="templateDescription">وصف القالب (اختياري):</label>
+                        <textarea id="templateDescription" placeholder="أدخل وصفاً للقالب"></textarea>
+                    </div>
+                </div>
+                <div class="step-buttons">
+                    <button class="back-btn" id="backToHomeBtn">العودة للرئيسية</button>
+                    <button class="next-btn" id="goToStep2Btn" disabled>التالي</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Define Fields -->
+            <div class="creator-step" id="step2" style="display: none;">
+                <h2>الخطوة 2: تحديد الحقول</h2>
+                <div class="template-editor-container">
+                    <div class="template-preview-area">
+                        <div class="template-canvas" id="templateCanvas">
+                            <!-- Template image will be displayed here -->
+                            <img id="canvasTemplateImage" src="" alt="صورة القالب">
+                            <!-- Fields will be added here dynamically -->
+                        </div>
+                    </div>
+                    <div class="fields-editor">
+                        <h3>الحقول</h3>
+                        <div class="fields-list" id="fieldsList">
+                            <!-- Fields will be added here dynamically -->
+                        </div>
+                        <button class="add-field-btn" id="addFieldBtn">
+                            <i class="fas fa-plus"></i> إضافة حقل جديد
+                        </button>
+                    </div>
+                </div>
+                <div class="step-buttons">
+                    <button class="back-btn" id="backToStep1Btn">السابق</button>
+                    <button class="save-btn" id="saveTemplateBtn">حفظ القالب</button>
+                </div>
+            </div>
+
+            <!-- Field Editor Modal -->
+            <div class="modal" id="fieldEditorModal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h3>تعديل الحقل</h3>
+                    <div class="form-group">
+                        <label for="fieldName">اسم الحقل:</label>
+                        <input type="text" id="fieldName" placeholder="أدخل اسم الحقل" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldType">نوع الحقل:</label>
+                        <select id="fieldType">
+                            <option value="text">نص</option>
+                            <option value="number">رقم</option>
+                            <option value="date">تاريخ</option>
+                            <option value="time">وقت</option>
+                            <option value="select">قائمة منسدلة</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="selectOptionsGroup" style="display: none;">
+                        <label for="selectOptions">خيارات القائمة (افصل بين الخيارات بفاصلة):</label>
+                        <textarea id="selectOptions" placeholder="الخيار الأول، الخيار الثاني، الخيار الثالث"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="maxLength">الحد الأقصى للأحرف:</label>
+                        <input type="number" id="maxLength" min="1" value="50">
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="isRequired">
+                        <label for="isRequired">حقل إلزامي</label>
+                    </div>
+                    <div class="form-group">
+                        <label>موضع الحقل:</label>
+                        <div class="position-inputs">
+                            <div>
+                                <label for="fieldX">س:</label>
+                                <input type="number" id="fieldX" min="0" value="0">
+                            </div>
+                            <div>
+                                <label for="fieldY">ص:</label>
+                                <input type="number" id="fieldY" min="0" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldWidth">العرض:</label>
+                        <input type="number" id="fieldWidth" min="50" value="200">
+                    </div>
+                    <div class="form-group">
+                        <label for="fontSize">حجم الخط:</label>
+                        <select id="fontSize">
+                            <option value="12">صغير (12px)</option>
+                            <option value="16" selected>متوسط (16px)</option>
+                            <option value="20">كبير (20px)</option>
+                            <option value="24">أكبر (24px)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fontFamily">نوع الخط:</label>
+                        <select id="fontFamily">
+                            <option value="Cairo" selected>Cairo</option>
+                            <option value="Tajawal">Tajawal</option>
+                            <option value="Amiri">Amiri</option>
+                            <option value="Scheherazade New">Scheherazade New</option>
+                            <option value="Lateef">Lateef</option>
+                            <option value="Reem Kufi">Reem Kufi</option>
+                        </select>
+                    </div>
+                    <div class="modal-buttons">
+                        <button class="cancel-btn" id="cancelFieldBtn">إلغاء</button>
+                        <button class="save-field-btn" id="saveFieldBtn">حفظ الحقل</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Modal -->
+            <div class="modal" id="successModal">
+                <div class="modal-content success-content">
+                    <i class="fas fa-check-circle success-icon"></i>
+                    <h3>تم حفظ القالب بنجاح!</h3>
+                    <p>يمكنك الآن استخدام القالب الجديد من الصفحة الرئيسية.</p>
+                    <button class="primary-btn" id="goToHomeBtn">العودة للرئيسية</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/template-creator.js"></script>
+</body>
+</html>

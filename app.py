@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, File, UploadFile, Form
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -6,6 +6,9 @@ import uvicorn
 import os
 import httpx
 import json
+import shutil
+from typing import Optional
+from datetime import datetime
 
 # Create FastAPI app
 app = FastAPI(title="Media Templates App")
@@ -15,6 +18,9 @@ app.mount("/static", StaticFiles(directory="."), name="static")
 
 # Set up templates
 templates = Jinja2Templates(directory=".")
+
+# Create templates directory if it doesn't exist
+os.makedirs("templates", exist_ok=True)
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
@@ -31,10 +37,93 @@ async def read_loading(request: Request):
     """Serve the loading.html file"""
     return templates.TemplateResponse("loading.html", {"request": request})
 
+@app.get("/template-creator", response_class=HTMLResponse)
+async def read_template_creator(request: Request):
+    """Serve the template-creator.html file"""
+    return templates.TemplateResponse("template-creator.html", {"request": request})
+
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
     """Serve favicon.ico"""
     return FileResponse("favicon.ico") if os.path.exists("favicon.ico") else None
+
+@app.post("/api/save-template")
+async def save_template(templateImage: UploadFile = File(...), templateData: str = Form(...)):
+    """Save a new template"""
+    try:
+        # Parse template data
+        template_data = json.loads(templateData)
+        
+        # Generate a unique ID for the template
+        template_id = f"template_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        
+        # Create directory for the template
+        template_dir = os.path.join("templates", template_id)
+        os.makedirs(template_dir, exist_ok=True)
+        
+        # Save the template image
+        image_path = os.path.join(template_dir, "template.jpg")
+        with open(image_path, "wb") as buffer:
+            shutil.copyfileobj(templateImage.file, buffer)
+        
+        # Update template data with the image path
+        template_data["imagePath"] = f"/static/templates/{template_id}/template.jpg"
+        template_data["id"] = template_id
+        
+        # Save template data as JSON
+        json_path = os.path.join(template_dir, "template.json")
+        with open(json_path, "w", encoding="utf-8") as f:
+            json.dump(template_data, f, ensure_ascii=False, indent=2)
+        
+        # Update templates index
+        templates_index_path = "templates/index.json"
+        templates_index = []
+        
+        if os.path.exists(templates_index_path):
+            with open(templates_index_path, "r", encoding="utf-8") as f:
+                templates_index = json.load(f)
+        
+        # Add new template to index
+        templates_index.append({
+            "id": template_id,
+            "name": template_data["name"],
+            "description": template_data["description"],
+            "imagePath": template_data["imagePath"],
+            "createdAt": datetime.now().isoformat()
+        })
+        
+        # Save updated index
+        with open(templates_index_path, "w", encoding="utf-8") as f:
+            json.dump(templates_index, f, ensure_ascii=False, indent=2)
+        
+        return JSONResponse(content={"success": True, "templateId": template_id})
+    
+    except Exception as e:
+        return JSONResponse(content={"success": False, "error": str(e)})
+
+@app.get("/api/templates")
+async def get_templates():
+    """Get all templates"""
+    templates_index_path = "templates/index.json"
+    
+    if os.path.exists(templates_index_path):
+        with open(templates_index_path, "r", encoding="utf-8") as f:
+            templates_index = json.load(f)
+        return JSONResponse(content=templates_index)
+    
+    return JSONResponse(content=[])
+
+@app.get("/api/template/{template_id}")
+async def get_template(template_id: str):
+    """Get a specific template"""
+    template_path = os.path.join("templates", template_id, "template.json")
+    
+    if os.path.exists(template_path):
+        with open(template_path, "r", encoding="utf-8") as f:
+            template_data = json.load(f)
+        return JSONResponse(content=template_data)
+    
+    return JSONResponse(content={"error": "Template not found"}, status_code=404)
 
 @app.get("/api/hijri-calendar/{year}/{month}")
 async def get_hijri_calendar_month(year: int, month: int):
