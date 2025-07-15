@@ -916,6 +916,12 @@ generateBtn.addEventListener('click', () => {
                         loadingMsg.textContent = 'جاري إنشاء ملف PDF...';
                         document.body.appendChild(loadingMsg);
                         
+                        // Hide directional controls before capturing
+                        const directionalControls = document.querySelectorAll('.directional-controls');
+                        directionalControls.forEach(control => {
+                            control.style.display = 'none';
+                        });
+                        
                         // Use html2canvas to capture the template with fixed dimensions
                         html2canvas(templateContainer, {
                             scale: 2,
@@ -954,6 +960,11 @@ generateBtn.addEventListener('click', () => {
                                     
                                     // Save the PDF
                                     pdf.save('نموذج_الإنتاج_الفني.pdf');
+                                    
+                                    // Show directional controls again
+                                    directionalControls.forEach(control => {
+                                        control.style.display = 'block';
+                                    });
                                 } else {
                                     // Use window.jspdf if available
                                     const { jsPDF } = window.jspdf;
@@ -984,11 +995,21 @@ generateBtn.addEventListener('click', () => {
                             } finally {
                                 // Hide loading message
                                 document.body.removeChild(loadingMsg);
+                                
+                                // Show directional controls again
+                                directionalControls.forEach(control => {
+                                    control.style.display = 'block';
+                                });
                             }
                         }).catch(error => {
                             console.error('Error generating PDF:', error);
                             alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
                             document.body.removeChild(loadingMsg);
+                            
+                            // Show directional controls again in case of error
+                            directionalControls.forEach(control => {
+                                control.style.display = 'block';
+                            });
                         });
                     }
                     
@@ -1010,6 +1031,12 @@ generateBtn.addEventListener('click', () => {
                         loadingMsg.textContent = 'جاري إنشاء الصورة...';
                         document.body.appendChild(loadingMsg);
                         
+                        // Hide directional controls before capturing
+                        const directionalControls = document.querySelectorAll('.directional-controls');
+                        directionalControls.forEach(control => {
+                            control.style.display = 'none';
+                        });
+                        
                         // Use html2canvas to capture the template with fixed dimensions
                         html2canvas(templateContainer, {
                             scale: 2,
@@ -1027,6 +1054,11 @@ generateBtn.addEventListener('click', () => {
                                 document.body.appendChild(link); // Append to body to work in Firefox
                                 link.click();
                                 document.body.removeChild(link); // Clean up
+                                
+                                // Show directional controls again
+                                directionalControls.forEach(control => {
+                                    control.style.display = 'block';
+                                });
                             } catch (error) {
                                 console.error('Error downloading image:', error);
                                 alert('حدث خطأ أثناء حفظ الصورة. يرجى المحاولة مرة أخرى.');
@@ -1038,6 +1070,11 @@ generateBtn.addEventListener('click', () => {
                             console.error('Error generating image:', error);
                             alert('حدث خطأ أثناء إنشاء الصورة. يرجى المحاولة مرة أخرى.');
                             document.body.removeChild(loadingMsg);
+                            
+                            // Show directional controls again in case of error
+                            directionalControls.forEach(control => {
+                                control.style.display = 'block';
+                            });
                         });
                     }
                 </script>
