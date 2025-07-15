@@ -546,6 +546,8 @@ generateBtn.addEventListener('click', () => {
                         padding: 3px 6px;
                         border-radius: 3px;
                         text-align: center;
+                        white-space: nowrap; /* Prevent text from wrapping to a new line */
+                        overflow: visible; /* Allow text to overflow its container */
                     }
                     
                     /* Mobile specific styles */
@@ -629,12 +631,12 @@ generateBtn.addEventListener('click', () => {
                                 <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 30%;">${formValues.formattedHour || formValues.hour || ''}</div>
                                 
                                 <!-- Assignees with individual positioning -->
-                                ${formValues.assignee1 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 13.5%;">${formValues.assignee1}</div>` : ''}
-                                ${formValues.assignee2 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 51%;">${formValues.assignee2}</div>` : ''}
-                                ${formValues.assignee3 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 13.5%;">${formValues.assignee3}</div>` : ''}
-                                ${formValues.assignee4 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 51%;">${formValues.assignee4}</div>` : ''}
-                                ${formValues.assignee5 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 13.5%;">${formValues.assignee5}</div>` : ''}
-                                ${formValues.assignee6 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 51%;">${formValues.assignee6}</div>` : ''}
+                                ${formValues.assignee1 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 13.5%; min-width: 150px;">${formValues.assignee1}</div>` : ''}
+                                ${formValues.assignee2 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 51%; min-width: 150px;">${formValues.assignee2}</div>` : ''}
+                                ${formValues.assignee3 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 13.5%; min-width: 150px;">${formValues.assignee3}</div>` : ''}
+                                ${formValues.assignee4 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 51%; min-width: 150px;">${formValues.assignee4}</div>` : ''}
+                                ${formValues.assignee5 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 13.5%; min-width: 150px;">${formValues.assignee5}</div>` : ''}
+                                ${formValues.assignee6 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 51%; min-width: 150px;">${formValues.assignee6}</div>` : ''}
                             </div>
                         </div>
                     </div>

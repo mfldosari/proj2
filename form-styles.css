@@ -483,6 +483,8 @@ main {
     padding: 3px 6px;
     border-radius: 3px;
     text-align: center;
+    white-space: nowrap; /* Prevent text from wrapping to a new line */
+    overflow: visible; /* Allow text to overflow its container */
     /* Position is set inline for each item */
     /* No responsive scaling */
     /* Font family and size are controlled by font styling buttons */
