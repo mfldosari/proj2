@@ -479,14 +479,13 @@ main {
 }
 
 .assignee-item {
-    font-family: 'Cairo', sans-serif;
-    font-size: 14px;
     background-color: transparent;
     padding: 3px 6px;
     border-radius: 3px;
     text-align: center;
     /* Position is set inline for each item */
     /* No responsive scaling */
+    /* Font family and size are controlled by font styling buttons */
 }
 
 /* Error Styles */

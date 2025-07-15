@@ -473,15 +473,15 @@ generateBtn.addEventListener('click', () => {
                     }
                     
                     .font-normal {
-                        font-size: 100%;
+                        font-size: 16px; /* Base size for all text elements */
                     }
                     
                     .font-large {
-                        font-size: 120%;
+                        font-size: 19px; /* 120% of base size */
                     }
                     
                     .font-larger {
-                        font-size: 140%;
+                        font-size: 22px; /* 140% of base size */
                     }
                     
                     .font-underline {
@@ -542,8 +542,6 @@ generateBtn.addEventListener('click', () => {
                     
                     .assignee-item {
                         position: absolute;
-                        font-family: 'Cairo', sans-serif;
-                        font-size: 14px;
                         background-color: transparent;
                         padding: 3px 6px;
                         border-radius: 3px;
