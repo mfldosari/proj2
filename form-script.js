@@ -642,6 +642,7 @@ generateBtn.addEventListener('click', () => {
                     </div>
                 </div>
                 
+                <script src="/static/movable-fields.js"></script>
                 <script>
                     // Initialize jsPDF when it's loaded
                     window.addEventListener('DOMContentLoaded', function() {
@@ -654,6 +655,12 @@ generateBtn.addEventListener('click', () => {
                         document.getElementById('downloadImgBtn').addEventListener('click', downloadAsImage);
                         document.getElementById('fontSizeBtn').addEventListener('click', changeFontSize);
                         document.getElementById('fontFamilyBtn').addEventListener('click', changeFontFamily);
+                        
+                        // Make fields movable with directional arrows
+                        makeFieldsMovable();
+                        
+                        // Add reset positions button
+                        addResetPositionsButton();
                         
                         // Function to change font size for all text elements
                         function changeFontSize() {
