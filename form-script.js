@@ -180,59 +180,396 @@ generateBtn.addEventListener('click', () => {
     // Show loading overlay
     const loadingOverlay = showLogoLoadingOverlay();
     
-    // Wait a moment before showing the template
+    // Wait a moment before opening the new window
     setTimeout(() => {
-        // Create template with data overlaid
-        templateResult.innerHTML = `
-            <div class="template-header">
-                <h2>النموذج المولد</h2>
-                <div class="template-actions">
-                    <button id="downloadPdfBtn" class="action-btn download-pdf-btn">
-                        <i class="fas fa-file-pdf"></i> حفظ كـ PDF
-                    </button>
-                    <button id="downloadImgBtn" class="action-btn download-img-btn">
-                        <i class="fas fa-image"></i> حفظ كصورة
-                    </button>
-                </div>
-            </div>
-            <div class="template-container" id="templateContainer">
-                <div class="template-image-container">
-                    <img src="/static/tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
+        // Create a new window with the template
+        const newWindow = window.open('', '_blank');
+        
+        // Write the HTML content to the new window
+        newWindow.document.write(`
+            <!DOCTYPE html>
+            <html lang="ar" dir="rtl">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+                <title>النموذج المولد</title>
+                <link rel="preconnect" href="https://fonts.googleapis.com">
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+                <style>
+                    body {
+                        font-family: 'Cairo', sans-serif;
+                        margin: 0;
+                        padding: 20px;
+                        background-color: #f5f9ff;
+                        direction: rtl;
+                    }
                     
-                    <!-- Overlay form data on the template -->
-                    <div class="data-overlay">
-                        <!-- You can adjust these positions as needed -->
-                        <div class="data-field" style="top: 20.5%; right: 30%;">${formValues.subject || ''}</div>
-                        <div class="data-field" style="top: 28%; right: 31%; font-weight: bold;">${formValues.day || ''}</div>
-                        <div class="data-field" style="top: 28%; right: 70%;">${formValues.hijriDate || ''}</div>
-                        <div class="data-field" style="top: 35%; right: 31%;">${formValues.location || ''}</div>
-                        <div class="data-field" style="top: 42%; right: 70%;">${formValues.time || ''}</div>
-                        <div class="data-field" style="top: 42%; right: 30%;">${formValues.formattedHour || formValues.hour || ''}</div>
+                    .container {
+                        max-width: 1000px;
+                        margin: 0 auto;
+                        background-color: white;
+                        padding: 20px;
+                        border-radius: 10px;
+                        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                    }
+                    
+                    .template-header {
+                        text-align: center;
+                        margin-bottom: 20px;
+                    }
+                    
+                    .template-header h2 {
+                        color: #009CDE;
+                        font-size: 24px;
+                        font-weight: bold;
+                    }
+                    
+                    .template-actions {
+                        display: flex;
+                        justify-content: center;
+                        gap: 10px;
+                        margin: 15px 0;
+                        flex-wrap: wrap;
+                    }
+                    
+                    .action-btn {
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 10px;
+                        font-size: 16px;
+                        font-weight: 700;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        transition: all 0.3s ease;
+                    }
+                    
+                    .download-pdf-btn {
+                        background-color: #f44336;
+                        color: white;
+                    }
+                    
+                    .download-img-btn {
+                        background-color: #2196f3;
+                        color: white;
+                    }
+                    
+                    .action-btn:hover {
+                        transform: translateY(-3px);
+                        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                    }
+                    
+                    /* Fixed size template container for all devices */
+                    .template-container {
+                        position: relative;
+                        margin: 20px auto;
+                        width: 800px;
+                        max-width: 100%;
+                        overflow-x: auto;
+                    }
+                    
+                    .template-image-container {
+                        position: relative;
+                        width: 800px;
+                        min-width: 800px; /* Force minimum width */
+                    }
+                    
+                    .template-image {
+                        width: 800px;
+                        height: auto;
+                        display: block;
+                        border: 2px solid #009CDE;
+                        border-radius: 5px;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    }
+                    
+                    .data-overlay {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        width: 100%;
+                        height: 100%;
+                        pointer-events: none;
+                    }
+                    
+                    .data-field {
+                        position: absolute;
+                        font-family: 'Cairo', sans-serif;
+                        font-size: 16px;
+                        color: #000;
+                        background-color: transparent;
+                        padding: 3px 6px;
+                        border-radius: 3px;
+                    }
+                    
+                    .assignee-item {
+                        position: absolute;
+                        font-family: 'Cairo', sans-serif;
+                        font-size: 14px;
+                        background-color: transparent;
+                        padding: 3px 6px;
+                        border-radius: 3px;
+                        text-align: center;
+                    }
+                    
+                    /* Mobile specific styles */
+                    @media (max-width: 820px) {
+                        body {
+                            padding: 10px;
+                        }
                         
-                        <!-- Assignees with individual positioning -->
-                        ${formValues.assignee1 ? `<div class="assignee-item" style="position: absolute; top: 71.5%; right: 13.5%;">${formValues.assignee1}</div>` : ''}
-                        ${formValues.assignee2 ? `<div class="assignee-item" style="position: absolute; top: 71.5%; right: 51%;">${formValues.assignee2}</div>` : ''}
-                        ${formValues.assignee3 ? `<div class="assignee-item" style="position: absolute; top: 76.5%; right: 13.5%;">${formValues.assignee3}</div>` : ''}
-                        ${formValues.assignee4 ? `<div class="assignee-item" style="position: absolute; top: 76.5%; right: 51%;">${formValues.assignee4}</div>` : ''}
-                        ${formValues.assignee5 ? `<div class="assignee-item" style="position: absolute; top: 81.5%; right: 13.5%;">${formValues.assignee5}</div>` : ''}
-                        ${formValues.assignee6 ? `<div class="assignee-item" style="position: absolute; top: 81.5%; right: 51%;">${formValues.assignee6}</div>` : ''}
+                        .container {
+                            padding: 10px;
+                        }
+                        
+                        /* Make container scrollable horizontally */
+                        .template-container {
+                            overflow-x: scroll;
+                            -webkit-overflow-scrolling: touch;
+                            padding-bottom: 15px; /* Space for scrollbar */
+                        }
+                    }
+                    
+                    @media print {
+                        .template-actions {
+                            display: none;
+                        }
+                        
+                        body {
+                            background-color: white;
+                            padding: 0;
+                        }
+                        
+                        .container {
+                            box-shadow: none;
+                            padding: 0;
+                        }
+                        
+                        .template-header {
+                            display: none;
+                        }
+                    }
+                </style>
+                <!-- Include html2canvas library -->
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+                <!-- Include jsPDF library -->
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="template-header">
+                        <h2>النموذج المولد</h2>
+                        <div class="template-actions">
+                            <button id="downloadPdfBtn" class="action-btn download-pdf-btn">
+                                <i class="fas fa-file-pdf"></i> حفظ كـ PDF
+                            </button>
+                            <button id="downloadImgBtn" class="action-btn download-img-btn">
+                                <i class="fas fa-image"></i> حفظ كصورة
+                            </button>
+                        </div>
+                    </div>
+                    <div class="template-container" id="templateContainer">
+                        <div class="template-image-container">
+                            <img src="/static/tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
+                            
+                            <!-- Overlay form data on the template -->
+                            <div class="data-overlay">
+                                <!-- You can adjust these positions as needed -->
+                                <div class="data-field" style="top: 20.5%; right: 30%;">${formValues.subject || ''}</div>
+                                <div class="data-field" style="top: 28%; right: 31%; font-weight: bold;">${formValues.day || ''}</div>
+                                <div class="data-field" style="top: 28%; right: 70%;">${formValues.hijriDate || ''}</div>
+                                <div class="data-field" style="top: 35%; right: 31%;">${formValues.location || ''}</div>
+                                <div class="data-field" style="top: 42%; right: 70%;">${formValues.time || ''}</div>
+                                <div class="data-field" style="top: 42%; right: 30%;">${formValues.formattedHour || formValues.hour || ''}</div>
+                                
+                                <!-- Assignees with individual positioning -->
+                                ${formValues.assignee1 ? `<div class="assignee-item" style="position: absolute; top: 71.5%; right: 13.5%;">${formValues.assignee1}</div>` : ''}
+                                ${formValues.assignee2 ? `<div class="assignee-item" style="position: absolute; top: 71.5%; right: 51%;">${formValues.assignee2}</div>` : ''}
+                                ${formValues.assignee3 ? `<div class="assignee-item" style="position: absolute; top: 76.5%; right: 13.5%;">${formValues.assignee3}</div>` : ''}
+                                ${formValues.assignee4 ? `<div class="assignee-item" style="position: absolute; top: 76.5%; right: 51%;">${formValues.assignee4}</div>` : ''}
+                                ${formValues.assignee5 ? `<div class="assignee-item" style="position: absolute; top: 81.5%; right: 13.5%;">${formValues.assignee5}</div>` : ''}
+                                ${formValues.assignee6 ? `<div class="assignee-item" style="position: absolute; top: 81.5%; right: 51%;">${formValues.assignee6}</div>` : ''}
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
+                
+                <script>
+                    // Initialize jsPDF when it's loaded
+                    window.addEventListener('DOMContentLoaded', function() {
+                        if (typeof window.jspdf === 'undefined' && typeof jsPDF !== 'undefined') {
+                            window.jspdf = { jsPDF: jsPDF };
+                        }
+                        
+                        // Add event listeners for buttons
+                        document.getElementById('downloadPdfBtn').addEventListener('click', downloadAsPdf);
+                        document.getElementById('downloadImgBtn').addEventListener('click', downloadAsImage);
+                        
+                        // Ensure proper sizing on mobile devices
+                        const templateContainer = document.getElementById('templateContainer');
+                        const templateImageContainer = templateContainer.querySelector('.template-image-container');
+                        
+                        // Force scrolling to the right (RTL layout) to show the beginning of the template
+                        if (templateContainer.scrollWidth > templateContainer.clientWidth) {
+                            templateContainer.scrollLeft = templateContainer.scrollWidth;
+                        }
+                    });
+                    
+                    // Download as PDF
+                    function downloadAsPdf() {
+                        const templateContainer = document.getElementById('templateContainer');
+                        
+                        // Show loading message
+                        const loadingMsg = document.createElement('div');
+                        loadingMsg.style.position = 'fixed';
+                        loadingMsg.style.top = '0';
+                        loadingMsg.style.left = '0';
+                        loadingMsg.style.width = '100%';
+                        loadingMsg.style.padding = '10px';
+                        loadingMsg.style.backgroundColor = '#009CDE';
+                        loadingMsg.style.color = 'white';
+                        loadingMsg.style.textAlign = 'center';
+                        loadingMsg.style.zIndex = '9999';
+                        loadingMsg.textContent = 'جاري إنشاء ملف PDF...';
+                        document.body.appendChild(loadingMsg);
+                        
+                        // Use html2canvas to capture the template with fixed dimensions
+                        html2canvas(templateContainer, {
+                            scale: 2,
+                            useCORS: true,
+                            allowTaint: true,
+                            logging: false,
+                            width: 800, // Fixed width
+                            height: templateContainer.offsetHeight // Maintain aspect ratio
+                        }).then(canvas => {
+                            try {
+                                // Check if jsPDF is available in the window object
+                                if (typeof window.jspdf === 'undefined') {
+                                    // Try to use jsPDF directly if available
+                                    if (typeof jsPDF === 'undefined') {
+                                        alert('مكتبة jsPDF غير متوفرة. يرجى التحقق من اتصال الإنترنت وإعادة تحميل الصفحة.');
+                                        document.body.removeChild(loadingMsg);
+                                        return;
+                                    }
+                                    
+                                    // Create a new jsPDF instance
+                                    const pdf = new jsPDF({
+                                        orientation: 'portrait',
+                                        unit: 'mm',
+                                        format: 'a4'
+                                    });
+                                    
+                                    // Calculate dimensions
+                                    const imgData = canvas.toDataURL('image/png');
+                                    const pageWidth = pdf.internal.pageSize.getWidth();
+                                    const pageHeight = pdf.internal.pageSize.getHeight();
+                                    const imgWidth = pageWidth - 20; // Margins
+                                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                                    
+                                    // Add the image to the PDF
+                                    pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                                    
+                                    // Save the PDF
+                                    pdf.save('نموذج_الإنتاج_الفني.pdf');
+                                } else {
+                                    // Use window.jspdf if available
+                                    const { jsPDF } = window.jspdf;
+                                    
+                                    // Create a new jsPDF instance
+                                    const pdf = new jsPDF({
+                                        orientation: 'portrait',
+                                        unit: 'mm',
+                                        format: 'a4'
+                                    });
+                                    
+                                    // Calculate dimensions
+                                    const imgData = canvas.toDataURL('image/png');
+                                    const pageWidth = pdf.internal.pageSize.getWidth();
+                                    const pageHeight = pdf.internal.pageSize.getHeight();
+                                    const imgWidth = pageWidth - 20; // Margins
+                                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                                    
+                                    // Add the image to the PDF
+                                    pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                                    
+                                    // Save the PDF
+                                    pdf.save('نموذج_الإنتاج_الفني.pdf');
+                                }
+                            } catch (error) {
+                                console.error('Error generating PDF:', error);
+                                alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
+                            } finally {
+                                // Hide loading message
+                                document.body.removeChild(loadingMsg);
+                            }
+                        }).catch(error => {
+                            console.error('Error generating PDF:', error);
+                            alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
+                            document.body.removeChild(loadingMsg);
+                        });
+                    }
+                    
+                    // Download as image
+                    function downloadAsImage() {
+                        const templateContainer = document.getElementById('templateContainer');
+                        
+                        // Show loading message
+                        const loadingMsg = document.createElement('div');
+                        loadingMsg.style.position = 'fixed';
+                        loadingMsg.style.top = '0';
+                        loadingMsg.style.left = '0';
+                        loadingMsg.style.width = '100%';
+                        loadingMsg.style.padding = '10px';
+                        loadingMsg.style.backgroundColor = '#009CDE';
+                        loadingMsg.style.color = 'white';
+                        loadingMsg.style.textAlign = 'center';
+                        loadingMsg.style.zIndex = '9999';
+                        loadingMsg.textContent = 'جاري إنشاء الصورة...';
+                        document.body.appendChild(loadingMsg);
+                        
+                        // Use html2canvas to capture the template with fixed dimensions
+                        html2canvas(templateContainer, {
+                            scale: 2,
+                            useCORS: true,
+                            allowTaint: true,
+                            logging: false,
+                            width: 800, // Fixed width
+                            height: templateContainer.offsetHeight // Maintain aspect ratio
+                        }).then(canvas => {
+                            try {
+                                // Create a download link
+                                const link = document.createElement('a');
+                                link.download = 'نموذج_الإنتاج_الفني.png';
+                                link.href = canvas.toDataURL('image/png');
+                                document.body.appendChild(link); // Append to body to work in Firefox
+                                link.click();
+                                document.body.removeChild(link); // Clean up
+                            } catch (error) {
+                                console.error('Error downloading image:', error);
+                                alert('حدث خطأ أثناء حفظ الصورة. يرجى المحاولة مرة أخرى.');
+                            } finally {
+                                // Hide loading message
+                                document.body.removeChild(loadingMsg);
+                            }
+                        }).catch(error => {
+                            console.error('Error generating image:', error);
+                            alert('حدث خطأ أثناء إنشاء الصورة. يرجى المحاولة مرة أخرى.');
+                            document.body.removeChild(loadingMsg);
+                        });
+                    }
+                </script>
+            </body>
+            </html>
+        `);
+        
+        // Close the document to finish loading
+        newWindow.document.close();
         
         // Hide loading overlay
         hideLogoLoadingOverlay(loadingOverlay);
-        
-        // Show the template result section
-        templateResult.classList.add('visible');
-        
-        // Add event listeners for download buttons
-        document.getElementById('downloadPdfBtn').addEventListener('click', downloadAsPdf);
-        document.getElementById('downloadImgBtn').addEventListener('click', downloadAsImage);
-        
-        // Scroll to the template result
-        templateResult.scrollIntoView({ behavior: 'smooth' });
         
         // Reset form to default values
         mediaForm.reset();
@@ -241,127 +578,6 @@ generateBtn.addEventListener('click', () => {
         daySelect.disabled = true;
     }, 1500);
 });
-
-// Download as PDF
-function downloadAsPdf() {
-    const templateContainer = document.getElementById('templateContainer');
-    
-    // Show loading overlay
-    const loadingOverlay = showLogoLoadingOverlay();
-    
-    // Use html2canvas to capture the template with fixed dimensions
-    html2canvas(templateContainer, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        width: 800, // Fixed width
-        height: templateContainer.offsetHeight // Maintain aspect ratio
-    }).then(canvas => {
-        try {
-            // Check if jsPDF is available in the window object
-            if (typeof window.jspdf === 'undefined') {
-                // Try to use jsPDF directly if available
-                if (typeof jsPDF === 'undefined') {
-                    alert('مكتبة jsPDF غير متوفرة. يرجى التحقق من اتصال الإنترنت وإعادة تحميل الصفحة.');
-                    hideLogoLoadingOverlay(loadingOverlay);
-                    return;
-                }
-                
-                // Create a new jsPDF instance
-                const pdf = new jsPDF({
-                    orientation: 'portrait',
-                    unit: 'mm',
-                    format: 'a4'
-                });
-                
-                // Calculate dimensions
-                const imgData = canvas.toDataURL('image/png');
-                const pageWidth = pdf.internal.pageSize.getWidth();
-                const pageHeight = pdf.internal.pageSize.getHeight();
-                const imgWidth = pageWidth - 20; // Margins
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                
-                // Add the image to the PDF
-                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-                
-                // Save the PDF
-                pdf.save('نموذج_الإنتاج_الفني.pdf');
-            } else {
-                // Use window.jspdf if available
-                const { jsPDF } = window.jspdf;
-                
-                // Create a new jsPDF instance
-                const pdf = new jsPDF({
-                    orientation: 'portrait',
-                    unit: 'mm',
-                    format: 'a4'
-                });
-                
-                // Calculate dimensions
-                const imgData = canvas.toDataURL('image/png');
-                const pageWidth = pdf.internal.pageSize.getWidth();
-                const pageHeight = pdf.internal.pageSize.getHeight();
-                const imgWidth = pageWidth - 20; // Margins
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                
-                // Add the image to the PDF
-                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-                
-                // Save the PDF
-                pdf.save('نموذج_الإنتاج_الفني.pdf');
-            }
-        } catch (error) {
-            console.error('Error generating PDF:', error);
-            alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
-        } finally {
-            // Hide loading overlay
-            hideLogoLoadingOverlay(loadingOverlay);
-        }
-    }).catch(error => {
-        console.error('Error generating PDF:', error);
-        alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
-        hideLogoLoadingOverlay(loadingOverlay);
-    });
-}
-
-// Download as image
-function downloadAsImage() {
-    const templateContainer = document.getElementById('templateContainer');
-    
-    // Show loading overlay
-    const loadingOverlay = showLogoLoadingOverlay();
-    
-    // Use html2canvas to capture the template with fixed dimensions
-    html2canvas(templateContainer, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        width: 800, // Fixed width
-        height: templateContainer.offsetHeight // Maintain aspect ratio
-    }).then(canvas => {
-        try {
-            // Create a download link
-            const link = document.createElement('a');
-            link.download = 'نموذج_الإنتاج_الفني.png';
-            link.href = canvas.toDataURL('image/png');
-            document.body.appendChild(link); // Append to body to work in Firefox
-            link.click();
-            document.body.removeChild(link); // Clean up
-        } catch (error) {
-            console.error('Error downloading image:', error);
-            alert('حدث خطأ أثناء حفظ الصورة. يرجى المحاولة مرة أخرى.');
-        } finally {
-            // Hide loading overlay
-            hideLogoLoadingOverlay(loadingOverlay);
-        }
-    }).catch(error => {
-        console.error('Error generating image:', error);
-        alert('حدث خطأ أثناء إنشاء الصورة. يرجى المحاولة مرة أخرى.');
-        hideLogoLoadingOverlay(loadingOverlay);
-    });
-}
 
 // Save form data to localStorage
 mediaForm.addEventListener('input', () => {
