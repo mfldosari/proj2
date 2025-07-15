@@ -13,6 +13,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- Include jsPDF library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Include Moment.js first -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <!-- Then include Moment-Hijri -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-hijri/2.1.2/moment-hijri.min.js"></script>
     <script>
         // Initialize jsPDF when it's loaded
         window.addEventListener('DOMContentLoaded', function() {
@@ -77,6 +81,33 @@
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
+        
+        /* Hijri date display */
+        .hijri-date-display {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #003459;
+            font-weight: bold;
+        }
+        
+        /* Arabic validation error styles */
+        .arabic-error {
+            border-color: #ff3333 !important;
+            box-shadow: 0 0 0 2px rgba(255, 51, 51, 0.2) !important;
+        }
+        
+        .arabic-error-msg {
+            color: #ff3333;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        /* Disabled select styling */
+        select:disabled {
+            background-color: #f9f9f9;
+            color: #333;
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
@@ -108,6 +139,7 @@
                         <div class="form-group">
                             <label for="subject">الموضوع</label>
                             <input type="text" id="subject" name="subject" required>
+                            <div class="arabic-error-msg" id="subjectError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
                         </div>
                     </div>
                     
@@ -115,7 +147,7 @@
                     <div class="form-column">
                         <div class="form-group">
                             <label for="day">اليوم</label>
-                            <select id="day" name="day" required>
+                            <select id="day" name="day" required disabled style="background-color: #f9f9f9; color: #333; font-weight: bold;">
                                 <option value="">اختر اليوم</option>
                                 <option value="الأحد">الأحد</option>
                                 <option value="الإثنين">الإثنين</option>
@@ -128,8 +160,12 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="date">التاريخ</label>
+                            <label for="date">التاريخ الميلادي</label>
                             <input type="date" id="date" name="date" required>
+                            <div class="hijri-date-display" style="display: block; padding: 5px; margin-top: 5px; background-color: #f5f5f5; border-radius: 4px;">
+                                <span id="hijriDateText">التاريخ الهجري: </span>
+                                <input type="hidden" id="hijriDate" name="hijriDate">
+                            </div>
                         </div>
                     </div>
                     
@@ -138,6 +174,7 @@
                         <div class="form-group">
                             <label for="location">الموقع</label>
                             <input type="text" id="location" name="location" required>
+                            <div class="arabic-error-msg" id="locationError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
                         </div>
                     </div>
                     
@@ -146,6 +183,7 @@
                         <div class="form-group">
                             <label for="time">الوقت</label>
                             <input type="text" id="time" name="time" placeholder="أدخل الوقت" required>
+                            <div class="arabic-error-msg" id="timeError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
                         </div>
                         
                         <div class="form-group">
@@ -160,12 +198,18 @@
                     <div class="form-group">
                         <label>المكلفون</label>
                         <div class="assignees-inputs">
-                            <input type="text" name="assignee1" placeholder="المكلف 1">
-                            <input type="text" name="assignee2" placeholder="المكلف 2">
-                            <input type="text" name="assignee3" placeholder="المكلف 3">
-                            <input type="text" name="assignee4" placeholder="المكلف 4">
-                            <input type="text" name="assignee5" placeholder="المكلف 5">
-                            <input type="text" name="assignee6" placeholder="المكلف 6">
+                            <input type="text" name="assignee1" id="assignee1" placeholder="المكلف 1">
+                            <div class="arabic-error-msg" id="assignee1Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                            <input type="text" name="assignee2" id="assignee2" placeholder="المكلف 2">
+                            <div class="arabic-error-msg" id="assignee2Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                            <input type="text" name="assignee3" id="assignee3" placeholder="المكلف 3">
+                            <div class="arabic-error-msg" id="assignee3Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                            <input type="text" name="assignee4" id="assignee4" placeholder="المكلف 4">
+                            <div class="arabic-error-msg" id="assignee4Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                            <input type="text" name="assignee5" id="assignee5" placeholder="المكلف 5">
+                            <div class="arabic-error-msg" id="assignee5Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                            <input type="text" name="assignee6" id="assignee6" placeholder="المكلف 6">
+                            <div class="arabic-error-msg" id="assignee6Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
                         </div>
                     </div>
                 </div>
@@ -196,20 +240,264 @@
         </footer>
     </div>
 
-    <script src="/static/form-script.js"></script>
     <script>
-        // Loading overlay functionality
-        document.addEventListener('DOMContentLoaded', () => {
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            
+        // Form functionality
+        document.addEventListener('DOMContentLoaded', function() {
             // Hide loading overlay after a short delay
+            const loadingOverlay = document.getElementById('loadingOverlay');
             setTimeout(() => {
                 loadingOverlay.style.opacity = '0';
                 setTimeout(() => {
                     loadingOverlay.style.display = 'none';
                 }, 500);
             }, 1500);
+            
+            // DOM Elements
+            const dateInput = document.getElementById('date');
+            const hijriDateText = document.getElementById('hijriDateText');
+            const hijriDateInput = document.getElementById('hijriDate');
+            const daySelect = document.getElementById('day');
+            const timeInput = document.getElementById('time');
+            const hourInput = document.getElementById('hour');
+            
+            // Arabic day names
+            const arabicDays = [
+                'الأحد',    // Sunday
+                'الإثنين',  // Monday
+                'الثلاثاء', // Tuesday
+                'الأربعاء', // Wednesday
+                'الخميس',   // Thursday
+                'الجمعة',   // Friday
+                'السبت'     // Saturday
+            ];
+            
+            // Hijri month names
+            const hijriMonths = [
+                'محرم',
+                'صفر',
+                'ربيع الأول',
+                'ربيع الثاني',
+                'جمادى الأولى',
+                'جمادى الآخرة',
+                'رجب',
+                'شعبان',
+                'رمضان',
+                'شوال',
+                'ذو القعدة',
+                'ذو الحجة'
+            ];
+            
+            // Set default values for today
+            const today = new Date();
+            
+            // Set default date
+            const year = today.getFullYear();
+            const month = (today.getMonth() + 1).toString().padStart(2, '0');
+            const day = today.getDate().toString().padStart(2, '0');
+            dateInput.value = `${year}-${month}-${day}`;
+            
+            // Set default day of week
+            const dayOfWeek = today.getDay();
+            daySelect.value = arabicDays[dayOfWeek];
+            
+            // Set default time
+            const hours = today.getHours().toString().padStart(2, '0');
+            const minutes = today.getMinutes().toString().padStart(2, '0');
+            hourInput.value = `${hours}:${minutes}`;
+            
+            // Format time in Arabic
+            const period = today.getHours() >= 12 ? 'م' : 'ص';
+            let formattedHours = today.getHours();
+            if (formattedHours > 12) {
+                formattedHours -= 12;
+            } else if (formattedHours === 0) {
+                formattedHours = 12;
+            }
+            timeInput.value = `${formattedHours}:${minutes} ${period}`;
+            
+            // Convert Gregorian to Hijri
+            function convertToHijri(date) {
+                try {
+                    // Use moment.js to convert
+                    const m = moment(date);
+                    
+                    // Debug
+                    console.log('Converting date:', date);
+                    console.log('Moment object:', m.format('YYYY-MM-DD'));
+                    
+                    // Convert to Hijri
+                    const hijriYear = m.iYear();
+                    const hijriMonth = m.iMonth();
+                    const hijriDay = m.iDate();
+                    
+                    console.log('Hijri date:', hijriDay, hijriMonth, hijriYear);
+                    
+                    return {
+                        day: hijriDay,
+                        month: hijriMonth,
+                        year: hijriYear
+                    };
+                } catch (error) {
+                    console.error('Error converting to Hijri:', error);
+                    return null;
+                }
+            }
+            
+            // Fallback method using Aladhan API
+            async function getHijriDateFromAPI(gregorianDate) {
+                try {
+                    const [year, month, day] = gregorianDate.split('-');
+                    const url = `http://api.aladhan.com/v1/gToH/${day}-${month}-${year}`;
+                    
+                    console.log('Fetching from API:', url);
+                    
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    if (data.code === 200 && data.data) {
+                        const hijri = data.data.hijri;
+                        console.log('API response:', hijri);
+                        
+                        return {
+                            day: parseInt(hijri.day),
+                            month: hijriMonths.indexOf(hijri.month.ar),
+                            monthName: hijri.month.ar,
+                            year: parseInt(hijri.year)
+                        };
+                    }
+                    
+                    return null;
+                } catch (error) {
+                    console.error('Error fetching from API:', error);
+                    return null;
+                }
+            }
+            
+            // Update Hijri date display with API fallback
+            async function updateHijriDateWithFallback() {
+                const date = dateInput.value;
+                console.log('Updating Hijri date for:', date);
+                
+                if (!date) {
+                    hijriDateText.textContent = 'التاريخ الهجري: ';
+                    hijriDateInput.value = '';
+                    return;
+                }
+                
+                // Try using moment-hijri first
+                const hijriDate = convertToHijri(date);
+                
+                if (hijriDate && hijriDate.day && hijriDate.year) {
+                    // Make sure we're using the correct month index (0-based to 1-based)
+                    const monthIndex = hijriDate.month;
+                    const monthName = hijriMonths[monthIndex];
+                    
+                    console.log('Month index:', monthIndex, 'Month name:', monthName);
+                    
+                    const formattedDate = `${hijriDate.day} ${monthName} ${hijriDate.year} هـ`;
+                    console.log('Formatted Hijri date:', formattedDate);
+                    
+                    hijriDateText.textContent = `التاريخ الهجري: ${formattedDate}`;
+                    hijriDateInput.value = formattedDate;
+                } else {
+                    // Fallback to API
+                    console.log('Falling back to API');
+                    const apiDate = await getHijriDateFromAPI(date);
+                    
+                    if (apiDate) {
+                        const formattedDate = `${apiDate.day} ${apiDate.monthName} ${apiDate.year} هـ`;
+                        console.log('API Formatted Hijri date:', formattedDate);
+                        
+                        hijriDateText.textContent = `التاريخ الهجري: ${formattedDate}`;
+                        hijriDateInput.value = formattedDate;
+                    } else {
+                        console.error('Failed to convert date to Hijri');
+                        hijriDateText.textContent = 'التاريخ الهجري: (خطأ في التحويل)';
+                        hijriDateInput.value = '';
+                    }
+                }
+            }
+            
+            // Update day of week based on selected date
+            dateInput.addEventListener('change', function() {
+                if (this.value) {
+                    const selectedDate = new Date(this.value);
+                    const dayIndex = selectedDate.getDay();
+                    daySelect.value = arabicDays[dayIndex];
+                    
+                    // Update Hijri date
+                    updateHijriDateWithFallback();
+                }
+            });
+            
+            // Set default Hijri date for today (July 15, 2025 = 15 Muharram 1447)
+            const defaultHijriDate = "15 محرم 1447 هـ";
+            hijriDateText.textContent = `التاريخ الهجري: ${defaultHijriDate}`;
+            hijriDateInput.value = defaultHijriDate;
+            
+            // Initial update of Hijri date
+            console.log('Setting initial Hijri date');
+            setTimeout(() => {
+                updateHijriDateWithFallback();
+            }, 500);
+            
+            // Arabic validation for text inputs
+            function isArabicText(text) {
+                if (!text) return true;
+                // Arabic Unicode range: \u0600-\u06FF
+                // Additional Arabic characters: \u0750-\u077F, \u08A0-\u08FF
+                // Arabic presentation forms: \uFB50-\uFDFF, \uFE70-\uFEFF
+                // Allow spaces, commas, and periods
+                const arabicRegex = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\s.,]+$/;
+                return arabicRegex.test(text);
+            }
+            
+            // Add Arabic validation to specific fields
+            const arabicFields = [
+                { input: document.getElementById('subject'), error: document.getElementById('subjectError') },
+                { input: document.getElementById('location'), error: document.getElementById('locationError') },
+                { input: document.getElementById('time'), error: document.getElementById('timeError') },
+                { input: document.getElementById('assignee1'), error: document.getElementById('assignee1Error') },
+                { input: document.getElementById('assignee2'), error: document.getElementById('assignee2Error') },
+                { input: document.getElementById('assignee3'), error: document.getElementById('assignee3Error') },
+                { input: document.getElementById('assignee4'), error: document.getElementById('assignee4Error') },
+                { input: document.getElementById('assignee5'), error: document.getElementById('assignee5Error') },
+                { input: document.getElementById('assignee6'), error: document.getElementById('assignee6Error') }
+            ];
+            
+            arabicFields.forEach(field => {
+                if (!field.input) return;
+                
+                field.input.addEventListener('input', function() {
+                    if (this.value && !isArabicText(this.value)) {
+                        this.classList.add('arabic-error');
+                        field.error.style.display = 'block';
+                    } else {
+                        this.classList.remove('arabic-error');
+                        field.error.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Check if all fields have valid Arabic text
+            window.validateArabicFields = function() {
+                let isValid = true;
+                
+                arabicFields.forEach(field => {
+                    if (!field.input) return;
+                    
+                    // Only validate if the field has a value
+                    if (field.input.value && !isArabicText(field.input.value)) {
+                        field.input.classList.add('arabic-error');
+                        field.error.style.display = 'block';
+                        isValid = false;
+                    }
+                });
+                
+                return isValid;
+            };
         });
     </script>
+    <script src="/static/form-script.js"></script>
 </body>
 </html>

@@ -4,57 +4,8 @@ const generateBtn = document.getElementById('generateBtn');
 const backBtn = document.getElementById('backBtn');
 const daySelect = document.getElementById('day');
 const dateInput = document.getElementById('date');
+const hijriDateInput = document.getElementById('hijriDate');
 const templateResult = document.getElementById('templateResult');
-
-// Function to validate Arabic text input
-function isArabicText(text) {
-    // Arabic Unicode range: \u0600-\u06FF
-    // Additional Arabic characters: \u0750-\u077F, \u08A0-\u08FF
-    // Arabic presentation forms: \uFB50-\uFDFF, \uFE70-\uFEFF
-    // Allow spaces, commas, and periods
-    const arabicRegex = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\s.,]+$/;
-    return arabicRegex.test(text);
-}
-
-// Add Arabic-only validation to text inputs
-function addArabicValidation() {
-    // Get all text inputs
-    const textInputs = document.querySelectorAll('input[type="text"]');
-    
-    textInputs.forEach(input => {
-        // Add input event listener
-        input.addEventListener('input', function() {
-            // If the input is not empty and not Arabic
-            if (this.value && !isArabicText(this.value)) {
-                // Remove non-Arabic characters
-                this.value = this.value.split('').filter(char => 
-                    isArabicText(char) || char === ' ' || char === '.' || char === ','
-                ).join('');
-                
-                // Add error class
-                this.classList.add('arabic-error');
-                
-                // Show error message
-                let errorMsg = this.parentNode.querySelector('.arabic-error-msg');
-                if (!errorMsg) {
-                    errorMsg = document.createElement('div');
-                    errorMsg.className = 'arabic-error-msg';
-                    errorMsg.textContent = 'يرجى إدخال حروف عربية فقط';
-                    this.parentNode.appendChild(errorMsg);
-                }
-            } else {
-                // Remove error class
-                this.classList.remove('arabic-error');
-                
-                // Remove error message
-                const errorMsg = this.parentNode.querySelector('.arabic-error-msg');
-                if (errorMsg) {
-                    errorMsg.remove();
-                }
-            }
-        });
-    });
-}
 
 // Function to show loading overlay with logo animation
 function showLogoLoadingOverlay() {
@@ -133,46 +84,6 @@ function setupAssigneeFields() {
     });
 }
 
-// Template positions for form fields
-const fieldPositions = {
-    'subject': { top: '20%', right: '25%' },
-    'day': { top: '25%', right: '25%' },
-    'date': { top: '30%', right: '25%' },
-    'location': { top: '35%', right: '25%' },
-    'time': { top: '40%', right: '25%' },
-    'hour': { top: '45%', right: '25%' },
-    'assignees': { top: '60%', right: '25%', grid: true }
-};
-
-// Arabic day names
-const arabicDays = [
-    'الأحد',    // Sunday
-    'الإثنين',  // Monday
-    'الثلاثاء', // Tuesday
-    'الأربعاء', // Wednesday
-    'الخميس',   // Thursday
-    'الجمعة',   // Friday
-    'السبت'     // Saturday
-];
-
-// Update day based on selected date
-dateInput.addEventListener('change', function() {
-    if (this.value) {
-        const selectedDate = new Date(this.value);
-        const dayIndex = selectedDate.getDay(); // 0 = Sunday, 1 = Monday, etc.
-        daySelect.value = arabicDays[dayIndex];
-    }
-});
-
-// Format date to Arabic format
-function formatDateToArabic(dateString) {
-    if (!dateString) return '';
-    
-    const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('ar-SA', options);
-}
-
 // Format time from time input
 function formatTime(timeString) {
     if (!timeString) return '';
@@ -203,6 +114,9 @@ backBtn.addEventListener('click', () => {
 
 // Generate template with form data
 generateBtn.addEventListener('click', () => {
+    // Temporarily enable the day field for form submission
+    daySelect.disabled = false;
+    
     // Check form validity
     if (!mediaForm.checkValidity()) {
         // Mark all required fields that are empty
@@ -220,12 +134,29 @@ generateBtn.addEventListener('click', () => {
         
         // Show error message
         alert('الرجاء ملء جميع الحقول المطلوبة');
+        
+        // Disable the day field again
+        daySelect.disabled = true;
         return;
+    }
+    
+    // Check Arabic validation
+    if (typeof window.validateArabicFields === 'function') {
+        if (!window.validateArabicFields()) {
+            alert('الرجاء إدخال حروف عربية فقط في الحقول المطلوبة');
+            
+            // Disable the day field again
+            daySelect.disabled = true;
+            return;
+        }
     }
     
     // Double check that all required fields are filled
     if (!areAllRequiredFieldsFilled()) {
         alert('الرجاء ملء جميع الحقول المطلوبة');
+        
+        // Disable the day field again
+        daySelect.disabled = true;
         return;
     }
     
@@ -237,10 +168,9 @@ generateBtn.addEventListener('click', () => {
         formValues[key] = value;
     }
     
-    // Format date if available
-    if (formValues.date) {
-        formValues.formattedDate = formatDateToArabic(formValues.date);
-    }
+    // Make sure to get the day value even though the field is disabled
+    formValues.day = daySelect.value;
+    console.log('Day value:', formValues.day);
     
     // Format hour if available
     if (formValues.hour) {
@@ -273,8 +203,8 @@ generateBtn.addEventListener('click', () => {
                     <div class="data-overlay">
                         <!-- You can adjust these positions as needed -->
                         <div class="data-field" style="top: 20.5%; right: 30%;">${formValues.subject || ''}</div>
-                        <div class="data-field" style="top: 28%; right: 31%;">${formValues.day || ''}</div>
-                        <div class="data-field" style="top: 28%; right: 70%;">${formValues.formattedDate || formValues.date || ''}</div>
+                        <div class="data-field" style="top: 28%; right: 31%; font-weight: bold;">${formValues.day || ''}</div>
+                        <div class="data-field" style="top: 28%; right: 70%;">${formValues.hijriDate || ''}</div>
                         <div class="data-field" style="top: 35%; right: 31%;">${formValues.location || ''}</div>
                         <div class="data-field" style="top: 42%; right: 70%;">${formValues.time || ''}</div>
                         <div class="data-field" style="top: 42%; right: 30%;">${formValues.formattedHour || formValues.hour || ''}</div>
@@ -307,79 +237,10 @@ generateBtn.addEventListener('click', () => {
         // Reset form to default values
         mediaForm.reset();
         
-        // Update day field after reset
-        if (dateInput.value) {
-            const event = new Event('change');
-            dateInput.dispatchEvent(event);
-        }
+        // Disable the day field again
+        daySelect.disabled = true;
     }, 1500);
 });
-
-// Print the template
-function printTemplate() {
-    const templateContainer = document.getElementById('templateContainer');
-    const printWindow = window.open('', '_blank');
-    
-    printWindow.document.write(`
-        <html>
-        <head>
-            <title>طباعة النموذج</title>
-            <style>
-                @media print {
-                    body {
-                        margin: 0;
-                        padding: 0;
-                    }
-                }
-                .template-container {
-                    position: relative;
-                }
-                .template-image-container {
-                    position: relative;
-                }
-                .template-image {
-                    width: 100%;
-                    max-width: 800px;
-                    height: auto;
-                }
-                .data-overlay {
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    width: 100%;
-                    height: 100%;
-                }
-                .data-field {
-                    position: absolute;
-                    font-family: Arial, sans-serif;
-                    font-size: 14px;
-                    font-weight: bold;
-                    background-color: transparent;
-                }
-                .assignee-item {
-                    position: absolute;
-                    font-family: Arial, sans-serif;
-                    font-size: 12px;
-                    background-color: transparent;
-                }
-            </style>
-        </head>
-        <body>
-            ${templateContainer.outerHTML}
-            <script>
-                window.onload = function() {
-                    window.print();
-                    window.setTimeout(function() {
-                        window.close();
-                    }, 500);
-                };
-            </script>
-        </body>
-        </html>
-    `);
-    
-    printWindow.document.close();
-}
 
 // Download as PDF
 function downloadAsPdf() {
@@ -534,12 +395,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-    }
-    
-    // If date is set, update day automatically
-    if (dateInput.value) {
-        const event = new Event('change');
-        dateInput.dispatchEvent(event);
     }
     
     // Setup assignee fields sequential enabling
