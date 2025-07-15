@@ -292,7 +292,6 @@ generateBtn.addEventListener('click', () => {
                         right: 0;
                         width: 100%;
                         height: 100%;
-                        pointer-events: none;
                     }
                     
                     .data-field {
@@ -303,6 +302,35 @@ generateBtn.addEventListener('click', () => {
                         background-color: transparent;
                         padding: 3px 6px;
                         border-radius: 3px;
+                    }
+                    
+                    .clickable {
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                    }
+                    
+                    .clickable:hover {
+                        background-color: rgba(0, 156, 222, 0.1);
+                    }
+                    
+                    .font-bold {
+                        font-weight: bold;
+                    }
+                    
+                    .font-large {
+                        font-size: 120%;
+                    }
+                    
+                    .font-underline {
+                        text-decoration: underline;
+                    }
+                    
+                    .font-color-primary {
+                        color: #009CDE;
+                    }
+                    
+                    .font-color-secondary {
+                        color: #D4A62D;
                     }
                     
                     .assignee-item {
@@ -351,6 +379,10 @@ generateBtn.addEventListener('click', () => {
                         .template-header {
                             display: none;
                         }
+                        
+                        #style-tooltip {
+                            display: none;
+                        }
                     }
                 </style>
                 <!-- Include html2canvas library -->
@@ -378,20 +410,20 @@ generateBtn.addEventListener('click', () => {
                             <!-- Overlay form data on the template -->
                             <div class="data-overlay">
                                 <!-- You can adjust these positions as needed -->
-                                <div class="data-field" style="top: 20.5%; right: 30%;">${formValues.subject || ''}</div>
+                                <div class="data-field clickable" style="top: 20.5%; right: 30%;" onclick="changeFontStyle(this)">${formValues.subject || ''}</div>
                                 <div class="data-field" style="top: 28%; right: 31%; font-weight: bold;">${formValues.day || ''}</div>
                                 <div class="data-field" style="top: 28%; right: 70%;">${formValues.hijriDate || ''}</div>
-                                <div class="data-field" style="top: 35%; right: 31%;">${formValues.location || ''}</div>
+                                <div class="data-field clickable" style="top: 35%; right: 31%;" onclick="changeFontStyle(this)">${formValues.location || ''}</div>
                                 <div class="data-field" style="top: 42%; right: 70%;">${formValues.time || ''}</div>
-                                <div class="data-field" style="top: 42%; right: 30%;">${formValues.formattedHour || formValues.hour || ''}</div>
+                                <div class="data-field clickable" style="top: 42%; right: 30%;" onclick="changeFontStyle(this)">${formValues.formattedHour || formValues.hour || ''}</div>
                                 
                                 <!-- Assignees with individual positioning -->
-                                ${formValues.assignee1 ? `<div class="assignee-item" style="position: absolute; top: 71.5%; right: 13.5%;">${formValues.assignee1}</div>` : ''}
-                                ${formValues.assignee2 ? `<div class="assignee-item" style="position: absolute; top: 71.5%; right: 51%;">${formValues.assignee2}</div>` : ''}
-                                ${formValues.assignee3 ? `<div class="assignee-item" style="position: absolute; top: 76.5%; right: 13.5%;">${formValues.assignee3}</div>` : ''}
-                                ${formValues.assignee4 ? `<div class="assignee-item" style="position: absolute; top: 76.5%; right: 51%;">${formValues.assignee4}</div>` : ''}
-                                ${formValues.assignee5 ? `<div class="assignee-item" style="position: absolute; top: 81.5%; right: 13.5%;">${formValues.assignee5}</div>` : ''}
-                                ${formValues.assignee6 ? `<div class="assignee-item" style="position: absolute; top: 81.5%; right: 51%;">${formValues.assignee6}</div>` : ''}
+                                ${formValues.assignee1 ? `<div class="assignee-item clickable" style="position: absolute; top: 71.5%; right: 13.5%;" onclick="changeFontStyle(this)">${formValues.assignee1}</div>` : ''}
+                                ${formValues.assignee2 ? `<div class="assignee-item clickable" style="position: absolute; top: 71.5%; right: 51%;" onclick="changeFontStyle(this)">${formValues.assignee2}</div>` : ''}
+                                ${formValues.assignee3 ? `<div class="assignee-item clickable" style="position: absolute; top: 76.5%; right: 13.5%;" onclick="changeFontStyle(this)">${formValues.assignee3}</div>` : ''}
+                                ${formValues.assignee4 ? `<div class="assignee-item clickable" style="position: absolute; top: 76.5%; right: 51%;" onclick="changeFontStyle(this)">${formValues.assignee4}</div>` : ''}
+                                ${formValues.assignee5 ? `<div class="assignee-item clickable" style="position: absolute; top: 81.5%; right: 13.5%;" onclick="changeFontStyle(this)">${formValues.assignee5}</div>` : ''}
+                                ${formValues.assignee6 ? `<div class="assignee-item clickable" style="position: absolute; top: 81.5%; right: 51%;" onclick="changeFontStyle(this)">${formValues.assignee6}</div>` : ''}
                             </div>
                         </div>
                     </div>
@@ -417,6 +449,76 @@ generateBtn.addEventListener('click', () => {
                             templateContainer.scrollLeft = templateContainer.scrollWidth;
                         }
                     });
+                    
+                    // Function to change font style when clicking on text
+                    function changeFontStyle(element) {
+                        // Array of possible style classes
+                        const styleClasses = [
+                            'font-bold',
+                            'font-large',
+                            'font-underline',
+                            'font-color-primary',
+                            'font-color-secondary'
+                        ];
+                        
+                        // Get current style index or start at -1
+                        let currentIndex = -1;
+                        
+                        // Find which style is currently applied
+                        for (let i = 0; i < styleClasses.length; i++) {
+                            if (element.classList.contains(styleClasses[i])) {
+                                currentIndex = i;
+                                break;
+                            }
+                        }
+                        
+                        // Remove current style if any
+                        if (currentIndex >= 0) {
+                            element.classList.remove(styleClasses[currentIndex]);
+                        }
+                        
+                        // Apply next style in the list
+                        const nextIndex = (currentIndex + 1) % styleClasses.length;
+                        element.classList.add(styleClasses[nextIndex]);
+                        
+                        // Show a tooltip with the current style name
+                        const styleNames = {
+                            'font-bold': 'خط عريض',
+                            'font-large': 'خط كبير',
+                            'font-underline': 'خط تحته',
+                            'font-color-primary': 'لون أزرق',
+                            'font-color-secondary': 'لون ذهبي'
+                        };
+                        
+                        // Create or update tooltip
+                        let tooltip = document.getElementById('style-tooltip');
+                        if (!tooltip) {
+                            tooltip = document.createElement('div');
+                            tooltip.id = 'style-tooltip';
+                            tooltip.style.position = 'fixed';
+                            tooltip.style.padding = '5px 10px';
+                            tooltip.style.backgroundColor = '#333';
+                            tooltip.style.color = 'white';
+                            tooltip.style.borderRadius = '4px';
+                            tooltip.style.fontSize = '14px';
+                            tooltip.style.zIndex = '1000';
+                            tooltip.style.opacity = '0';
+                            tooltip.style.transition = 'opacity 0.3s';
+                            document.body.appendChild(tooltip);
+                        }
+                        
+                        // Position and show tooltip
+                        const rect = element.getBoundingClientRect();
+                        tooltip.style.top = (rect.top - 30) + 'px';
+                        tooltip.style.right = (rect.right - rect.width/2) + 'px';
+                        tooltip.textContent = styleNames[styleClasses[nextIndex]];
+                        tooltip.style.opacity = '1';
+                        
+                        // Hide tooltip after 1.5 seconds
+                        setTimeout(() => {
+                            tooltip.style.opacity = '0';
+                        }, 1500);
+                    }
                     
                     // Download as PDF
                     function downloadAsPdf() {
