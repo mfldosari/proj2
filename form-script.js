@@ -1170,8 +1170,26 @@ window.validateArabicFields = function() {
         { id: 'subject', errorId: 'subjectError' },
         { id: 'location', errorId: 'locationError' },
         { id: 'time', errorId: 'timeError' }
-        // Assignee fields are now select elements, so they don't need Arabic validation
     ];
+    
+    let isValid = true;
+    
+    arabicFields.forEach(field => {
+        const input = document.getElementById(field.id);
+        if (input && input.value.trim() !== '') {
+            if (!isArabicText(input.value)) {
+                input.classList.add('arabic-error');
+                const errorElement = document.getElementById(field.errorId);
+                if (errorElement) {
+                    errorElement.style.display = 'block';
+                }
+                isValid = false;
+            }
+        }
+    });
+    
+    return isValid;
+};
         { id: 'assignee4', errorId: 'assignee4Error' },
         { id: 'assignee5', errorId: 'assignee5Error' },
         { id: 'assignee6', errorId: 'assignee6Error' }

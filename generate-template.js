@@ -81,7 +81,7 @@ function generateTemplate() {
     
     // Format hour if available
     if (formValues.hour) {
-        formValues.formattedHour = formatTime(formValues.hour);
+        formValues.hour = formatTime(formValues.hour);
     }
     
     // Show loading overlay
@@ -178,18 +178,65 @@ function generateTemplate() {
                         height: 100%;
                     }
                     
-                    .data-field {
+                    .data-field, .assignee-item {
                         position: absolute;
                         font-size: 16px;
                         color: #000;
                         background-color: transparent;
+                        padding: 5px;
+                        border-radius: 3px;
+                        transition: background-color 0.3s;
+                        cursor: pointer;
                     }
                     
-                    .assignee-item {
+                    .data-field:hover, .assignee-item:hover {
+                        background-color: rgba(0, 156, 222, 0.1);
+                    }
+                    
+                    .data-field.active, .assignee-item.active {
+                        background-color: rgba(0, 156, 222, 0.2);
+                        outline: 2px dashed #009CDE;
+                    }
+                    
+                    .item-controls {
+                        display: none;
                         position: absolute;
-                        background-color: transparent;
-                        font-size: 16px;
-                        color: #000;
+                        top: 100%;
+                        right: 0;
+                        background-color: rgba(255, 255, 255, 0.9);
+                        border-radius: 3px;
+                        padding: 3px;
+                        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                        z-index: 10;
+                    }
+                    
+                    .data-field.active .item-controls, .assignee-item.active .item-controls {
+                        display: flex;
+                    }
+                    
+                    .item-btn {
+                        width: 24px;
+                        height: 24px;
+                        border: 1px solid #ddd;
+                        background-color: white;
+                        border-radius: 3px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        margin: 2px;
+                        font-size: 12px;
+                        color: #666;
+                        transition: all 0.2s;
+                    }
+                    
+                    .item-btn:hover {
+                        background-color: #f0f0f0;
+                        color: #009CDE;
+                    }
+                    
+                    .item-btn:active {
+                        transform: scale(0.95);
                     }
                     
                     .template-actions {
@@ -236,24 +283,58 @@ function generateTemplate() {
                     .directional-controls {
                         display: flex;
                         justify-content: center;
-                        gap: 5px;
-                        margin-top: 10px;
+                        align-items: center;
+                        gap: 8px;
+                        margin-bottom: 15px;
+                        padding: 10px;
+                        background-color: #f0f0f0;
+                        border-radius: 5px;
+                        flex-wrap: wrap;
+                    }
+                    
+                    .direction-label {
+                        margin-right: 10px;
+                        font-weight: bold;
+                        color: #333;
                     }
                     
                     .direction-btn {
-                        background-color: #f0f0f0;
+                        background-color: #fff;
                         border: 1px solid #ddd;
-                        width: 30px;
-                        height: 30px;
+                        width: 36px;
+                        height: 36px;
                         border-radius: 50%;
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         cursor: pointer;
+                        transition: all 0.2s ease;
                     }
                     
                     .direction-btn:hover {
                         background-color: #e0e0e0;
+                    }
+                    
+                    .direction-btn:active {
+                        transform: scale(0.95);
+                    }
+                    
+                    .reset-btn {
+                        background-color: #ff9800;
+                        color: white;
+                        border: none;
+                    }
+                    
+                    .reset-btn:hover {
+                        background-color: #e68a00;
+                    }
+                    
+                    .element-selector {
+                        padding: 8px;
+                        border-radius: 4px;
+                        border: 1px solid #ddd;
+                        font-family: 'Cairo', sans-serif;
+                        min-width: 150px;
                     }
                     
                     .font-normal {
@@ -361,7 +442,7 @@ function generateTemplate() {
                     }
                     
                     @media print {
-                        .style-controls {
+                        .style-controls, .item-controls {
                             display: none !important;
                         }
                         
@@ -405,25 +486,121 @@ function generateTemplate() {
                             <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
                             
                             <div class="data-overlay">
-                                <div class="data-field font-family-cairo font-normal" style="top: 20.5%; right: 30%;">${formValues.subject || ''}</div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 31%; font-weight: bold;">${formValues.day || ''}</div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 70%;">${document.getElementById('hijriDateText').textContent.replace('التاريخ الهجري: ', '') || ''}</div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 35%; right: 31%;">${formValues.location || ''}</div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 70%;">${formValues.hour ? formatTime(formValues.hour) : ''}</div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 30%;">${formValues.time || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 20.5%; right: 30%;">
+                                    ${formValues.subject || ''}
+                                    <div class="item-controls">
+                                        <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
+                                        <button class="item-btn item-down"><i class="fas fa-chevron-down"></i></button>
+                                        <button class="item-btn item-right"><i class="fas fa-chevron-right"></i></button>
+                                        <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
+                                    </div>
+                                </div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 31%; font-weight: bold;">
+                                    ${formValues.day || ''}
+                                    <div class="item-controls">
+                                        <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
+                                        <button class="item-btn item-down"><i class="fas fa-chevron-down"></i></button>
+                                        <button class="item-btn item-right"><i class="fas fa-chevron-right"></i></button>
+                                        <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
+                                    </div>
+                                </div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 70%;">
+                                    ${document.getElementById('hijriDateText').textContent.replace('التاريخ الهجري: ', '') || ''}
+                                    <div class="item-controls">
+                                        <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
+                                        <button class="item-btn item-down"><i class="fas fa-chevron-down"></i></button>
+                                        <button class="item-btn item-right"><i class="fas fa-chevron-right"></i></button>
+                                        <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
+                                    </div>
+                                </div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 35%; right: 31%;">
+                                    ${formValues.location || ''}
+                                    <div class="item-controls">
+                                        <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
+                                        <button class="item-btn item-down"><i class="fas fa-chevron-down"></i></button>
+                                        <button class="item-btn item-right"><i class="fas fa-chevron-right"></i></button>
+                                        <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
+                                    </div>
+                                </div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 70%;">
+                                    ${formValues.hour || ''}
+                                    <div class="item-controls">
+                                        <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
+                                        <button class="item-btn item-down"><i class="fas fa-chevron-down"></i></button>
+                                        <button class="item-btn item-right"><i class="fas fa-chevron-right"></i></button>
+                                        <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
+                                    </div>
+                                </div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 30%;">
+                                    ${formValues.time || ''}
+                                    <div class="item-controls">
+                                        <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
+                                        <button class="item-btn item-down"><i class="fas fa-chevron-down"></i></button>
+                                        <button class="item-btn item-right"><i class="fas fa-chevron-right"></i></button>
+                                        <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
+                                    </div>
+                                </div>
                                 
                                 <!-- Requirements section -->
                                 ${formValues.audio ? '<div class="requirement-icon" style="top: 56.5%; right: 64.5%;">✓</div>' : ''}
                                 ${formValues.video ? '<div class="requirement-icon" style="top: 56.5%; right: 43%;">✓</div>' : ''}
                                 ${formValues.photo ? '<div class="requirement-icon" style="top: 56.5%; right: 15.5%;">✓</div>' : ''}
                                 
-                                <!-- Assignees with individual positioning -->
-                                ${formValues.assignee1 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 13.5%; min-width: 150px;">${formValues.assignee1}</div>` : ''}
-                                ${formValues.assignee2 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 51%; min-width: 150px;">${formValues.assignee2}</div>` : ''}
-                                ${formValues.assignee3 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 13.5%; min-width: 150px;">${formValues.assignee3}</div>` : ''}
-                                ${formValues.assignee4 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 51%; min-width: 150px;">${formValues.assignee4}</div>` : ''}
-                                ${formValues.assignee5 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 13.5%; min-width: 150px;">${formValues.assignee5}</div>` : ''}
-                                ${formValues.assignee6 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 51%; min-width: 150px;">${formValues.assignee6}</div>` : ''}
+                                <!-- Assignees with individual positioning and controls -->
+                                ${formValues.assignee1 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 13.5%; min-width: 150px;">
+                                    ${formValues.assignee1}
+                                    <div class="item-controls">
+                                        <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
+                                        <button class="item-btn item-down"><i class="fas fa-chevron-down"></i></button>
+                                        <button class="item-btn item-right"><i class="fas fa-chevron-right"></i></button>
+                                        <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
+                                    </div>
+                                </div>` : ''}
+                                ${formValues.assignee2 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 51%; min-width: 150px;">
+                                    ${formValues.assignee2}
+                                    <div class="item-controls">
+                                        <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
+                                        <button class="item-btn item-down"><i class="fas fa-chevron-down"></i></button>
+                                        <button class="item-btn item-right"><i class="fas fa-chevron-right"></i></button>
+                                        <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
+                                    </div>
+                                </div>` : ''}
+                                ${formValues.assignee3 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 13.5%; min-width: 150px;">
+                                    ${formValues.assignee3}
+                                    <div class="item-controls">
+                                        <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
+                                        <button class="item-btn item-down"><i class="fas fa-chevron-down"></i></button>
+                                        <button class="item-btn item-right"><i class="fas fa-chevron-right"></i></button>
+                                        <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
+                                    </div>
+                                </div>` : ''}
+                                ${formValues.assignee4 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 51%; min-width: 150px;">
+                                    ${formValues.assignee4}
+                                    <div class="item-controls">
+                                        <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
+                                        <button class="item-btn item-down"><i class="fas fa-chevron-down"></i></button>
+                                        <button class="item-btn item-right"><i class="fas fa-chevron-right"></i></button>
+                                        <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
+                                    </div>
+                                </div>` : ''}
+                                ${formValues.assignee5 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 13.5%; min-width: 150px;">
+                                    ${formValues.assignee5}
+                                    <div class="item-controls">
+                                        <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
+                                        <button class="item-btn item-down"><i class="fas fa-chevron-down"></i></button>
+                                        <button class="item-btn item-right"><i class="fas fa-chevron-right"></i></button>
+                                        <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
+                                    </div>
+                                </div>` : ''}
+                                ${formValues.assignee6 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 51%; min-width: 150px;">
+                                    ${formValues.assignee6}
+                                    <div class="item-controls">
+                                        <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
+                                        <button class="item-btn item-down"><i class="fas fa-chevron-down"></i></button>
+                                        <button class="item-btn item-right"><i class="fas fa-chevron-right"></i></button>
+                                        <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
+                                    </div>
+                                </div>` : ''}
                             </div>
                         </div>
                     </div>
@@ -445,6 +622,9 @@ function generateTemplate() {
                         document.getElementById('downloadImgBtn').addEventListener('click', downloadAsImage);
                         document.getElementById('fontSizeBtn').addEventListener('click', changeFontSize);
                         document.getElementById('fontFamilyBtn').addEventListener('click', changeFontFamily);
+                        
+                        // Setup item directional controls
+                        setupItemControls();
                         
                         // Function to change font size for all text elements
                         function changeFontSize() {
@@ -544,7 +724,93 @@ function generateTemplate() {
                             showTooltip(fontFamilyNames[fontFamilyClasses[nextClassIndex]]);
                         }
                         
-                        // Function to show tooltip
+                        // Function to setup item controls
+                        function setupItemControls() {
+                            // Get all items with controls
+                            const items = document.querySelectorAll('.data-field, .assignee-item');
+                            
+                            // Track active item
+                            let activeItem = null;
+                            
+                            // Handle click outside to close controls
+                            document.addEventListener('click', function(e) {
+                                // If click is outside any item, deactivate all
+                                if (!e.target.closest('.data-field') && !e.target.closest('.assignee-item') && !e.target.closest('.item-controls')) {
+                                    items.forEach(item => {
+                                        item.classList.remove('active');
+                                    });
+                                    activeItem = null;
+                                }
+                            });
+                            
+                            items.forEach(item => {
+                                const upBtn = item.querySelector('.item-up');
+                                const downBtn = item.querySelector('.item-down');
+                                const rightBtn = item.querySelector('.item-right');
+                                const leftBtn = item.querySelector('.item-left');
+                                
+                                // Add click event to show controls
+                                item.addEventListener('click', function(e) {
+                                    // If clicking on a button, don't toggle active state
+                                    if (e.target.closest('.item-btn')) {
+                                        return;
+                                    }
+                                    
+                                    // Deactivate all items
+                                    items.forEach(i => {
+                                        if (i !== item) {
+                                            i.classList.remove('active');
+                                        }
+                                    });
+                                    
+                                    // Toggle active state for clicked item
+                                    item.classList.toggle('active');
+                                    activeItem = item.classList.contains('active') ? item : null;
+                                });
+                                
+                                if (upBtn && downBtn && rightBtn && leftBtn) {
+                                    // Store original position
+                                    const originalTop = parseFloat(item.style.top) || 0;
+                                    const originalRight = parseFloat(item.style.right) || 0;
+                                    
+                                    // Move step size
+                                    const step = 0.5; // 0.5% each time
+                                    
+                                    // Add event listeners
+                                    upBtn.addEventListener('click', (e) => {
+                                        e.stopPropagation();
+                                        const currentTop = parseFloat(item.style.top) || 0;
+                                        item.style.top = (currentTop - step) + '%';
+                                    });
+                                    
+                                    downBtn.addEventListener('click', (e) => {
+                                        e.stopPropagation();
+                                        const currentTop = parseFloat(item.style.top) || 0;
+                                        item.style.top = (currentTop + step) + '%';
+                                    });
+                                    
+                                    // Fix the direction: right button should decrease right value (move right)
+                                    rightBtn.addEventListener('click', (e) => {
+                                        e.stopPropagation();
+                                        const currentRight = parseFloat(item.style.right) || 0;
+                                        item.style.right = (currentRight - step) + '%';
+                                    });
+                                    
+                                    // Fix the direction: left button should increase right value (move left)
+                                    leftBtn.addEventListener('click', (e) => {
+                                        e.stopPropagation();
+                                        const currentRight = parseFloat(item.style.right) || 0;
+                                        item.style.right = (currentRight + step) + '%';
+                                    });
+                                    
+                                    // Double click to reset position
+                                    item.addEventListener('dblclick', () => {
+                                        item.style.top = originalTop + '%';
+                                        item.style.right = originalRight + '%';
+                                    });
+                                }
+                            });
+                        }
                         function showTooltip(text) {
                             // Create tooltip if it doesn't exist
                             let tooltip = document.querySelector('.tooltip');
@@ -613,6 +879,12 @@ function generateTemplate() {
                             const styleControls = document.querySelector('.style-controls');
                             const originalStyleControlsDisplay = styleControls.style.display;
                             styleControls.style.display = 'none';
+                            
+                            // Hide all item controls
+                            const itemControls = document.querySelectorAll('.item-controls');
+                            itemControls.forEach(control => {
+                                control.style.display = 'none';
+                            });
                             
                             // Get the template content
                             const content = document.querySelector('.template-content');
