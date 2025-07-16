@@ -98,13 +98,21 @@ function generateTemplate() {
             <html lang="ar" dir="rtl">
             <head>
                 <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
                 <title>النموذج المولد</title>
                 <link rel="preconnect" href="https://fonts.googleapis.com">
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Lateef&family=Reem+Kufi:wght@400;700&family=Scheherazade+New:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
                 <style>
+                    html {
+                        font-size: 16px;
+                        -webkit-text-size-adjust: 100%;
+                        -moz-text-size-adjust: 100%;
+                        -ms-text-size-adjust: 100%;
+                        text-size-adjust: 100%;
+                    }
+                    
                     body {
                         font-family: 'Cairo', sans-serif;
                         margin: 0;
@@ -152,19 +160,29 @@ function generateTemplate() {
                         font-size: 18px;
                     }
                     
+                    .template-content-wrapper {
+                        width: 100%;
+                        overflow-x: auto;
+                        -webkit-overflow-scrolling: touch;
+                        margin: 0 auto;
+                        padding-bottom: 10px;
+                    }
+                    
                     .template-content {
                         position: relative;
                         margin-bottom: 20px;
+                        width: 800px;
+                        margin: 0 auto 20px;
                     }
                     
                     .template-image-container {
                         position: relative;
-                        width: 100%;
+                        width: 800px;
                         margin-bottom: 20px;
                     }
                     
                     .template-image {
-                        width: 100%;
+                        width: 800px;
                         height: auto;
                         display: block;
                         border-radius: 5px;
@@ -174,7 +192,7 @@ function generateTemplate() {
                         position: absolute;
                         top: 0;
                         right: 0;
-                        width: 100%;
+                        width: 800px;
                         height: 100%;
                     }
                     
@@ -187,6 +205,11 @@ function generateTemplate() {
                         border-radius: 3px;
                         transition: background-color 0.3s;
                         cursor: pointer;
+                        /* Prevent text size adjustment on mobile */
+                        -webkit-text-size-adjust: 100% !important;
+                        -moz-text-size-adjust: 100% !important;
+                        -ms-text-size-adjust: 100% !important;
+                        text-size-adjust: 100% !important;
                     }
                     
                     .data-field:hover, .assignee-item:hover {
@@ -200,7 +223,6 @@ function generateTemplate() {
                     }
                     
                     .data-field.active::after, .assignee-item.active::after {
-                        content: "استخدم أسهم لوحة المفاتيح للتحريك";
                         position: absolute;
                         bottom: -25px;
                         right: 0;
@@ -456,6 +478,18 @@ function generateTemplate() {
                         font-weight: bold;
                     }
                     
+                    @media (max-width: 820px) {
+                        .template-content-wrapper::after {
+                            content: "← اسحب للمشاهدة →";
+                            display: block;
+                            text-align: center;
+                            padding: 5px;
+                            color: #666;
+                            font-size: 12px;
+                            margin-top: 10px;
+                        }
+                    }
+                    
                     @media print {
                         .style-controls, .item-controls {
                             display: none !important;
@@ -496,9 +530,10 @@ function generateTemplate() {
                         </button>
                     </div>
                     
-                    <div class="template-content">
-                        <div class="template-image-container">
-                            <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
+                    <div class="template-content-wrapper">
+                        <div class="template-content">
+                            <div class="template-image-container">
+                                <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
                             
                             <div class="data-overlay">
                                 <div class="data-field font-family-cairo font-normal" style="top: 20.5%; right: 30%;">
@@ -557,9 +592,9 @@ function generateTemplate() {
                                 </div>
                                 
                                 <!-- Requirements section -->
-                                ${formValues.audio ? '<div class="requirement-icon" style="top: 56.5%; right: 64.5%;">✓</div>' : ''}
-                                ${formValues.video ? '<div class="requirement-icon" style="top: 56.5%; right: 43%;">✓</div>' : ''}
-                                ${formValues.photo ? '<div class="requirement-icon" style="top: 56.5%; right: 15.5%;">✓</div>' : ''}
+                                ${formValues.audio ? '<div class="requirement-icon" style="top: 55.5%; right: 64%;">✓</div>' : ''}
+                                ${formValues.video ? '<div class="requirement-icon" style="top: 55.5%; right: 42.5%;">✓</div>' : ''}
+                                ${formValues.photo ? '<div class="requirement-icon" style="top: 55.5%; right: 15%;">✓</div>' : ''}
                                 
                                 <!-- Assignees with individual positioning and controls -->
                                 ${formValues.assignee1 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 13.5%; min-width: 150px;">
@@ -957,6 +992,27 @@ function generateTemplate() {
                             });
                         }
                     });
+                    // Function to ensure consistent template sizing on all devices
+                    function ensureConsistentTemplateSize() {
+                        // Apply fixed sizing to all text elements in the template
+                        const textElements = document.querySelectorAll('.data-field, .assignee-item');
+                        textElements.forEach(element => {
+                            // Ensure text size doesn't get adjusted by mobile browsers
+                            element.style.webkitTextSizeAdjust = '100%';
+                            element.style.mozTextSizeAdjust = '100%';
+                            element.style.msTextSizeAdjust = '100%';
+                            element.style.textSizeAdjust = '100%';
+                        });
+                    }
+                    
+                    // Run when DOM is loaded
+                    document.addEventListener('DOMContentLoaded', ensureConsistentTemplateSize);
+                    
+                    // Also run when window is resized
+                    window.addEventListener('resize', ensureConsistentTemplateSize);
+                    
+                    // Run when orientation changes (mobile devices)
+                    window.addEventListener('orientationchange', ensureConsistentTemplateSize);
                 </script>
             </body>
             </html>

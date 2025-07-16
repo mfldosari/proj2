@@ -18,6 +18,16 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Cairo', sans-serif;
+    /* Prevent text size adjustment */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+html {
+    /* Force consistent font sizing */
+    font-size: 16px;
 }
 
 body {
@@ -415,24 +425,41 @@ main {
 .template-container {
     position: relative;
     margin: 20px auto;
-    width: 800px;
-    max-width: 100%;
-    overflow-x: auto;
+    width: 800px; /* Fixed width */
+    max-width: none; /* Prevent responsive scaling */
+    transform-origin: top left; /* Ensure scaling happens from top left */
+}
+
+.template-container-wrapper {
+    width: 100%;
+    overflow-x: auto; /* Enable horizontal scrolling on small screens */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    margin: 0 auto;
+    padding-bottom: 10px; /* Space for scrollbar */
 }
 
 .template-image-container {
     position: relative;
-    width: 800px;
+    width: 800px; /* Fixed width */
     height: auto;
 }
 
 .template-image {
-    width: 800px;
+    width: 800px; /* Fixed width */
     height: auto;
     display: block;
     border: 2px solid var(--primary-color);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
+}
+
+/* Ensure text elements maintain exact size on all devices */
+.data-field, .assignee-item {
+    /* Prevent text size adjustment */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 .back-btn {
@@ -619,11 +646,22 @@ footer {
         margin-bottom: 10px;
     }
     
-    /* Template container should scroll horizontally on small screens */
-    .template-container {
+    /* Template container wrapper should handle scrolling */
+    .template-container-wrapper {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
         padding-bottom: 20px; /* Space for scrollbar */
+    }
+    
+    /* Add visual indicator for horizontal scrolling */
+    .template-container-wrapper::after {
+        content: "← اسحب للمشاهدة →";
+        display: block;
+        text-align: center;
+        padding: 5px;
+        color: #666;
+        font-size: 12px;
+        margin-top: 10px;
     }
     
     /* Template actions should be full width */
@@ -742,33 +780,45 @@ input[type="text"]:disabled {
     border-radius: 3px;
 }
 
-/* Font styling classes */
+/* Font styling classes - Using fixed pixel sizes for consistency across devices */
 .font-normal {
-    font-size: 16px; /* Base size for all text elements */
+    font-size: 16px !important; /* Base size for all text elements */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 .font-large {
-    font-size: 19px; /* 120% of base size */
+    font-size: 19px !important; /* 120% of base size */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 .font-larger {
-    font-size: 22px; /* 140% of base size */
+    font-size: 22px !important; /* 140% of base size */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 .font-family-cairo {
-    font-family: 'Cairo', sans-serif;
+    font-family: 'Cairo', sans-serif !important;
 }
 
 .font-family-tajawal {
-    font-family: 'Tajawal', sans-serif;
+    font-family: 'Tajawal', sans-serif !important;
 }
 
 .font-family-amiri {
-    font-family: 'Amiri', serif;
+    font-family: 'Amiri', serif !important;
 }
 
 .font-family-scheherazade {
-    font-family: 'Scheherazade New', serif;
+    font-family: 'Scheherazade New', serif !important;
 }
 
 .font-family-lateef {
