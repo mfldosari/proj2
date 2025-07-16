@@ -641,6 +641,50 @@ generateBtn.addEventListener('click', () => {
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
                 <!-- Include jsPDF library -->
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+                <style>
+                    /* Additional styles for better mobile export */
+                    @media (max-width: 820px) {
+                        .template-container {
+                            width: 800px !important;
+                            max-width: none !important;
+                            overflow-x: auto;
+                            -webkit-overflow-scrolling: touch;
+                        }
+                        
+                        .template-image-container {
+                            width: 100% !important;
+                            min-width: 800px !important;
+                        }
+                        
+                        .template-image {
+                            width: 100% !important;
+                            height: auto !important;
+                        }
+                    }
+                    
+                    @media print {
+                        .template-container {
+                            width: 100% !important;
+                            height: auto !important;
+                            overflow: visible !important;
+                        }
+                        
+                        .template-image-container {
+                            page-break-inside: avoid;
+                            width: 100% !important;
+                            height: auto !important;
+                        }
+                        
+                        .template-image {
+                            width: 100% !important;
+                            height: auto !important;
+                        }
+                        
+                        .template-actions, .directional-controls {
+                            display: none !important;
+                        }
+                    }
+                </style>
             </head>
             <body>
                 <div class="container">
@@ -662,18 +706,18 @@ generateBtn.addEventListener('click', () => {
                         </div>
                     </div>
                     <div class="template-container" id="templateContainer">
-                        <div class="template-image-container">
-                            <img src="/static/tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
+                        <div class="template-image-container" style="width: 800px; min-width: 800px;">
+                            <img src="/static/tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image" style="width: 100%; height: auto;">
                             
                             <!-- Overlay form data on the template -->
-                            <div class="data-overlay">
+                            <div class="data-overlay" style="position: absolute; top: 0; right: 0; width: 100%; height: 100%;">
                                 <!-- You can adjust these positions as needed -->
                                 <div class="data-field font-family-cairo font-normal" style="top: 20.5%; right: 30%;">${formValues.subject || ''}</div>
                                 <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 31%; font-weight: bold;">${formValues.day || ''}</div>
                                 <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 70%;">${formValues.hijriDate || ''}</div>
                                 <div class="data-field font-family-cairo font-normal" style="top: 35%; right: 31%;">${formValues.location || ''}</div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 70%;">${formValues.time || ''}</div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 30%;">${formValues.formattedHour || formValues.hour || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 70%;">${formValues.formattedHour || formValues.hour || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 30%;">${formValues.time || ''}</div>
                                 
                                 <!-- Assignees with individual positioning -->
                                 ${formValues.assignee1 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 13.5%; min-width: 150px;">${formValues.assignee1}</div>` : ''}
@@ -967,14 +1011,20 @@ generateBtn.addEventListener('click', () => {
                             control.style.display = 'none';
                         });
                         
-                        // Use html2canvas to capture the template with fixed dimensions
-                        html2canvas(templateContainer, {
-                            scale: 2,
+                        // Get the template image container for better capture
+                        const templateImageContainer = templateContainer.querySelector('.template-image-container');
+                        const targetElement = templateImageContainer || templateContainer;
+                        
+                        // Use html2canvas with improved settings for mobile
+                        html2canvas(targetElement, {
+                            scale: 2, // Higher scale for better quality
                             useCORS: true,
                             allowTaint: true,
                             logging: false,
-                            width: 800, // Fixed width
-                            height: templateContainer.offsetHeight // Maintain aspect ratio
+                            windowWidth: document.documentElement.offsetWidth,
+                            windowHeight: document.documentElement.offsetHeight,
+                            scrollX: 0,
+                            scrollY: 0
                         }).then(canvas => {
                             try {
                                 // Check if jsPDF is available in the window object
@@ -1082,14 +1132,20 @@ generateBtn.addEventListener('click', () => {
                             control.style.display = 'none';
                         });
                         
-                        // Use html2canvas to capture the template with fixed dimensions
-                        html2canvas(templateContainer, {
-                            scale: 2,
+                        // Get the template image container for better capture
+                        const templateImageContainer = templateContainer.querySelector('.template-image-container');
+                        const targetElement = templateImageContainer || templateContainer;
+                        
+                        // Use html2canvas with improved settings for mobile
+                        html2canvas(targetElement, {
+                            scale: 2, // Higher scale for better quality
                             useCORS: true,
                             allowTaint: true,
                             logging: false,
-                            width: 800, // Fixed width
-                            height: templateContainer.offsetHeight // Maintain aspect ratio
+                            windowWidth: document.documentElement.offsetWidth,
+                            windowHeight: document.documentElement.offsetHeight,
+                            scrollX: 0,
+                            scrollY: 0
                         }).then(canvas => {
                             try {
                                 // Create a download link

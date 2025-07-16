@@ -53,8 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (previewDay) previewDay.textContent = day;
         if (previewHijriDate) previewHijriDate.textContent = hijriDate;
         if (previewLocation) previewLocation.textContent = location;
-        if (previewTime) previewTime.textContent = time;
         if (previewHour) previewHour.textContent = hour;
+        if (previewTime) previewTime.textContent = time;
         if (previewAssignee1) previewAssignee1.textContent = assignee1;
         if (previewAssignee2) previewAssignee2.textContent = assignee2;
         if (previewAssignee3) previewAssignee3.textContent = assignee3;
@@ -103,157 +103,88 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Listen for changes to the hijriDateText element
+    if (hijriDateText) {
+        // Use MutationObserver to detect changes to the hijriDateText content
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'characterData' || mutation.type === 'childList') {
+                    updatePreview();
+                }
+            });
+        });
+        
+        // Configure and start the observer
+        observer.observe(hijriDateText, { 
+            characterData: true, 
+            childList: true,
+            subtree: true 
+        });
+    }
+    
     // Toggle preview section when preview button is clicked
     if (previewBtn && previewSection) {
         previewBtn.addEventListener('click', function() {
             // Update preview before showing
             updatePreview();
             
-            // Toggle preview section visibility
+            // Toggle preview section visibility with animation
             if (previewSection.style.display === 'none') {
+                // Show preview section
                 previewSection.style.display = 'block';
                 previewBtn.innerHTML = '<i class="fas fa-eye-slash"></i> إخفاء المعاينة';
                 
+                // Add animation class
+                previewSection.classList.add('fade-in');
+                
                 // Scroll to preview section
-                previewSection.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                    previewSection.scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Check if we're on a mobile device and add scroll hint
+                    if (window.innerWidth <= 820) {
+                        // Reset horizontal scroll position to show the beginning (right side in RTL)
+                        previewSection.scrollLeft = previewSection.scrollWidth;
+                        
+                        // Add a visual indicator for horizontal scrolling
+                        const scrollHint = document.createElement('div');
+                        scrollHint.className = 'scroll-hint';
+                        scrollHint.textContent = '← اسحب للمشاهدة →';
+                        scrollHint.style.cssText = `
+                            text-align: center;
+                            padding: 5px;
+                            color: #666;
+                            font-size: 12px;
+                            margin-top: 10px;
+                            animation: pulse 2s infinite;
+                        `;
+                        
+                        // Add the hint after the preview section
+                        if (!document.querySelector('.scroll-hint')) {
+                            previewSection.appendChild(scrollHint);
+                            
+                            // Remove the hint after 5 seconds
+                            setTimeout(() => {
+                                if (scrollHint.parentNode) {
+                                    scrollHint.parentNode.removeChild(scrollHint);
+                                }
+                            }, 5000);
+                        }
+                    }
+                }, 100);
             } else {
-                previewSection.style.display = 'none';
-                previewBtn.innerHTML = '<i class="fas fa-eye"></i> معاينة النموذج';
+                // Hide preview section
+                previewSection.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    previewSection.style.display = 'none';
+                    previewSection.classList.remove('fade-out');
+                    previewBtn.innerHTML = '<i class="fas fa-eye"></i> معاينة النموذج';
+                }, 300);
             }
         });
     }
     
-    // Improved Hijri date conversion
-    function updateHijriDate() {
-        const date = dateInput.value;
-        if (!date) {
-            hijriDateText.textContent = 'التاريخ الهجري: ';
-            return;
-        }
-        
-        // Show loading state
-        hijriDateText.textContent = 'التاريخ الهجري: جاري التحميل...';
-        
-        // Get Hijri date from API
-        getHijriDate(date)
-            .then(hijriDate => {
-                if (hijriDate) {
-                    const formattedDate = `${hijriDate.day} ${hijriDate.month} ${hijriDate.year} هـ`;
-                    hijriDateText.textContent = `التاريخ الهجري: ${formattedDate}`;
-                    
-                    // Update preview after hijri date is updated
-                    updatePreview();
-                } else {
-                    // Fallback to a simple calculation if API fails
-                    const fallbackDate = getFallbackHijriDate(date);
-                    hijriDateText.textContent = `التاريخ الهجري: ${fallbackDate}`;
-                    
-                    // Update preview after hijri date is updated
-                    updatePreview();
-                }
-            })
-            .catch(error => {
-                console.error('Error updating Hijri date:', error);
-                const fallbackDate = getFallbackHijriDate(date);
-                hijriDateText.textContent = `التاريخ الهجري: ${fallbackDate}`;
-                
-                // Update preview after hijri date is updated
-                updatePreview();
-            });
-    }
-    
-    // Fetch Hijri date from API
-    async function getHijriDate(gregorianDate) {
-        try {
-            const [year, month, day] = gregorianDate.split('-');
-            const url = `https://api.aladhan.com/v1/gToH/${day}-${month}-${year}`;
-            
-            console.log('Fetching Hijri date from API:', url);
-            
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`API request failed with status ${response.status}`);
-            }
-            
-            const data = await response.json();
-            
-            if (data.code === 200 && data.data) {
-                const hijri = data.data.hijri;
-                console.log('API response:', hijri);
-                
-                return {
-                    day: parseInt(hijri.day),
-                    month: hijri.month.ar,
-                    year: parseInt(hijri.year)
-                };
-            } else {
-                throw new Error('Invalid API response format');
-            }
-        } catch (error) {
-            console.error('Error fetching Hijri date:', error);
-            return null;
-        }
-    }
-    
-    // Simple fallback calculation (approximate)
-    function getFallbackHijriDate(gregorianDateStr) {
-        try {
-            // Try to use moment-hijri if available
-            if (typeof moment !== 'undefined' && typeof moment().iHijri === 'function') {
-                const m = moment(gregorianDateStr);
-                const hijriDate = m.iHijri();
-                return `${hijriDate.iDate()} ${getHijriMonthName(hijriDate.iMonth())} ${hijriDate.iYear()} هـ`;
-            }
-        } catch (e) {
-            console.error('Error using moment-hijri:', e);
-        }
-        
-        // Very simple approximation as fallback
-        const gregorianDate = new Date(gregorianDateStr);
-        
-        // Approximate conversion (Hijri year is about 354 days)
-        const gregorianYear = gregorianDate.getFullYear();
-        const gregorianMonth = gregorianDate.getMonth();
-        const gregorianDay = gregorianDate.getDate();
-        
-        // Approximate Hijri year (622 CE is year 1 in Hijri calendar)
-        const yearDiff = gregorianYear - 622;
-        const hijriYear = Math.floor(yearDiff + (yearDiff / 32));
-        
-        // Approximate month and day (very rough estimate)
-        const dayOfYear = Math.floor((gregorianDate - new Date(gregorianYear, 0, 1)) / (24 * 60 * 60 * 1000));
-        const hijriDayOfYear = (dayOfYear + 10) % 354; // Offset by 10 days as a rough adjustment
-        
-        const hijriMonth = Math.floor(hijriDayOfYear / 29.5);
-        const hijriDay = Math.floor(hijriDayOfYear % 29.5) + 1;
-        
-        return `${hijriDay} ${getHijriMonthName(hijriMonth)} ${hijriYear} هـ`;
-    }
-    
-    // Helper function to get Hijri month name
-    function getHijriMonthName(monthIndex) {
-        const hijriMonths = [
-            'محرم',
-            'صفر',
-            'ربيع الأول',
-            'ربيع الثاني',
-            'جمادى الأولى',
-            'جمادى الآخرة',
-            'رجب',
-            'شعبان',
-            'رمضان',
-            'شوال',
-            'ذو القعدة',
-            'ذو الحجة'
-        ];
-        return hijriMonths[monthIndex % 12];
-    }
-    
-    // Update Hijri date when date input changes
-    if (dateInput) {
-        dateInput.addEventListener('change', updateHijriDate);
-        
-        // Initial update of Hijri date
-        setTimeout(updateHijriDate, 500);
-    }
+    // Initialize preview with a slight delay to ensure all values are loaded
+    setTimeout(updatePreview, 1000);
 });
