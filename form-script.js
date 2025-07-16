@@ -37,6 +37,11 @@ function updatePreview() {
     const assignee5 = document.getElementById('assignee5').value || 'المكلف 5';
     const assignee6 = document.getElementById('assignee6').value || 'المكلف 6';
     
+    // Get requirements
+    const audio = document.getElementById('audio').checked;
+    const video = document.getElementById('video').checked;
+    const photo = document.getElementById('photo').checked;
+    
     // Update preview elements
     previewSubject.textContent = subject;
     previewDay.textContent = day;
@@ -178,33 +183,9 @@ function hideLogoLoadingOverlay(overlay) {
 
 // Function to handle assignee fields sequential enabling
 function setupAssigneeFields() {
-    // Get all assignee input fields
-    const assigneeInputs = document.querySelectorAll('.assignees-inputs input[type="text"]');
-    
-    // Disable all except the first one
-    assigneeInputs.forEach((input, index) => {
-        if (index > 0) {
-            input.disabled = true;
-        }
-    });
-    
-    // Add input event listeners to enable next field when text is entered
-    assigneeInputs.forEach((input, index) => {
-        if (index < assigneeInputs.length - 1) { // Skip the last one
-            input.addEventListener('input', function() {
-                // If current field has text, enable the next field
-                if (this.value.trim() !== '') {
-                    assigneeInputs[index + 1].disabled = false;
-                } else {
-                    // If current field is empty, disable all subsequent fields
-                    for (let i = index + 1; i < assigneeInputs.length; i++) {
-                        assigneeInputs[i].disabled = true;
-                        assigneeInputs[i].value = ''; // Clear the value
-                    }
-                }
-            });
-        }
-    });
+    // This function is now handled by assignee-selector.js
+    // We're keeping it here for backward compatibility
+    console.log('Assignee fields are now handled by assignee-selector.js');
 }
 
 // Format time from time input
@@ -224,6 +205,12 @@ function formatTime(timeString) {
     return `${formattedHours}:${minutes} ${period}`;
 }
 
+// Check if at least one assignee is selected
+function isAtLeastOneAssigneeSelected() {
+    const assigneeSelects = document.querySelectorAll('.assignee-select');
+    return Array.from(assigneeSelects).some(select => select.value.trim() !== '');
+}
+
 // Check if all required fields are filled
 function areAllRequiredFieldsFilled() {
     const requiredFields = mediaForm.querySelectorAll('[required]');
@@ -236,77 +223,99 @@ backBtn.addEventListener('click', () => {
 });
 
 // Generate template with form data
-generateBtn.addEventListener('click', () => {
-    // Temporarily enable the day field for form submission
-    daySelect.disabled = false;
-    
-    // Check form validity
-    if (!mediaForm.checkValidity()) {
-        // Mark all required fields that are empty
-        const requiredFields = mediaForm.querySelectorAll('[required]');
-        requiredFields.forEach(field => {
-            if (!field.value) {
-                field.classList.add('error');
-                field.addEventListener('input', function() {
-                    if (this.value) {
-                        this.classList.remove('error');
-                    }
-                }, { once: true });
-            }
-        });
+if (generateBtn) {
+    generateBtn.addEventListener('click', () => {
+        console.log('Generate button clicked');
         
-        // Show error message
-        alert('الرجاء ملء جميع الحقول المطلوبة');
+        // Temporarily enable the day field for form submission
+        daySelect.disabled = false;
         
-        // Disable the day field again
-        daySelect.disabled = true;
-        return;
-    }
-    
-    // Check Arabic validation
-    if (typeof window.validateArabicFields === 'function') {
-        if (!window.validateArabicFields()) {
-            alert('الرجاء إدخال حروف عربية فقط في الحقول المطلوبة');
+        // Check form validity
+        if (!mediaForm.checkValidity()) {
+            // Mark all required fields that are empty
+            const requiredFields = mediaForm.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    field.classList.add('error');
+                    field.addEventListener('input', function() {
+                        if (this.value) {
+                            this.classList.remove('error');
+                        }
+                    }, { once: true });
+                }
+            });
+            
+            // Show error message
+            alert('الرجاء ملء جميع الحقول المطلوبة');
             
             // Disable the day field again
             daySelect.disabled = true;
             return;
         }
-    }
-    
-    // Double check that all required fields are filled
-    if (!areAllRequiredFieldsFilled()) {
-        alert('الرجاء ملء جميع الحقول المطلوبة');
         
-        // Disable the day field again
-        daySelect.disabled = true;
-        return;
-    }
-    
-    // Get form data
-    const formData = new FormData(mediaForm);
-    const formValues = {};
-    
-    for (const [key, value] of formData.entries()) {
-        formValues[key] = value;
-    }
-    
-    // Make sure to get the day value even though the field is disabled
-    formValues.day = daySelect.value;
-    console.log('Day value:', formValues.day);
-    
-    // Format hour if available
-    if (formValues.hour) {
-        formValues.formattedHour = formatTime(formValues.hour);
-    }
-    
-    // Show loading overlay
-    const loadingOverlay = showLogoLoadingOverlay();
-    
-    // Wait a moment before opening the new window
-    setTimeout(() => {
-        // Create a new window with the template
-        const newWindow = window.open('', '_blank');
+        // Check Arabic validation
+        if (typeof window.validateArabicFields === 'function') {
+            if (!window.validateArabicFields()) {
+                alert('الرجاء إدخال حروف عربية فقط في الحقول المطلوبة');
+                
+                // Disable the day field again
+                daySelect.disabled = true;
+                return;
+            }
+        }
+        
+        // Double check that all required fields are filled
+        if (!areAllRequiredFieldsFilled()) {
+            alert('الرجاء ملء جميع الحقول المطلوبة');
+            
+            // Disable the day field again
+            daySelect.disabled = true;
+            return;
+        }
+        
+        // Check that at least one assignee is selected
+        if (!isAtLeastOneAssigneeSelected()) {
+            alert('الرجاء اختيار مكلف واحد على الأقل');
+            
+            // Highlight the assignee selects
+            const assigneeSelects = document.querySelectorAll('.assignee-select');
+            assigneeSelects.forEach(select => {
+                select.classList.add('error');
+                select.addEventListener('change', function() {
+                    if (this.value) {
+                        assigneeSelects.forEach(s => s.classList.remove('error'));
+                    }
+                }, { once: true });
+            });
+            
+            // Disable the day field again
+            daySelect.disabled = true;
+            return;
+        }
+        // Get form data
+        const formData = new FormData(mediaForm);
+        const formValues = {};
+        
+        for (const [key, value] of formData.entries()) {
+            formValues[key] = value;
+        }
+        
+        // Make sure to get the day value even though the field is disabled
+        formValues.day = daySelect.value;
+        console.log('Day value:', formValues.day);
+        
+        // Format hour if available
+        if (formValues.hour) {
+            formValues.formattedHour = formatTime(formValues.hour);
+        }
+        
+        // Show loading overlay
+        const loadingOverlay = showLogoLoadingOverlay();
+        
+        // Wait a moment before opening the new window
+        setTimeout(() => {
+            // Create a new window with the template
+            const newWindow = window.open('', '_blank');
         
         // Write the HTML content to the new window
         newWindow.document.write(`
@@ -1070,6 +1079,8 @@ generateBtn.addEventListener('click', () => {
         // Disable the day field again
         daySelect.disabled = true;
     }, 1500);
+    });
+}
 });
 
 // We're removing the localStorage saving functionality to ensure form resets on refresh
@@ -1128,18 +1139,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setupCharCounters();
     
     // Setup assignee fields sequential enabling
-    setupAssigneeFields();
-    
-    // After loading saved data, we need to check if we should enable subsequent assignee fields
-    const assigneeInputs = document.querySelectorAll('.assignees-inputs input[type="text"]');
-    assigneeInputs.forEach((input, index) => {
-        if (index > 0 && index < assigneeInputs.length) {
-            // If the previous field has a value, enable this field
-            if (assigneeInputs[index - 1].value.trim() !== '') {
-                input.disabled = false;
-            }
-        }
-    });
+    // Note: This is now handled by assignee-selector.js
+    // setupAssigneeFields();
 });
 // Ensure form is reset on page load/refresh
 window.onload = function() {
@@ -1168,10 +1169,9 @@ window.validateArabicFields = function() {
     const arabicFields = [
         { id: 'subject', errorId: 'subjectError' },
         { id: 'location', errorId: 'locationError' },
-        { id: 'time', errorId: 'timeError' },
-        { id: 'assignee1', errorId: 'assignee1Error' },
-        { id: 'assignee2', errorId: 'assignee2Error' },
-        { id: 'assignee3', errorId: 'assignee3Error' },
+        { id: 'time', errorId: 'timeError' }
+        // Assignee fields are now select elements, so they don't need Arabic validation
+    ];
         { id: 'assignee4', errorId: 'assignee4Error' },
         { id: 'assignee5', errorId: 'assignee5Error' },
         { id: 'assignee6', errorId: 'assignee6Error' }
