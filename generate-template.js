@@ -774,10 +774,6 @@ function generateTemplate() {
                             <i class="fas fa-image"></i>
                             <span>تحميل صورة</span>
                         </div>
-                        <div id="whatsappBtn" class="select-btn whatsapp-button" title="مشاركة عبر واتساب">
-                            <i class="fab fa-whatsapp"></i>
-                            <span>مشاركة واتساب</span>
-                        </div>
                     </div>
                     
                     <div class="template-content-wrapper">
@@ -1190,9 +1186,12 @@ function generateTemplate() {
                                 allowTaint: true,
                                 backgroundColor: null
                             }).then(canvas => {
-                                // Create download link
-                                const link = document.createElement('a');
-                                link.download = 'نموذج_الإنتاج_الفني.png';
+                                // Fixed file name for the image
+                                var fileName = 'نموذج الانتاج الفني';
+
+                                // Logic to download the image with the fixed file name
+                                var link = document.createElement('a');
+                                link.download = fileName + '.png';
                                 link.href = canvas.toDataURL('image/png');
                                 link.click();
                                 
@@ -1336,47 +1335,20 @@ function showLogoLoadingOverlay() {
     return loadingOverlay;
 }
 
-// WhatsApp share button functionality
-    document.getElementById('whatsappBtn').addEventListener('click', function() {
-        const styleControls = document.querySelector('.button-controls');
-        const originalStyleControlsDisplay = styleControls.style.display;
-        styleControls.style.display = 'none';
-        const items = document.querySelectorAll('.data-field, .assignee-item');
-        items.forEach(item => {
-            item.classList.remove('active');
-        });
-        const content = document.querySelector('.template-content');
-        html2canvas(content, {
-            scale: 2,
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: null
-        }).then(canvas => {
-            canvas.toBlob(function(blob) {
-                // Upload to imgbb
-                const formData = new FormData();
-                formData.append('image', blob);
-                // You can get a free API key from https://api.imgbb.com/
-                const imgbbApiKey = '81c41b67c0e36e2cf23f2d6b3ca44d4b'; // <-- Replace with your key
-                fetch('https://api.imgbb.com/1/upload?key=' + imgbbApiKey, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    styleControls.style.display = originalStyleControlsDisplay;
-                    if (data && data.data && data.data.url) {
-                        const imageUrl = data.data.url;
-                        // Immediately open WhatsApp Web with the image link
-                        window.open('https://wa.me/?text=' + encodeURIComponent(imageUrl), '_blank');
-                    } else {
-                        alert('فشل رفع الصورة. يرجى المحاولة لاحقاً.');
-                    }
-                })
-                .catch(() => {
-                    alert('فشل رفع الصورة. يرجى المحاولة لاحقاً.');
-                    styleControls.style.display = originalStyleControlsDisplay;
-                });
-            }, 'image/png');
-        });
+// Remove WhatsApp button functionality
+    var whatsappBtn = document.getElementById('whatsappBtn');
+    if (whatsappBtn) {
+        whatsappBtn.remove();
+    }
+
+// Modify download image button functionality
+    document.getElementById('downloadImageBtn').addEventListener('click', function() {
+        // Fixed file name for the image
+        var fileName = 'نموذج الانتاج الفني';
+
+        // Logic to download the image with the fixed file name
+        var link = document.createElement('a');
+        link.download = fileName + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
     });
