@@ -181,6 +181,150 @@
                 padding-bottom: 130px;
             }
         }
+        
+        /* Assignee Management Styles */
+        .assignee-management {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .assignee-management h3 {
+            color: #003459;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .assignee-management h3 i {
+            margin-right: 10px;
+            color: #009CDE;
+        }
+        
+        .assignee-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+        }
+        
+        .input-group .char-counter {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .arabic-error-msg {
+            color: #ff3333;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .action-btn {
+            background-color: #009CDE;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .action-btn:hover {
+            background-color: #0078a8;
+        }
+        
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .assignees-list {
+            margin-top: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 0.5rem;
+            background-color: white;
+        }
+        
+        .assignee-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .assignee-item:last-child {
+            border-bottom: none;
+        }
+        
+        .assignee-name {
+            font-weight: 600;
+        }
+        
+        .delete-assignee-btn {
+            background-color: transparent;
+            color: #ff3333;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .delete-assignee-btn:hover {
+            background-color: rgba(255, 51, 51, 0.1);
+        }
+        
+        .no-assignees-msg {
+            text-align: center;
+            padding: 1rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        @media (min-width: 768px) {
+            .assignee-form {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            
+            .input-group {
+                flex: 1;
+            }
+            
+            .action-btn {
+                margin-top: 0;
+                height: 42px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -240,10 +384,30 @@
         <div class="templates-grid">
             <!-- Templates will be loaded dynamically -->
         </div>
+        
+        <!-- Assignee Management Section -->
+        <div class="assignee-management">
+            <h3>إدارة المكلفين <i class="fas fa-users"></i></h3>
+            <div class="assignee-form">
+                <div class="input-group">
+                    <input type="text" id="assigneeName" placeholder="اسم المكلف (حروف عربية فقط)" maxlength="30" dir="rtl">
+                    <div class="char-counter" id="assigneeNameCounter">0/30</div>
+                    <div class="arabic-error-msg" id="assigneeNameError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                </div>
+                <button id="addAssigneeBtn" class="action-btn">
+                    <i class="fas fa-plus"></i> إضافة مكلف
+                </button>
+            </div>
+            <div class="assignees-list" id="assigneesList">
+                <!-- Assignees will be loaded here -->
+                <div class="no-assignees-msg">لا يوجد مكلفين حالياً</div>
+            </div>
+        </div>
     </main>
 
 
     <script src="/static/script.js"></script>
+    <script src="/static/assignee-manager.js"></script>
     <script>
         // Loading overlay functionality
         document.addEventListener('DOMContentLoaded', () => {

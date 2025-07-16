@@ -399,6 +399,37 @@ async def get_full_hijri_calendar(year: int):
 
     return HTMLResponse(content=html_content)
 
+@app.post("/api/save-assignees")
+async def save_assignees(request: Request):
+    """Save assignees to a JSON file"""
+    try:
+        # Get the request body
+        data = await request.json()
+        
+        # Create the assignees directory if it doesn't exist
+        os.makedirs("assignees", exist_ok=True)
+        
+        # Save the assignees to a JSON file
+        with open("assignees/assignees.json", "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        
+        return JSONResponse(content={"success": True})
+    
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@app.get("/api/load-assignees")
+async def load_assignees():
+    """Load assignees from a JSON file"""
+    assignees_path = "assignees/assignees.json"
+    
+    if os.path.exists(assignees_path):
+        with open(assignees_path, "r", encoding="utf-8") as f:
+            assignees_data = json.load(f)
+        return JSONResponse(content=assignees_data)
+    
+    return JSONResponse(content={"assignees": []}, status_code=404)
+
 @app.get("/api/test-delete/{template_id}")
 async def test_delete(template_id: str):
     """Test endpoint for template deletion"""
