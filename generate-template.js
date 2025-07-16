@@ -311,22 +311,37 @@ function generateTemplate() {
                         display: flex;
                         justify-content: center;
                         gap: 10px;
-                        margin-top: 10px;
+                        margin-bottom: 15px;
+                        padding: 10px;
+                        background-color: #f9f9f9;
+                        border-radius: 5px;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                     }
                     
                     .style-btn {
                         background-color: #f0f0f0;
                         border: 1px solid #ddd;
-                        padding: 5px 10px;
+                        padding: 8px 15px;
                         border-radius: 5px;
                         cursor: pointer;
                         display: flex;
                         align-items: center;
                         gap: 5px;
+                        transition: all 0.2s ease;
                     }
                     
                     .style-btn:hover {
                         background-color: #e0e0e0;
+                    }
+                    
+                    .img-btn {
+                        background-color: #673AB7;
+                        color: white;
+                        border: none;
+                    }
+                    
+                    .img-btn:hover {
+                        background-color: #5e35b1;
                     }
                     
                     .reset-btn {
@@ -340,12 +355,13 @@ function generateTemplate() {
                     
                     .requirement-icon {
                         position: absolute;
-                        font-size: 24px;
+                        font-size: 50px;
                         color: #009CDE;
+                        font-weight: bold;
                     }
                     
                     @media print {
-                        .template-actions, .directional-controls, .style-controls {
+                        .style-controls {
                             display: none !important;
                         }
                         
@@ -371,6 +387,19 @@ function generateTemplate() {
                         </div>
                     </div>
                     
+                    <!-- Style controls at the top -->
+                    <div class="style-controls">
+                        <button id="fontSizeBtn" class="style-btn">
+                            <i class="fas fa-text-height"></i> تغيير حجم الخط
+                        </button>
+                        <button id="fontFamilyBtn" class="style-btn">
+                            <i class="fas fa-font"></i> تغيير نوع الخط
+                        </button>
+                        <button id="downloadImgBtn" class="action-btn img-btn">
+                            <i class="fas fa-image"></i> تحميل صورة
+                        </button>
+                    </div>
+                    
                     <div class="template-content">
                         <div class="template-image-container">
                             <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
@@ -384,9 +413,9 @@ function generateTemplate() {
                                 <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 30%;">${formValues.time || ''}</div>
                                 
                                 <!-- Requirements section -->
-                                ${formValues.audio ? '<div class="requirement-icon" style="top: 70%; right: 31%;"><i class="fas fa-volume-up"></i> ✓</div>' : ''}
-                                ${formValues.video ? '<div class="requirement-icon" style="top: 70%; right: 41%;"><i class="fas fa-video"></i> ✓</div>' : ''}
-                                ${formValues.photo ? '<div class="requirement-icon" style="top: 70%; right: 51%;"><i class="fas fa-camera"></i> ✓</div>' : ''}
+                                ${formValues.audio ? '<div class="requirement-icon" style="top: 56.5%; right: 64.5%;">✓</div>' : ''}
+                                ${formValues.video ? '<div class="requirement-icon" style="top: 56.5%; right: 43%;">✓</div>' : ''}
+                                ${formValues.photo ? '<div class="requirement-icon" style="top: 56.5%; right: 15.5%;">✓</div>' : ''}
                                 
                                 <!-- Assignees with individual positioning -->
                                 ${formValues.assignee1 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 13.5%; min-width: 150px;">${formValues.assignee1}</div>` : ''}
@@ -399,26 +428,7 @@ function generateTemplate() {
                         </div>
                     </div>
                     
-                    <div class="template-actions">
-                        <button id="printBtn" class="action-btn print-btn">
-                            <i class="fas fa-print"></i> طباعة
-                        </button>
-                        <button id="downloadPdfBtn" class="action-btn pdf-btn">
-                            <i class="fas fa-file-pdf"></i> تحميل PDF
-                        </button>
-                        <button id="downloadImgBtn" class="action-btn img-btn">
-                            <i class="fas fa-image"></i> تحميل صورة
-                        </button>
-                    </div>
-                    
-                    <div class="style-controls">
-                        <button id="fontSizeBtn" class="style-btn">
-                            <i class="fas fa-text-height"></i> تغيير حجم الخط
-                        </button>
-                        <button id="fontFamilyBtn" class="style-btn">
-                            <i class="fas fa-font"></i> تغيير نوع الخط
-                        </button>
-                    </div>
+                    <!-- No buttons at the bottom -->
                 </div>
                 
                 <!-- Include html2canvas and jsPDF libraries -->
@@ -432,11 +442,6 @@ function generateTemplate() {
                         }
                         
                         // Add event listeners for buttons
-                        document.getElementById('printBtn').addEventListener('click', function() {
-                            window.print();
-                        });
-                        
-                        document.getElementById('downloadPdfBtn').addEventListener('click', downloadAsPDF);
                         document.getElementById('downloadImgBtn').addEventListener('click', downloadAsImage);
                         document.getElementById('fontSizeBtn').addEventListener('click', changeFontSize);
                         document.getElementById('fontFamilyBtn').addEventListener('click', changeFontFamily);
@@ -605,11 +610,8 @@ function generateTemplate() {
                         // Function to download as image
                         function downloadAsImage() {
                             // Hide buttons before capturing
-                            const actions = document.querySelector('.template-actions');
                             const styleControls = document.querySelector('.style-controls');
-                            const originalActionsDisplay = actions.style.display;
                             const originalStyleControlsDisplay = styleControls.style.display;
-                            actions.style.display = 'none';
                             styleControls.style.display = 'none';
                             
                             // Get the template content
@@ -629,7 +631,6 @@ function generateTemplate() {
                                 link.click();
                                 
                                 // Restore buttons
-                                actions.style.display = originalActionsDisplay;
                                 styleControls.style.display = originalStyleControlsDisplay;
                             });
                         }
