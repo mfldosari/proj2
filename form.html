@@ -209,9 +209,9 @@
                             <div class="form-column">
                                 <div class="form-group">
                                     <label for="subject">الموضوع</label>
-                                    <input type="text" id="subject" name="subject" required placeholder="أدخل الموضوع (حروف عربية فقط)" maxlength="40">
+                                    <input type="text" id="subject" name="subject" required placeholder="أدخل الموضوع (حروف عربية فقط)" maxlength="28">
                                     <div class="arabic-error-msg" id="subjectError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                                    <div class="char-counter" id="subjectCounter">0/40</div>
+                                    <div class="char-counter" id="subjectCounter">0/28</div>
                                 </div>
                             </div>
                             
@@ -245,9 +245,9 @@
                             <div class="form-column">
                                 <div class="form-group">
                                     <label for="location">الموقع</label>
-                                    <input type="text" id="location" name="location" required placeholder="أدخل الموقع (حروف عربية فقط)" maxlength="40">
+                                    <input type="text" id="location" name="location" required placeholder="أدخل الموقع (حروف عربية فقط)" maxlength="28">
                                     <div class="arabic-error-msg" id="locationError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                                    <div class="char-counter" id="locationCounter">0/40</div>
+                                    <div class="char-counter" id="locationCounter">0/28</div>
                                 </div>
                             </div>
                             
@@ -255,9 +255,9 @@
                             <div class="form-column">
                                 <div class="form-group">
                                     <label for="time">الوقت</label>
-                                    <input type="text" id="time" name="time" placeholder="ادخل الوقت (حروف عربية فقط)" required maxlength="20">
+                                    <input type="text" id="time" name="time" placeholder="ادخل الوقت (حروف عربية فقط)" required maxlength="16">
                                     <div class="arabic-error-msg" id="timeError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                                    <div class="char-counter" id="timeCounter">0/20</div>
+                                    <div class="char-counter" id="timeCounter">0/16</div>
                                 </div>
                                 
                                 <div class="form-group">
@@ -341,48 +341,12 @@
                             <button type="button" id="generateBtn" class="action-btn generate-btn" onclick="generateTemplate()">
                                 <i class="fas fa-magic"></i> توليد النموذج
                             </button>
-                            <button type="button" id="previewBtn" class="action-btn preview-btn">
-                                <i class="fas fa-eye"></i> معاينة النموذج
-                            </button>
                             <button type="button" id="backBtn" class="action-btn back-btn">
                                 <i class="fas fa-arrow-right"></i> العودة للقوالب
                             </button>
                         </div>
                     </form>
                 </div>
-            
-            <!-- Preview section (hidden by default) -->
-            <div id="previewSection" class="preview-section" style="display: none;">
-                <div class="preview-header">
-                    <h3>معاينة النموذج</h3>
-                </div>
-                <div class="template-container-wrapper">
-                    <div class="template-container" id="previewContainer">
-                        <div class="template-image-container">
-                            <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
-                            
-                            <!-- Overlay form data on the template -->
-                            <div class="data-overlay" style="position: absolute; top: 0; right: 0; width: 100%; height: 100%;">
-                                <!-- You can adjust these positions as needed -->
-                            <div class="data-field font-family-cairo font-normal" style="top: 20.5%; right: 30%;" id="preview-subject">الموضوع</div>
-                            <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 31%; font-weight: bold;" id="preview-day">اليوم</div>
-                            <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 70%;" id="preview-hijriDate">التاريخ الهجري</div>
-                            <div class="data-field font-family-cairo font-normal" style="top: 35%; right: 31%;" id="preview-location">الموقع</div>
-                            <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 70%;" id="preview-hour">الساعة</div>
-                            <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 30%;" id="preview-time">الوقت</div>
-                            
-                            <!-- Assignees with individual positioning -->
-                            <div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 13.5%; min-width: 150px;" id="preview-assignee1">المكلف 1</div>
-                            <div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 51%; min-width: 150px;" id="preview-assignee2">المكلف 2</div>
-                            <div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 13.5%; min-width: 150px;" id="preview-assignee3">المكلف 3</div>
-                            <div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 51%; min-width: 150px;" id="preview-assignee4">المكلف 4</div>
-                            <div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 13.5%; min-width: 150px;" id="preview-assignee5">المكلف 5</div>
-                            <div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 51%; min-width: 150px;" id="preview-assignee6">المكلف 6</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
             
             <!-- Template result section -->
             <div id="templateResult" class="template-result">
@@ -393,7 +357,6 @@
     </div>
 
     <script src="/static/form-script.js"></script>
-    <script src="preview-script.js"></script>
     <script src="date-time-handler.js"></script>
     <script src="export-handler.js"></script>
     <script src="assignee-selector.js"></script>

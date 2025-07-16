@@ -718,11 +718,11 @@ if (generateBtn) {
                             <!-- Overlay form data on the template -->
                             <div class="data-overlay" style="position: absolute; top: 0; right: 0; width: 100%; height: 100%;">
                                 <!-- You can adjust these positions as needed -->
-                                <div class="data-field font-family-cairo font-normal" style="top: 20.7%; right: 55%;">${formValues.subject || ''}</div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 28.5%; right: 36%; font-weight: bold;">${formValues.day || ''}</div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 28.5%; right: 72%;">${formValues.hijriDate || ''}</div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 35%; right: 55%;">${formValues.location || ''}</div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 75%;">${formValues.formattedHour || formValues.hour || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 20%; right: 30.5%;">${formValues.subject || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 29%; right: 35.5%; font-weight: bold;">${formValues.day || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 29%; right: 70%;">${formValues.hijriDate || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 34.5%; right: 56%;">${formValues.location || ''}</div>
+                                <div class="data-field font-family-cairo font-normal" style="top: 41%; right: 77%;">${formValues.formattedHour || formValues.hour || ''}</div>
                                 <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 36%;">${formValues.time || ''}</div>
                                 
                                 <!-- Assignees with individual positioning -->

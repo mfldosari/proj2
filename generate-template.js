@@ -467,46 +467,56 @@ function generateTemplate() {
                         transition: opacity 0.3s;
                     }
                     
-                    .icon-controls {
-                        display: flex;
-                        justify-content: center;
-                        gap: 20px;
-                        margin-bottom: 15px;
-                        padding: 10px;
-                    }
-                    
-                    .control-icon {
-                        font-size: 24px;
-                        color: #333;
-                        cursor: pointer;
-                        width: 40px;
-                        height: 40px;
+                    .control-button {
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        border-radius: 50%;
+                        gap: 8px;
+                        padding: 8px 16px;
+                        border-radius: 5px;
                         background-color: #f0f0f0;
+                        color: #333;
+                        cursor: pointer;
                         transition: all 0.2s ease;
                         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                        font-size: 14px;
+                        margin: 0 5px;
                     }
                     
-                    .control-icon:hover {
+                    .control-button:hover {
                         background-color: #e0e0e0;
-                        transform: scale(1.1);
+                        transform: translateY(-2px);
                     }
                     
-                    .back-icon {
+                    .control-button i {
+                        font-size: 16px;
+                    }
+                    
+                    .back-button {
                         background-color: #f44336;
                         color: white;
                     }
                     
-                    .back-icon:hover {
+                    .back-button:hover {
                         background-color: #d32f2f;
                     }
                     
-                    .download-icon {
+                    .download-button {
                         background-color: #673AB7;
                         color: white;
+                    }
+                    
+                    .download-button:hover {
+                        background-color: #5e35b1;
+                    }
+                    
+                    .font-button {
+                        background-color: #2196F3;
+                        color: white;
+                    }
+                    
+                    .font-button:hover {
+                        background-color: #1976D2;
                     }
                     
                     .back-btn {
@@ -556,7 +566,7 @@ function generateTemplate() {
                     }
                     
                     @media print {
-                        .icon-controls, .item-controls {
+                        .button-controls, .item-controls {
                             display: none !important;
                         }
                         
@@ -582,16 +592,19 @@ function generateTemplate() {
                         </div>
                     </div>
                     
-                    <!-- Icon controls at the top -->
-                    <div class="icon-controls">
-                        <div id="backBtn" class="control-icon back-icon" title="العودة للنموذج">
-                            <i class="fas fa-arrow-right"></i>
+                    <!-- Button controls at the top -->
+                    <div class="button-controls" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; padding: 10px;">
+                        <div id="backBtn" class="control-button back-button" title="العودة للصفحة الرئيسية">
+                            <i class="fas fa-home"></i>
+                            <span>الصفحة الرئيسية</span>
                         </div>
-                        <div id="fontFamilyBtn" class="control-icon" title="تغيير نوع الخط">
+                        <div id="fontFamilyBtn" class="control-button font-button" title="تغيير نوع الخط">
                             <i class="fas fa-font"></i>
+                            <span>تغيير نوع الخط</span>
                         </div>
-                        <div id="downloadImgBtn" class="control-icon download-icon" title="تحميل صورة">
+                        <div id="downloadImgBtn" class="control-button download-button" title="تحميل صورة">
                             <i class="fas fa-image"></i>
+                            <span>تحميل صورة</span>
                         </div>
                     </div>
                     
@@ -601,7 +614,7 @@ function generateTemplate() {
                                 <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
                             
                             <div class="data-overlay">
-                                <div class="data-field font-family-cairo font-x-large" style="top: 20.5%; right: 30%;">
+                                <div class="data-field font-family-cairo font-large" style="top: 20.5%; right: 30.5%;">
                                     ${formValues.subject || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -610,7 +623,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-cairo font-x-large" style="top: 28%; right: 31%; font-weight: bold;">
+                                <div class="data-field font-family-cairo font-x-large" style="top: 27.5%; right: 32.9%; font-weight: bold;">
                                     ${formValues.day || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -619,7 +632,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-cairo font-x-large" style="top: 28%; right: 70%;">
+                                <div class="data-field font-family-cairo font-x-large" style="top: 27.5%; right: 67.7%;">
                                     ${document.getElementById('hijriDateText').textContent.replace('التاريخ الهجري: ', '') || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -628,7 +641,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-cairo font-x-large" style="top: 35%; right: 31%;">
+                                <div class="data-field font-family-cairo font-large" style="top: 34.5%; right: 30.5%;">
                                     ${formValues.location || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -637,7 +650,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-cairo font-x-large" style="top: 42%; right: 70%;">
+                                <div class="data-field font-family-cairo font-x-large" style="top: 41%; right: 73.7%;">
                                     ${formValues.hour || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -945,7 +958,7 @@ function generateTemplate() {
                             
                             // Hide buttons before capturing
                             const actions = document.querySelector('.template-actions');
-                            const styleControls = document.querySelector('.icon-controls');
+                            const styleControls = document.querySelector('.button-controls');
                             const originalActionsDisplay = actions.style.display;
                             const originalStyleControlsDisplay = styleControls.style.display;
                             actions.style.display = 'none';
@@ -985,7 +998,7 @@ function generateTemplate() {
                         // Function to download as image
                         function downloadAsImage() {
                             // Hide buttons before capturing
-                            const styleControls = document.querySelector('.icon-controls');
+                            const styleControls = document.querySelector('.button-controls');
                             const originalStyleControlsDisplay = styleControls.style.display;
                             styleControls.style.display = 'none';
                             
@@ -1018,7 +1031,7 @@ function generateTemplate() {
                         
                         // Handle back button click
                         document.getElementById('backBtn').addEventListener('click', function() {
-                            window.history.back();
+                            window.location.href = '/';
                         });
                     });
                     // Function to ensure consistent template sizing on all devices
@@ -1071,7 +1084,7 @@ function isAtLeastOneAssigneeSelected() {
     return Array.from(assigneeSelects).some(select => select.value.trim() !== '');
 }
 
-// Function to format time to 12-hour format with AM/PM
+// Function to format time to 12-hour format with Arabic AM/PM (ص/م)
 function formatTime(timeString) {
     if (!timeString) return '';
     
@@ -1079,13 +1092,13 @@ function formatTime(timeString) {
     const hour = parseInt(hours, 10);
     
     if (hour === 0) {
-        return `AM 12:${minutes}`;
+        return `12:${minutes} ص`;
     } else if (hour < 12) {
-        return `AM ${hour}:${minutes}`;
+        return `${hour}:${minutes} ص`;
     } else if (hour === 12) {
-        return `PM 12:${minutes}`;
+        return `12:${minutes} م`;
     } else {
-        return `PM ${hour - 12}:${minutes}`;
+        return `${hour - 12}:${minutes} م`;
     }
 }
 
