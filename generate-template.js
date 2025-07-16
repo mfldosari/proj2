@@ -772,7 +772,7 @@ function generateTemplate() {
                                 <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
                             
                             <div class="data-overlay">
-                                <div class="data-field font-family-cairo font-large" style="top: 20.5%; right: 30.5%;">
+                                <div class="data-field font-family-noto-kufi font-large" style="top: 20.5%; right: 30.5%;">
                                     ${formValues.subject || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -781,7 +781,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-cairo font-x-large" style="top: 27.5%; right: 32.9%; font-weight: bold;">
+                                <div class="data-field font-family-noto-kufi font-x-large" style="top: 27.5%; right: 32.9%;">
                                     ${formValues.day || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -790,7 +790,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-cairo font-x-large" style="top: 27.5%; right: 67.7%;">
+                                <div class="data-field font-family-noto-kufi font-x-large" style="top: 27.5%; right: 67.2%;">
                                     ${document.getElementById('hijriDateText').textContent.replace('التاريخ الهجري: ', '') || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -799,7 +799,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-cairo font-large" style="top: 34.5%; right: 30.5%;">
+                                <div class="data-field font-family-noto-kufi font-large" style="top: 34.5%; right: 30.5%;">
                                     ${formValues.location || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -808,7 +808,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-cairo font-x-large" style="top: 41%; right: 73.7%;">
+                                <div class="data-field font-family-noto-kufi font-x-large" style="top: 41%; right: 73.7%;">
                                     ${formValues.hour || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -817,7 +817,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 30%;">
+                                <div class="data-field font-family-noto-kufi font-normal" style="top: 42%; right: 30%;">
                                     ${formValues.time || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -833,7 +833,7 @@ function generateTemplate() {
                                 ${formValues.photo ? '<div class="requirement-icon" style="top: 55.5%; right: 15%;">✓</div>' : ''}
                                 
                                 <!-- Assignees with individual positioning and controls -->
-                                ${formValues.assignee1 ? `<div class="assignee-item font-family-cairo font-xx-large" style="position: absolute; top: 71.5%; right: 13.5%; min-width: 150px;">
+                                ${formValues.assignee1 ? `<div class="assignee-item font-family-noto-kufi font-xx-large" style="position: absolute; top: 70.5%; right: 14.5%; min-width: 150px;">
                                     ${formValues.assignee1}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -842,7 +842,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee2 ? `<div class="assignee-item font-family-cairo font-xx-large" style="position: absolute; top: 71.5%; right: 51%; min-width: 150px;">
+                                ${formValues.assignee2 ? `<div class="assignee-item font-family-noto-kufi font-xx-large" style="position: absolute; top: 70.5%; right: 51%; min-width: 150px;">
                                     ${formValues.assignee2}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -851,7 +851,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee3 ? `<div class="assignee-item font-family-cairo font-xx-large" style="position: absolute; top: 76.5%; right: 13.5%; min-width: 150px;">
+                                ${formValues.assignee3 ? `<div class="assignee-item font-family-noto-kufi font-xx-large" style="position: absolute; top: 75.4%; right: 14.5%; min-width: 150px;">
                                     ${formValues.assignee3}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -860,7 +860,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee4 ? `<div class="assignee-item font-family-cairo font-xx-large" style="position: absolute; top: 76.5%; right: 51%; min-width: 150px;">
+                                ${formValues.assignee4 ? `<div class="assignee-item font-family-noto-kufi font-xx-large" style="position: absolute; top: 75.4%; right: 51%; min-width: 150px;">
                                     ${formValues.assignee4}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -869,7 +869,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee5 ? `<div class="assignee-item font-family-cairo font-xx-large" style="position: absolute; top: 81.5%; right: 13.5%; min-width: 150px;">
+                                ${formValues.assignee5 ? `<div class="assignee-item font-family-noto-kufi font-xx-large" style="position: absolute; top: 80%; right: 14.5%; min-width: 150px;">
                                     ${formValues.assignee5}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -878,7 +878,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee6 ? `<div class="assignee-item font-family-cairo font-xx-large" style="position: absolute; top: 81.5%; right: 51%; min-width: 150px;">
+                                ${formValues.assignee6 ? `<div class="assignee-item font-family-noto-kufi font-xx-large" style="position: absolute; top: 80%; right: 51%; min-width: 150px;">
                                     ${formValues.assignee6}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
