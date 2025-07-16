@@ -595,7 +595,7 @@ function generateTemplate() {
                     
                     .requirement-icon {
                         position: absolute;
-                        font-size: 50px;
+                        font-size: 40px;
                         color: #009CDE;
                         font-weight: bold;
                     }
@@ -842,9 +842,9 @@ function generateTemplate() {
                                 </div>
                                 
                                 <!-- Requirements section -->
-                                ${formValues.audio ? '<div class="requirement-icon" style="top: 55.5%; right: 64%;">✓</div>' : ''}
-                                ${formValues.video ? '<div class="requirement-icon" style="top: 55.5%; right: 42.5%;">✓</div>' : ''}
-                                ${formValues.photo ? '<div class="requirement-icon" style="top: 55.5%; right: 15%;">✓</div>' : ''}
+                                ${formValues.audio ? '<div class="requirement-icon" style="top: 56%; right: 64.5%;">✓</div>' : ''}
+                                ${formValues.video ? '<div class="requirement-icon" style="top: 56%; right: 43%;">✓</div>' : ''}
+                                ${formValues.photo ? '<div class="requirement-icon" style="top: 56%; right: 15.5%;">✓</div>' : ''}
                                 
                                 <!-- Assignees with individual positioning and controls -->
                                 ${formValues.assignee1 ? `<div class="assignee-item font-family-noto-kufi font-xx-large" style="position: absolute; top: 70.5%; right: 14.5%; min-width: 150px;">
@@ -1335,3 +1335,48 @@ function showLogoLoadingOverlay() {
     
     return loadingOverlay;
 }
+
+// WhatsApp share button functionality
+    document.getElementById('whatsappBtn').addEventListener('click', function() {
+        const styleControls = document.querySelector('.button-controls');
+        const originalStyleControlsDisplay = styleControls.style.display;
+        styleControls.style.display = 'none';
+        const items = document.querySelectorAll('.data-field, .assignee-item');
+        items.forEach(item => {
+            item.classList.remove('active');
+        });
+        const content = document.querySelector('.template-content');
+        html2canvas(content, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: null
+        }).then(canvas => {
+            canvas.toBlob(function(blob) {
+                // Upload to imgbb
+                const formData = new FormData();
+                formData.append('image', blob);
+                // You can get a free API key from https://api.imgbb.com/
+                const imgbbApiKey = '81c41b67c0e36e2cf23f2d6b3ca44d4b'; // <-- Replace with your key
+                fetch('https://api.imgbb.com/1/upload?key=' + imgbbApiKey, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    styleControls.style.display = originalStyleControlsDisplay;
+                    if (data && data.data && data.data.url) {
+                        const imageUrl = data.data.url;
+                        // Immediately open WhatsApp Web with the image link
+                        window.open('https://wa.me/?text=' + encodeURIComponent(imageUrl), '_blank');
+                    } else {
+                        alert('فشل رفع الصورة. يرجى المحاولة لاحقاً.');
+                    }
+                })
+                .catch(() => {
+                    alert('فشل رفع الصورة. يرجى المحاولة لاحقاً.');
+                    styleControls.style.display = originalStyleControlsDisplay;
+                });
+            }, 'image/png');
+        });
+    });
