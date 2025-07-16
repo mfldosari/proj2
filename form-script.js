@@ -691,9 +691,6 @@ generateBtn.addEventListener('click', () => {
                     <div class="template-header">
                         <h2>النموذج المولد</h2>
                         <div class="template-actions">
-                            <button id="downloadPdfBtn" class="action-btn download-pdf-btn">
-                                <i class="fas fa-file-pdf"></i> حفظ كـ PDF
-                            </button>
                             <button id="downloadImgBtn" class="action-btn download-img-btn">
                                 <i class="fas fa-image"></i> حفظ كصورة
                             </button>
@@ -740,7 +737,6 @@ generateBtn.addEventListener('click', () => {
                         }
                         
                         // Add event listeners for buttons
-                        document.getElementById('downloadPdfBtn').addEventListener('click', downloadAsPdf);
                         document.getElementById('downloadImgBtn').addEventListener('click', downloadAsImage);
                         document.getElementById('fontSizeBtn').addEventListener('click', changeFontSize);
                         document.getElementById('fontFamilyBtn').addEventListener('click', changeFontFamily);
@@ -985,127 +981,6 @@ generateBtn.addEventListener('click', () => {
                         setTimeout(() => {
                             tooltip.style.opacity = '0';
                         }, 1500);
-                    }
-                    
-                    // Download as PDF
-                    function downloadAsPdf() {
-                        const templateContainer = document.getElementById('templateContainer');
-                        
-                        // Show loading message
-                        const loadingMsg = document.createElement('div');
-                        loadingMsg.style.position = 'fixed';
-                        loadingMsg.style.top = '0';
-                        loadingMsg.style.left = '0';
-                        loadingMsg.style.width = '100%';
-                        loadingMsg.style.padding = '10px';
-                        loadingMsg.style.backgroundColor = '#009CDE';
-                        loadingMsg.style.color = 'white';
-                        loadingMsg.style.textAlign = 'center';
-                        loadingMsg.style.zIndex = '9999';
-                        loadingMsg.textContent = 'جاري إنشاء ملف PDF...';
-                        document.body.appendChild(loadingMsg);
-                        
-                        // Hide directional controls before capturing
-                        const directionalControls = document.querySelectorAll('.directional-controls');
-                        directionalControls.forEach(control => {
-                            control.style.display = 'none';
-                        });
-                        
-                        // Get the template image container for better capture
-                        const templateImageContainer = templateContainer.querySelector('.template-image-container');
-                        const targetElement = templateImageContainer || templateContainer;
-                        
-                        // Use html2canvas with improved settings for mobile
-                        html2canvas(targetElement, {
-                            scale: 2, // Higher scale for better quality
-                            useCORS: true,
-                            allowTaint: true,
-                            logging: false,
-                            windowWidth: document.documentElement.offsetWidth,
-                            windowHeight: document.documentElement.offsetHeight,
-                            scrollX: 0,
-                            scrollY: 0
-                        }).then(canvas => {
-                            try {
-                                // Check if jsPDF is available in the window object
-                                if (typeof window.jspdf === 'undefined') {
-                                    // Try to use jsPDF directly if available
-                                    if (typeof jsPDF === 'undefined') {
-                                        alert('مكتبة jsPDF غير متوفرة. يرجى التحقق من اتصال الإنترنت وإعادة تحميل الصفحة.');
-                                        document.body.removeChild(loadingMsg);
-                                        return;
-                                    }
-                                    
-                                    // Create a new jsPDF instance
-                                    const pdf = new jsPDF({
-                                        orientation: 'portrait',
-                                        unit: 'mm',
-                                        format: 'a4'
-                                    });
-                                    
-                                    // Calculate dimensions
-                                    const imgData = canvas.toDataURL('image/png');
-                                    const pageWidth = pdf.internal.pageSize.getWidth();
-                                    const pageHeight = pdf.internal.pageSize.getHeight();
-                                    const imgWidth = pageWidth - 20; // Margins
-                                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                                    
-                                    // Add the image to the PDF
-                                    pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-                                    
-                                    // Save the PDF
-                                    pdf.save('نموذج_الإنتاج_الفني.pdf');
-                                    
-                                    // Show directional controls again
-                                    directionalControls.forEach(control => {
-                                        control.style.display = 'block';
-                                    });
-                                } else {
-                                    // Use window.jspdf if available
-                                    const { jsPDF } = window.jspdf;
-                                    
-                                    // Create a new jsPDF instance
-                                    const pdf = new jsPDF({
-                                        orientation: 'portrait',
-                                        unit: 'mm',
-                                        format: 'a4'
-                                    });
-                                    
-                                    // Calculate dimensions
-                                    const imgData = canvas.toDataURL('image/png');
-                                    const pageWidth = pdf.internal.pageSize.getWidth();
-                                    const pageHeight = pdf.internal.pageSize.getHeight();
-                                    const imgWidth = pageWidth - 20; // Margins
-                                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                                    
-                                    // Add the image to the PDF
-                                    pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-                                    
-                                    // Save the PDF
-                                    pdf.save('نموذج_الإنتاج_الفني.pdf');
-                                }
-                            } catch (error) {
-                                console.error('Error generating PDF:', error);
-                                alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
-                            } finally {
-                                // Hide loading message
-                                document.body.removeChild(loadingMsg);
-                                
-                                // Show directional controls again
-                                directionalControls.forEach(control => {
-                                    control.style.display = 'block';
-                                });
-                            }
-                        }).catch(error => {
-                            console.error('Error generating PDF:', error);
-                            alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
-                            document.body.removeChild(loadingMsg);
-                            
-                            // Show directional controls again in case of error
-                            directionalControls.forEach(control => {
-                                control.style.display = 'block';
-                            });
-                        });
                     }
                     
                     // Download as image
