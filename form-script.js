@@ -7,6 +7,51 @@ const dateInput = document.getElementById('date');
 const hijriDateInput = document.getElementById('hijriDate');
 const templateResult = document.getElementById('templateResult');
 
+// Preview elements
+const previewSubject = document.getElementById('preview-subject');
+const previewDay = document.getElementById('preview-day');
+const previewHijriDate = document.getElementById('preview-hijriDate');
+const previewLocation = document.getElementById('preview-location');
+const previewTime = document.getElementById('preview-time');
+const previewHour = document.getElementById('preview-hour');
+const previewAssignee1 = document.getElementById('preview-assignee1');
+const previewAssignee2 = document.getElementById('preview-assignee2');
+const previewAssignee3 = document.getElementById('preview-assignee3');
+const previewAssignee4 = document.getElementById('preview-assignee4');
+const previewAssignee5 = document.getElementById('preview-assignee5');
+const previewAssignee6 = document.getElementById('preview-assignee6');
+
+// Function to update preview in real-time
+function updatePreview() {
+    // Get form values
+    const subject = document.getElementById('subject').value || 'الموضوع';
+    const day = daySelect.value || 'اليوم';
+    const hijriDate = document.getElementById('hijriDateText').textContent.replace('التاريخ الهجري: ', '') || 'التاريخ الهجري';
+    const location = document.getElementById('location').value || 'الموقع';
+    const time = document.getElementById('time').value || 'الوقت';
+    const hour = formatTime(document.getElementById('hour').value) || 'الساعة';
+    const assignee1 = document.getElementById('assignee1').value || 'المكلف 1';
+    const assignee2 = document.getElementById('assignee2').value || 'المكلف 2';
+    const assignee3 = document.getElementById('assignee3').value || 'المكلف 3';
+    const assignee4 = document.getElementById('assignee4').value || 'المكلف 4';
+    const assignee5 = document.getElementById('assignee5').value || 'المكلف 5';
+    const assignee6 = document.getElementById('assignee6').value || 'المكلف 6';
+    
+    // Update preview elements
+    previewSubject.textContent = subject;
+    previewDay.textContent = day;
+    previewHijriDate.textContent = hijriDate;
+    previewLocation.textContent = location;
+    previewTime.textContent = time;
+    previewHour.textContent = hour;
+    previewAssignee1.textContent = assignee1;
+    previewAssignee2.textContent = assignee2;
+    previewAssignee3.textContent = assignee3;
+    previewAssignee4.textContent = assignee4;
+    previewAssignee5.textContent = assignee5;
+    previewAssignee6.textContent = assignee6;
+}
+
 // Function to show loading overlay with logo animation
 function showLogoLoadingOverlay() {
     // Create loading overlay

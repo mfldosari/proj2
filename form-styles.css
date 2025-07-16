@@ -81,6 +81,54 @@ main {
     margin-bottom: 30px;
 }
 
+/* Split Layout */
+.split-layout {
+    display: flex;
+    flex-direction: row-reverse; /* Right to left for RTL */
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.form-container {
+    flex: 1;
+    min-width: 0; /* Allow shrinking below content size */
+}
+
+.preview-container {
+    flex: 1;
+    min-width: 0; /* Allow shrinking below content size */
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    padding: 15px;
+    background-color: #f9f9f9;
+    position: relative;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.preview-header h3 {
+    color: var(--primary-color);
+    font-size: 18px;
+    margin: 0;
+}
+
+.preview-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.preview-actions .action-btn {
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
 /* Form Styles */
 .media-form {
     margin-bottom: 30px;
@@ -530,6 +578,16 @@ footer {
     .form-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+    
+    /* Stack the split layout on medium screens */
+    .split-layout {
+        flex-direction: column;
+    }
+    
+    .preview-container {
+        margin-bottom: 30px;
+        order: -1; /* Show preview first on mobile */
+    }
 }
 
 /* Responsive design improvements */
@@ -649,4 +707,139 @@ input[type="text"]:disabled {
 /* Add a subtle highlight effect when a field becomes enabled */
 .assignees-inputs input[type="text"]:not(:disabled) {
     box-shadow: 0 0 5px rgba(0, 156, 222, 0.3);
+}
+/* Preview Container */
+#previewContainer {
+    max-width: 100%;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+#previewContainer .template-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#previewContainer .data-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#previewContainer .data-field,
+#previewContainer .assignee-item {
+    position: absolute;
+    font-family: 'Cairo', sans-serif;
+    font-size: 16px;
+    color: #000;
+    background-color: transparent;
+    padding: 3px 6px;
+    border-radius: 3px;
+}
+
+/* Font styling classes */
+.font-normal {
+    font-size: 16px; /* Base size for all text elements */
+}
+
+.font-large {
+    font-size: 19px; /* 120% of base size */
+}
+
+.font-larger {
+    font-size: 22px; /* 140% of base size */
+}
+
+.font-family-cairo {
+    font-family: 'Cairo', sans-serif;
+}
+
+.font-family-tajawal {
+    font-family: 'Tajawal', sans-serif;
+}
+
+.font-family-amiri {
+    font-family: 'Amiri', serif;
+}
+
+.font-family-scheherazade {
+    font-family: 'Scheherazade New', serif;
+}
+
+.font-family-lateef {
+    font-family: 'Lateef', cursive;
+}
+
+.font-family-reem-kufi {
+    font-family: 'Reem Kufi', sans-serif;
+}
+
+/* Style tooltip */
+#style-tooltip {
+    position: fixed;
+    padding: 5px 10px;
+    background-color: #333;
+    color: white;
+    border-radius: 4px;
+    font-size: 14px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+/* Font styling buttons */
+.font-size-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.font-family-btn {
+    background-color: #FF9800;
+    color: white;
+}
+
+.font-size-btn:hover,
+.font-family-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+/* Preview Section */
+.preview-section {
+    margin-top: 30px;
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.preview-header h3 {
+    color: var(--primary-color);
+    font-size: 18px;
+    margin: 0;
+}
+
+/* Preview Button */
+.preview-btn {
+    background-color: #2196f3;
+    color: white;
+}
+
+.preview-btn:hover {
+    background-color: #0d8bf2;
 }

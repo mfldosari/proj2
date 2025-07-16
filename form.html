@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/static/form-styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Lateef&family=Reem+Kufi:wght@400;700&family=Scheherazade+New:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Include html2canvas library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -189,7 +189,6 @@
             }, 4000);
         });
     </script>
-
     <div class="container">
         <header>
             <div class="logo">
@@ -202,111 +201,149 @@
         </header>
 
         <main>
-            <form id="mediaForm" class="media-form">
-                <div class="form-grid">
-                    <!-- First Column -->
-                    <div class="form-column">
-                        <div class="form-group">
-                            <label for="subject">الموضوع</label>
-                            <input type="text" id="subject" name="subject" required placeholder="أدخل الموضوع" maxlength="40">
-                            <div class="arabic-error-msg" id="subjectError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <div class="char-counter" id="subjectCounter">0/40</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Second Column -->
-                    <div class="form-column">
-                        <div class="form-group">
-                            <label for="day">اليوم</label>
-                            <select id="day" name="day" required disabled style="background-color: #f9f9f9; color: #333; font-weight: bold;">
-                                <option value="">اختر اليوم</option>
-                                <option value="الأحد">الأحد</option>
-                                <option value="الإثنين">الإثنين</option>
-                                <option value="الثلاثاء">الثلاثاء</option>
-                                <option value="الأربعاء">الأربعاء</option>
-                                <option value="الخميس">الخميس</option>
-                                <option value="الجمعة">الجمعة</option>
-                                <option value="السبت">السبت</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="date">التاريخ الميلادي</label>
-                            <input type="date" id="date" name="date" required>
-                            <div class="hijri-date-display" style="display: block; padding: 5px; margin-top: 5px; background-color: #f5f5f5; border-radius: 4px;">
-                                <span id="hijriDateText">التاريخ الهجري: </span>
-                                <input type="hidden" id="hijriDate" name="hijriDate">
+            <!-- Form section -->
+                <div class="form-container" style="width: 100%">
+                    <form id="mediaForm" class="media-form">
+                        <div class="form-grid">
+                            <!-- First Column -->
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label for="subject">الموضوع</label>
+                                    <input type="text" id="subject" name="subject" required placeholder="أدخل الموضوع" maxlength="40">
+                                    <div class="arabic-error-msg" id="subjectError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                                    <div class="char-counter" id="subjectCounter">0/40</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Second Column -->
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label for="day">اليوم</label>
+                                    <select id="day" name="day" required disabled style="background-color: #f9f9f9; color: #333; font-weight: bold;">
+                                        <option value="">اختر اليوم</option>
+                                        <option value="الأحد">الأحد</option>
+                                        <option value="الإثنين">الإثنين</option>
+                                        <option value="الثلاثاء">الثلاثاء</option>
+                                        <option value="الأربعاء">الأربعاء</option>
+                                        <option value="الخميس">الخميس</option>
+                                        <option value="الجمعة">الجمعة</option>
+                                        <option value="السبت">السبت</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="date">التاريخ الميلادي</label>
+                                    <input type="date" id="date" name="date" required>
+                                    <div class="hijri-date-display" style="display: block; padding: 5px; margin-top: 5px; background-color: #f5f5f5; border-radius: 4px;">
+                                        <span id="hijriDateText">التاريخ الهجري: </span>
+                                        <input type="hidden" id="hijriDate" name="hijriDate">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Third Column -->
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label for="location">الموقع</label>
+                                    <input type="text" id="location" name="location" required placeholder="أدخل الموقع" maxlength="40">
+                                    <div class="arabic-error-msg" id="locationError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                                    <div class="char-counter" id="locationCounter">0/40</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Fourth Column -->
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label for="time">الوقت</label>
+                                    <input type="text" id="time" name="time" placeholder="أدخل الوقت" required maxlength="30">
+                                    <div class="arabic-error-msg" id="timeError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                                    <div class="char-counter" id="timeCounter">0/30</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="hour">الساعة</label>
+                                    <input type="time" id="hour" name="hour" required>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Third Column -->
-                    <div class="form-column">
-                        <div class="form-group">
-                            <label for="location">الموقع</label>
-                            <input type="text" id="location" name="location" required placeholder="أدخل الموقع" maxlength="40">
-                            <div class="arabic-error-msg" id="locationError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <div class="char-counter" id="locationCounter">0/40</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Fourth Column -->
-                    <div class="form-column">
-                        <div class="form-group">
-                            <label for="time">الوقت</label>
-                            <input type="text" id="time" name="time" placeholder="أدخل الوقت" required maxlength="30">
-                            <div class="arabic-error-msg" id="timeError" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <div class="char-counter" id="timeCounter">0/30</div>
+                        
+                        <!-- Assignees -->
+                        <div class="form-section">
+                            <div class="form-group">
+                                <label>المكلفون</label>
+                                <div class="assignees-inputs">
+                                    <input type="text" name="assignee1" id="assignee1" placeholder="المكلف 1" maxlength="30">
+                                    <div class="arabic-error-msg" id="assignee1Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                                    <div class="char-counter" id="assignee1Counter">0/30</div>
+                                    
+                                    <input type="text" name="assignee2" id="assignee2" placeholder="المكلف 2" maxlength="30">
+                                    <div class="arabic-error-msg" id="assignee2Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                                    <div class="char-counter" id="assignee2Counter">0/30</div>
+                                    
+                                    <input type="text" name="assignee3" id="assignee3" placeholder="المكلف 3" maxlength="30">
+                                    <div class="arabic-error-msg" id="assignee3Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                                    <div class="char-counter" id="assignee3Counter">0/30</div>
+                                    
+                                    <input type="text" name="assignee4" id="assignee4" placeholder="المكلف 4" maxlength="30">
+                                    <div class="arabic-error-msg" id="assignee4Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                                    <div class="char-counter" id="assignee4Counter">0/30</div>
+                                    
+                                    <input type="text" name="assignee5" id="assignee5" placeholder="المكلف 5" maxlength="30">
+                                    <div class="arabic-error-msg" id="assignee5Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                                    <div class="char-counter" id="assignee5Counter">0/30</div>
+                                    
+                                    <input type="text" name="assignee6" id="assignee6" placeholder="المكلف 6" maxlength="30">
+                                    <div class="arabic-error-msg" id="assignee6Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
+                                    <div class="char-counter" id="assignee6Counter">0/30</div>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="hour">الساعة</label>
-                            <input type="time" id="hour" name="hour" required>
+                        <div class="buttons-container">
+                            <button type="button" id="generateBtn" class="action-btn generate-btn">
+                                <i class="fas fa-magic"></i> توليد النموذج
+                            </button>
+                            <button type="button" id="previewBtn" class="action-btn preview-btn">
+                                <i class="fas fa-eye"></i> معاينة النموذج
+                            </button>
+                            <button type="button" id="backBtn" class="action-btn back-btn">
+                                <i class="fas fa-arrow-right"></i> العودة للقوالب
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            
+            <!-- Preview section (hidden by default) -->
+            <div id="previewSection" class="preview-section" style="display: none;">
+                <div class="preview-header">
+                    <h3>معاينة النموذج</h3>
+                </div>
+                <div class="template-container" id="previewContainer">
+                    <div class="template-image-container">
+                        <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
+                        
+                        <!-- Overlay form data on the template -->
+                        <div class="data-overlay">
+                            <!-- You can adjust these positions as needed -->
+                            <div class="data-field font-family-cairo font-normal" style="top: 20.5%; right: 30%;" id="preview-subject">الموضوع</div>
+                            <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 31%; font-weight: bold;" id="preview-day">اليوم</div>
+                            <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 70%;" id="preview-hijriDate">التاريخ الهجري</div>
+                            <div class="data-field font-family-cairo font-normal" style="top: 35%; right: 31%;" id="preview-location">الموقع</div>
+                            <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 70%;" id="preview-time">الوقت</div>
+                            <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 30%;" id="preview-hour">الساعة</div>
+                            
+                            <!-- Assignees with individual positioning -->
+                            <div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 13.5%; min-width: 150px;" id="preview-assignee1">المكلف 1</div>
+                            <div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 51%; min-width: 150px;" id="preview-assignee2">المكلف 2</div>
+                            <div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 13.5%; min-width: 150px;" id="preview-assignee3">المكلف 3</div>
+                            <div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 51%; min-width: 150px;" id="preview-assignee4">المكلف 4</div>
+                            <div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 13.5%; min-width: 150px;" id="preview-assignee5">المكلف 5</div>
+                            <div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 51%; min-width: 150px;" id="preview-assignee6">المكلف 6</div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Assignees -->
-                <div class="form-section">
-                    <div class="form-group">
-                        <label>المكلفون</label>
-                        <div class="assignees-inputs">
-                            <input type="text" name="assignee1" id="assignee1" placeholder="المكلف 1" maxlength="30">
-                            <div class="arabic-error-msg" id="assignee1Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <div class="char-counter" id="assignee1Counter">0/30</div>
-                            
-                            <input type="text" name="assignee2" id="assignee2" placeholder="المكلف 2" maxlength="30">
-                            <div class="arabic-error-msg" id="assignee2Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <div class="char-counter" id="assignee2Counter">0/30</div>
-                            
-                            <input type="text" name="assignee3" id="assignee3" placeholder="المكلف 3" maxlength="30">
-                            <div class="arabic-error-msg" id="assignee3Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <div class="char-counter" id="assignee3Counter">0/30</div>
-                            
-                            <input type="text" name="assignee4" id="assignee4" placeholder="المكلف 4" maxlength="30">
-                            <div class="arabic-error-msg" id="assignee4Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <div class="char-counter" id="assignee4Counter">0/30</div>
-                            
-                            <input type="text" name="assignee5" id="assignee5" placeholder="المكلف 5" maxlength="30">
-                            <div class="arabic-error-msg" id="assignee5Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <div class="char-counter" id="assignee5Counter">0/30</div>
-                            
-                            <input type="text" name="assignee6" id="assignee6" placeholder="المكلف 6" maxlength="30">
-                            <div class="arabic-error-msg" id="assignee6Error" style="display: none;">يرجى إدخال حروف عربية فقط</div>
-                            <div class="char-counter" id="assignee6Counter">0/30</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="buttons-container">
-                    <button type="button" id="generateBtn" class="action-btn generate-btn">
-                        <i class="fas fa-magic"></i> توليد النموذج
-                    </button>
-                    <button type="button" id="backBtn" class="action-btn back-btn">
-                        <i class="fas fa-arrow-right"></i> العودة للقوالب
-                    </button>
-                </div>
-            </form>
+            </div>
+            </div>
             
             <!-- Template result section -->
             <div id="templateResult" class="template-result">
@@ -324,363 +361,7 @@
         </footer>
     </div>
 
-    <script>
-        // Form functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Hide loading overlay after exactly 3 seconds
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            
-            // Force complete removal after 3 seconds
-            setTimeout(() => {
-                // Immediately hide the overlay
-                loadingOverlay.style.display = 'none';
-                
-                // Also remove it from the DOM completely
-                if (loadingOverlay.parentNode) {
-                    loadingOverlay.parentNode.removeChild(loadingOverlay);
-                }
-            }, 3000);
-            
-            // DOM Elements
-            const dateInput = document.getElementById('date');
-            const hijriDateText = document.getElementById('hijriDateText');
-            const hijriDateInput = document.getElementById('hijriDate');
-            const daySelect = document.getElementById('day');
-            const timeInput = document.getElementById('time');
-            const hourInput = document.getElementById('hour');
-            
-            // Character counter elements
-            const subjectInput = document.getElementById('subject');
-            const subjectCounter = document.getElementById('subjectCounter');
-            const locationInput = document.getElementById('location');
-            const locationCounter = document.getElementById('locationCounter');
-            const timeCounter = document.getElementById('timeCounter');
-            const assignee1Input = document.getElementById('assignee1');
-            const assignee1Counter = document.getElementById('assignee1Counter');
-            const assignee2Input = document.getElementById('assignee2');
-            const assignee2Counter = document.getElementById('assignee2Counter');
-            const assignee3Input = document.getElementById('assignee3');
-            const assignee3Counter = document.getElementById('assignee3Counter');
-            const assignee4Input = document.getElementById('assignee4');
-            const assignee4Counter = document.getElementById('assignee4Counter');
-            const assignee5Input = document.getElementById('assignee5');
-            const assignee5Counter = document.getElementById('assignee5Counter');
-            const assignee6Input = document.getElementById('assignee6');
-            const assignee6Counter = document.getElementById('assignee6Counter');
-            
-            // Character counter function
-            function updateCharCounter(input, counter, maxLength) {
-                if (!input || !counter) return;
-                const currentLength = input.value.length;
-                counter.textContent = `${currentLength}/${maxLength}`;
-                
-                if (currentLength >= maxLength) {
-                    counter.classList.add('char-limit-reached');
-                } else {
-                    counter.classList.remove('char-limit-reached');
-                }
-            }
-            
-            // Initialize all character counters
-            function initializeCounters() {
-                updateCharCounter(subjectInput, subjectCounter, 40);
-                updateCharCounter(locationInput, locationCounter, 40);
-                updateCharCounter(timeInput, timeCounter, 30);
-                updateCharCounter(assignee1Input, assignee1Counter, 30);
-                updateCharCounter(assignee2Input, assignee2Counter, 30);
-                updateCharCounter(assignee3Input, assignee3Counter, 30);
-                updateCharCounter(assignee4Input, assignee4Counter, 30);
-                updateCharCounter(assignee5Input, assignee5Counter, 30);
-                updateCharCounter(assignee6Input, assignee6Counter, 30);
-            }
-            
-            // Add event listeners for character counting
-            function setupCharCounters() {
-                if (subjectInput) {
-                    subjectInput.addEventListener('input', function() {
-                        updateCharCounter(this, subjectCounter, 40);
-                    });
-                }
-                
-                if (locationInput) {
-                    locationInput.addEventListener('input', function() {
-                        updateCharCounter(this, locationCounter, 40);
-                    });
-                }
-                
-                if (timeInput) {
-                    timeInput.addEventListener('input', function() {
-                        updateCharCounter(this, timeCounter, 30);
-                    });
-                }
-                
-                if (assignee1Input) {
-                    assignee1Input.addEventListener('input', function() {
-                        updateCharCounter(this, assignee1Counter, 30);
-                    });
-                }
-                
-                if (assignee2Input) {
-                    assignee2Input.addEventListener('input', function() {
-                        updateCharCounter(this, assignee2Counter, 30);
-                    });
-                }
-                
-                if (assignee3Input) {
-                    assignee3Input.addEventListener('input', function() {
-                        updateCharCounter(this, assignee3Counter, 30);
-                    });
-                }
-                
-                if (assignee4Input) {
-                    assignee4Input.addEventListener('input', function() {
-                        updateCharCounter(this, assignee4Counter, 30);
-                    });
-                }
-                
-                if (assignee5Input) {
-                    assignee5Input.addEventListener('input', function() {
-                        updateCharCounter(this, assignee5Counter, 30);
-                    });
-                }
-                
-                if (assignee6Input) {
-                    assignee6Input.addEventListener('input', function() {
-                        updateCharCounter(this, assignee6Counter, 30);
-                    });
-                }
-            }
-            
-            // Initialize counters and set up event listeners
-            initializeCounters();
-            setupCharCounters();
-            
-            // Arabic day names
-            const arabicDays = [
-                'الأحد',    // Sunday
-                'الإثنين',  // Monday
-                'الثلاثاء', // Tuesday
-                'الأربعاء', // Wednesday
-                'الخميس',   // Thursday
-                'الجمعة',   // Friday
-                'السبت'     // Saturday
-            ];
-            
-            // Hijri month names
-            const hijriMonths = [
-                'محرم',
-                'صفر',
-                'ربيع الأول',
-                'ربيع الثاني',
-                'جمادى الأولى',
-                'جمادى الآخرة',
-                'رجب',
-                'شعبان',
-                'رمضان',
-                'شوال',
-                'ذو القعدة',
-                'ذو الحجة'
-            ];
-            
-            // Set default values for today
-            const today = new Date();
-            
-            // Set default date
-            const year = today.getFullYear();
-            const month = (today.getMonth() + 1).toString().padStart(2, '0');
-            const day = today.getDate().toString().padStart(2, '0');
-            dateInput.value = `${year}-${month}-${day}`;
-            
-            // Set default day of week
-            const dayOfWeek = today.getDay();
-            daySelect.value = arabicDays[dayOfWeek];
-            
-            // Set default time
-            const hours = today.getHours().toString().padStart(2, '0');
-            const minutes = today.getMinutes().toString().padStart(2, '0');
-            hourInput.value = `${hours}:${minutes}`;
-            
-            // Format time in Arabic
-            const period = today.getHours() >= 12 ? 'م' : 'ص';
-            let formattedHours = today.getHours();
-            if (formattedHours > 12) {
-                formattedHours -= 12;
-            } else if (formattedHours === 0) {
-                formattedHours = 12;
-            }
-            timeInput.value = `${formattedHours}:${minutes} ${period}`;
-            
-            // Improved Hijri date conversion using Aladhan API
-            async function getHijriDate(gregorianDate) {
-                try {
-                    const [year, month, day] = gregorianDate.split('-');
-                    const url = `https://api.aladhan.com/v1/gToH/${day}-${month}-${year}`;
-                    
-                    console.log('Fetching Hijri date from API:', url);
-                    
-                    const response = await fetch(url);
-                    if (!response.ok) {
-                        throw new Error(`API request failed with status ${response.status}`);
-                    }
-                    
-                    const data = await response.json();
-                    
-                    if (data.code === 200 && data.data) {
-                        const hijri = data.data.hijri;
-                        console.log('API response:', hijri);
-                        
-                        return {
-                            day: parseInt(hijri.day),
-                            month: hijri.month.ar,
-                            year: parseInt(hijri.year)
-                        };
-                    } else {
-                        throw new Error('Invalid API response format');
-                    }
-                } catch (error) {
-                    console.error('Error fetching Hijri date:', error);
-                    return null;
-                }
-            }
-            
-            // Update Hijri date display
-            async function updateHijriDate() {
-                const date = dateInput.value;
-                if (!date) {
-                    hijriDateText.textContent = 'التاريخ الهجري: ';
-                    hijriDateInput.value = '';
-                    return;
-                }
-                
-                // Show loading state
-                hijriDateText.textContent = 'التاريخ الهجري: جاري التحميل...';
-                
-                try {
-                    // Get Hijri date from API
-                    const hijriDate = await getHijriDate(date);
-                    
-                    if (hijriDate) {
-                        const formattedDate = `${hijriDate.day} ${hijriDate.month} ${hijriDate.year} هـ`;
-                        hijriDateText.textContent = `التاريخ الهجري: ${formattedDate}`;
-                        hijriDateInput.value = formattedDate;
-                    } else {
-                        // Fallback to a simple calculation if API fails
-                        const fallbackDate = getFallbackHijriDate(date);
-                        hijriDateText.textContent = `التاريخ الهجري: ${fallbackDate}`;
-                        hijriDateInput.value = fallbackDate;
-                    }
-                } catch (error) {
-                    console.error('Error updating Hijri date:', error);
-                    hijriDateText.textContent = 'التاريخ الهجري: (خطأ في التحويل)';
-                    hijriDateInput.value = '';
-                }
-            }
-            
-            // Simple fallback calculation (approximate)
-            function getFallbackHijriDate(gregorianDateStr) {
-                const gregorianDate = new Date(gregorianDateStr);
-                
-                // Approximate conversion (Hijri year is about 354 days)
-                const gregorianYear = gregorianDate.getFullYear();
-                const gregorianMonth = gregorianDate.getMonth();
-                const gregorianDay = gregorianDate.getDate();
-                
-                // Approximate Hijri year (622 CE is year 1 in Hijri calendar)
-                const yearDiff = gregorianYear - 622;
-                const hijriYear = Math.floor(yearDiff + (yearDiff / 32));
-                
-                // Approximate month and day (very rough estimate)
-                const dayOfYear = Math.floor((gregorianDate - new Date(gregorianYear, 0, 1)) / (24 * 60 * 60 * 1000));
-                const hijriDayOfYear = (dayOfYear + 10) % 354; // Offset by 10 days as a rough adjustment
-                
-                const hijriMonth = Math.floor(hijriDayOfYear / 29.5);
-                const hijriDay = Math.floor(hijriDayOfYear % 29.5) + 1;
-                
-                return `${hijriDay} ${hijriMonths[hijriMonth % 12]} ${hijriYear} هـ`;
-            }
-            
-            // Update day of week based on selected date
-            dateInput.addEventListener('change', function() {
-                if (this.value) {
-                    const selectedDate = new Date(this.value);
-                    const dayIndex = selectedDate.getDay();
-                    daySelect.value = arabicDays[dayIndex];
-                    
-                    // Update Hijri date
-                    updateHijriDate();
-                }
-            });
-            
-            // Initial update of Hijri date
-            setTimeout(() => {
-                updateHijriDate();
-            }, 500);
-            
-            // Arabic validation for text inputs
-            function isArabicText(text) {
-                if (!text) return true;
-                // Arabic Unicode range: \u0600-\u06FF
-                // Additional Arabic characters: \u0750-\u077F, \u08A0-\u08FF
-                // Arabic presentation forms: \uFB50-\uFDFF, \uFE70-\uFEFF
-                // Allow spaces, commas, and periods
-                const arabicRegex = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\s.,]+$/;
-                return arabicRegex.test(text);
-            }
-            
-            // Add Arabic validation to specific fields
-            const arabicFields = [
-                { input: document.getElementById('subject'), error: document.getElementById('subjectError') },
-                { input: document.getElementById('location'), error: document.getElementById('locationError') },
-                { input: document.getElementById('time'), error: document.getElementById('timeError') },
-                { input: document.getElementById('assignee1'), error: document.getElementById('assignee1Error') },
-                { input: document.getElementById('assignee2'), error: document.getElementById('assignee2Error') },
-                { input: document.getElementById('assignee3'), error: document.getElementById('assignee3Error') },
-                { input: document.getElementById('assignee4'), error: document.getElementById('assignee4Error') },
-                { input: document.getElementById('assignee5'), error: document.getElementById('assignee5Error') },
-                { input: document.getElementById('assignee6'), error: document.getElementById('assignee6Error') }
-            ];
-            
-            arabicFields.forEach(field => {
-                if (!field.input) return;
-                
-                field.input.addEventListener('input', function() {
-                    // Update character counter first
-                    const counter = document.getElementById(field.input.id + 'Counter');
-                    const maxLength = field.input.id === 'subject' || field.input.id === 'location' ? 40 : 30;
-                    if (counter) {
-                        updateCharCounter(field.input, counter, maxLength);
-                    }
-                    
-                    // Then check Arabic validation
-                    if (this.value && !isArabicText(this.value)) {
-                        this.classList.add('arabic-error');
-                        field.error.style.display = 'block';
-                    } else {
-                        this.classList.remove('arabic-error');
-                        field.error.style.display = 'none';
-                    }
-                });
-            });
-            
-            // Check if all fields have valid Arabic text
-            window.validateArabicFields = function() {
-                let isValid = true;
-                
-                arabicFields.forEach(field => {
-                    if (!field.input) return;
-                    
-                    // Only validate if the field has a value
-                    if (field.input.value && !isArabicText(field.input.value)) {
-                        field.input.classList.add('arabic-error');
-                        field.error.style.display = 'block';
-                        isValid = false;
-                    }
-                });
-                
-                return isValid;
-            };
-        });
-    </script>
     <script src="/static/form-script.js"></script>
+    <script src="preview-script.js"></script>
 </body>
 </html>
