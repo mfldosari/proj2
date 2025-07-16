@@ -1072,39 +1072,60 @@ generateBtn.addEventListener('click', () => {
     }, 1500);
 });
 
-// Save form data to localStorage
-mediaForm.addEventListener('input', () => {
-    const formData = new FormData(mediaForm);
-    const formValues = {};
-    
-    for (const [key, value] of formData.entries()) {
-        formValues[key] = value;
+// We're removing the localStorage saving functionality to ensure form resets on refresh
+// mediaForm.addEventListener('input', () => {
+//     const formData = new FormData(mediaForm);
+//     const formValues = {};
+//     
+//     for (const [key, value] of formData.entries()) {
+//         formValues[key] = value;
+//     }
+//     
+//     localStorage.setItem('mediaFormData', JSON.stringify(formValues));
+// });
+
+// Function to update character counter
+function updateCharCounter(input) {
+    const counterId = input.id + 'Counter';
+    const counter = document.getElementById(counterId);
+    if (counter) {
+        const maxLength = input.getAttribute('maxlength');
+        const currentLength = input.value.length;
+        counter.textContent = currentLength + '/' + maxLength;
+        
+        // Add visual indication when approaching limit
+        if (currentLength >= maxLength) {
+            counter.classList.add('char-limit-reached');
+        } else {
+            counter.classList.remove('char-limit-reached');
+        }
     }
-    
-    localStorage.setItem('mediaFormData', JSON.stringify(formValues));
-});
+}
+
+// Setup character counters for all inputs with maxlength
+function setupCharCounters() {
+    const inputs = document.querySelectorAll('input[maxlength]');
+    inputs.forEach(input => {
+        // Initialize counter
+        updateCharCounter(input);
+        
+        // Add input event listener
+        input.addEventListener('input', function() {
+            updateCharCounter(this);
+        });
+    });
+}
 
 // Load saved form data on page load
 document.addEventListener('DOMContentLoaded', () => {
-    const savedData = localStorage.getItem('mediaFormData');
+    // Clear form data from localStorage to ensure fresh start on page refresh
+    localStorage.removeItem('mediaFormData');
     
-    if (savedData) {
-        const formValues = JSON.parse(savedData);
-        
-        for (const [key, value] of Object.entries(formValues)) {
-            const field = mediaForm.elements[key];
-            if (field) {
-                if (field.type === 'radio') {
-                    const radio = mediaForm.querySelector(`input[name="${key}"][value="${value}"]`);
-                    if (radio) radio.checked = true;
-                } else if (field.type === 'checkbox') {
-                    field.checked = value === 'on';
-                } else {
-                    field.value = value;
-                }
-            }
-        }
-    }
+    // Reset all form fields to their default values
+    mediaForm.reset();
+    
+    // Initialize all character counters
+    setupCharCounters();
     
     // Setup assignee fields sequential enabling
     setupAssigneeFields();
@@ -1120,3 +1141,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+// Ensure form is reset on page load/refresh
+window.onload = function() {
+    // Reset the form
+    if (mediaForm) {
+        mediaForm.reset();
+        
+        // Update all character counters to show 0/max
+        const inputs = document.querySelectorAll('input[maxlength]');
+        inputs.forEach(input => {
+            updateCharCounter(input);
+        });
+    }
+};
