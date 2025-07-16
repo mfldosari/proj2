@@ -1154,3 +1154,137 @@ window.onload = function() {
         });
     }
 };
+// Function to check if text contains only Arabic characters
+function isArabicText(text) {
+    // Arabic Unicode range: \u0600-\u06FF (Arabic), \u0750-\u077F (Arabic Supplement), \u08A0-\u08FF (Arabic Extended-A)
+    // Also allow spaces, numbers, and some punctuation
+    const arabicRegex = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\s\d\.\,\:\-\_\(\)]*$/;
+    return arabicRegex.test(text);
+}
+
+// Function to validate Arabic fields
+window.validateArabicFields = function() {
+    // Fields that should contain only Arabic text
+    const arabicFields = [
+        { id: 'subject', errorId: 'subjectError' },
+        { id: 'location', errorId: 'locationError' },
+        { id: 'time', errorId: 'timeError' },
+        { id: 'assignee1', errorId: 'assignee1Error' },
+        { id: 'assignee2', errorId: 'assignee2Error' },
+        { id: 'assignee3', errorId: 'assignee3Error' },
+        { id: 'assignee4', errorId: 'assignee4Error' },
+        { id: 'assignee5', errorId: 'assignee5Error' },
+        { id: 'assignee6', errorId: 'assignee6Error' }
+    ];
+    
+    let isValid = true;
+    
+    // Check each field
+    arabicFields.forEach(field => {
+        const inputElement = document.getElementById(field.id);
+        const errorElement = document.getElementById(field.errorId);
+        
+        if (inputElement && inputElement.value.trim() !== '') {
+            if (!isArabicText(inputElement.value)) {
+                inputElement.classList.add('arabic-error');
+                if (errorElement) {
+                    errorElement.style.display = 'block';
+                }
+                isValid = false;
+            } else {
+                inputElement.classList.remove('arabic-error');
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+            }
+        }
+    });
+    
+    return isValid;
+};
+
+// Add input event listeners for Arabic validation
+document.addEventListener('DOMContentLoaded', function() {
+    const arabicFields = ['subject', 'location', 'time'];
+    
+    arabicFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        const errorElement = document.getElementById(fieldId + 'Error');
+        
+        if (field) {
+            field.addEventListener('input', function() {
+                if (this.value.trim() !== '') {
+                    if (!isArabicText(this.value)) {
+                        this.classList.add('arabic-error');
+                        if (errorElement) {
+                            errorElement.style.display = 'block';
+                        }
+                    } else {
+                        this.classList.remove('arabic-error');
+                        if (errorElement) {
+                            errorElement.style.display = 'none';
+                        }
+                    }
+                } else {
+                    this.classList.remove('arabic-error');
+                    if (errorElement) {
+                        errorElement.style.display = 'none';
+                    }
+                }
+            });
+        }
+    });
+});
+// Add keydown event listeners to prevent non-Arabic input
+document.addEventListener('DOMContentLoaded', function() {
+    const arabicOnlyFields = [
+        'subject', 'location', 'time', 
+        'assignee1', 'assignee2', 'assignee3', 
+        'assignee4', 'assignee5', 'assignee6'
+    ];
+    
+    arabicOnlyFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        
+        if (field) {
+            field.addEventListener('keypress', function(e) {
+                // Get the character that would be added
+                const char = String.fromCharCode(e.charCode);
+                
+                // Check if the character is not Arabic, space, number, or allowed punctuation
+                if (!/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\s\d\.\,\:\-\_\(\)]/.test(char)) {
+                    e.preventDefault();
+                    
+                    // Show error message briefly
+                    const errorElement = document.getElementById(fieldId + 'Error');
+                    if (errorElement) {
+                        errorElement.style.display = 'block';
+                        setTimeout(() => {
+                            errorElement.style.display = 'none';
+                        }, 2000);
+                    }
+                }
+            });
+            
+            // Also handle paste events to filter non-Arabic text
+            field.addEventListener('paste', function(e) {
+                // Get pasted text
+                const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+                
+                // Check if pasted text contains non-Arabic characters
+                if (!/^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\s\d\.\,\:\-\_\(\)]*$/.test(pastedText)) {
+                    e.preventDefault();
+                    
+                    // Show error message
+                    const errorElement = document.getElementById(fieldId + 'Error');
+                    if (errorElement) {
+                        errorElement.style.display = 'block';
+                        setTimeout(() => {
+                            errorElement.style.display = 'none';
+                        }, 2000);
+                    }
+                }
+            });
+        }
+    });
+});
