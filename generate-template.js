@@ -196,6 +196,21 @@ function generateTemplate() {
                     .data-field.active, .assignee-item.active {
                         background-color: rgba(0, 156, 222, 0.2);
                         outline: 2px dashed #009CDE;
+                        position: relative;
+                    }
+                    
+                    .data-field.active::after, .assignee-item.active::after {
+                        content: "استخدم أسهم لوحة المفاتيح للتحريك";
+                        position: absolute;
+                        bottom: -25px;
+                        right: 0;
+                        font-size: 12px;
+                        background-color: rgba(0, 0, 0, 0.7);
+                        color: white;
+                        padding: 3px 8px;
+                        border-radius: 3px;
+                        white-space: nowrap;
+                        z-index: 20;
                     }
                     
                     .item-controls {
@@ -743,6 +758,41 @@ function generateTemplate() {
                                 }
                             });
                             
+                            // Add keyboard support for arrow keys
+                            document.addEventListener('keydown', function(e) {
+                                if (!activeItem) return;
+                                
+                                const step = 0.5; // 0.5% each time
+                                const currentTop = parseFloat(activeItem.style.top) || 0;
+                                const currentRight = parseFloat(activeItem.style.right) || 0;
+                                
+                                switch (e.key) {
+                                    case 'ArrowUp':
+                                        activeItem.style.top = (currentTop - step) + '%';
+                                        e.preventDefault();
+                                        break;
+                                    case 'ArrowDown':
+                                        activeItem.style.top = (currentTop + step) + '%';
+                                        e.preventDefault();
+                                        break;
+                                    case 'ArrowRight':
+                                        // Move right (decrease right value)
+                                        activeItem.style.right = (currentRight - step) + '%';
+                                        e.preventDefault();
+                                        break;
+                                    case 'ArrowLeft':
+                                        // Move left (increase right value)
+                                        activeItem.style.right = (currentRight + step) + '%';
+                                        e.preventDefault();
+                                        break;
+                                    case 'Escape':
+                                        // Deactivate on Escape key
+                                        activeItem.classList.remove('active');
+                                        activeItem = null;
+                                        break;
+                                }
+                            });
+                            
                             items.forEach(item => {
                                 const upBtn = item.querySelector('.item-up');
                                 const downBtn = item.querySelector('.item-down');
@@ -880,10 +930,10 @@ function generateTemplate() {
                             const originalStyleControlsDisplay = styleControls.style.display;
                             styleControls.style.display = 'none';
                             
-                            // Hide all item controls
-                            const itemControls = document.querySelectorAll('.item-controls');
-                            itemControls.forEach(control => {
-                                control.style.display = 'none';
+                            // Hide all item controls and deactivate all items
+                            const items = document.querySelectorAll('.data-field, .assignee-item');
+                            items.forEach(item => {
+                                item.classList.remove('active');
                             });
                             
                             // Get the template content
@@ -936,12 +986,22 @@ function isAtLeastOneAssigneeSelected() {
     return Array.from(assigneeSelects).some(select => select.value.trim() !== '');
 }
 
-// Function to format time
+// Function to format time to 12-hour format with AM/PM
 function formatTime(timeString) {
     if (!timeString) return '';
     
     const [hours, minutes] = timeString.split(':');
-    return `${hours}:${minutes}`;
+    const hour = parseInt(hours, 10);
+    
+    if (hour === 0) {
+        return `AM 12:${minutes}`;
+    } else if (hour < 12) {
+        return `AM ${hour}:${minutes}`;
+    } else if (hour === 12) {
+        return `PM 12:${minutes}`;
+    } else {
+        return `PM ${hour - 12}:${minutes}`;
+    }
 }
 
 // Function to show loading overlay with logo animation
