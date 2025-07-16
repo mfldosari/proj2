@@ -688,6 +688,16 @@ function generateTemplate() {
                         background-color: #1976D2;
                         box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
                     }
+
+                    .whatsapp-button {
+                        background-color: #25D366;
+                        color: white;
+                    }
+                    
+                    .whatsapp-button:hover {
+                        background-color: #128C7E;
+                        box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+                    }
                     
                     /* Button animations */
                     .button-controls {
@@ -763,6 +773,10 @@ function generateTemplate() {
                         <div id="downloadImgBtn" class="select-btn download-button" title="تحميل صورة">
                             <i class="fas fa-image"></i>
                             <span>تحميل صورة</span>
+                        </div>
+                        <div id="whatsappBtn" class="select-btn whatsapp-button" title="مشاركة عبر واتساب">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>مشاركة واتساب</span>
                         </div>
                     </div>
                     
