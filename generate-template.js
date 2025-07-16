@@ -104,6 +104,7 @@ function generateTemplate() {
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;600;700&family=Lateef&family=Noto+Kufi+Arabic:wght@400;700&family=Reem+Kufi:wght@400;700&family=Scheherazade+New:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+                <link rel="stylesheet" href="button-styles.css">
                 <style>
                     html {
                         font-size: 16px;
@@ -467,56 +468,102 @@ function generateTemplate() {
                         transition: opacity 0.3s;
                     }
                     
-                    .control-button {
+                    .stylish-button {
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        gap: 8px;
-                        padding: 8px 16px;
-                        border-radius: 5px;
-                        background-color: #f0f0f0;
-                        color: #333;
+                        gap: 10px;
+                        padding: 12px 24px;
+                        border-radius: 50px;
+                        background: linear-gradient(135deg, #009CDE 0%, #007bb5 100%);
+                        color: white;
                         cursor: pointer;
-                        transition: all 0.2s ease;
-                        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-                        font-size: 14px;
-                        margin: 0 5px;
-                    }
-                    
-                    .control-button:hover {
-                        background-color: #e0e0e0;
-                        transform: translateY(-2px);
-                    }
-                    
-                    .control-button i {
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 15px rgba(0, 156, 222, 0.3);
                         font-size: 16px;
+                        font-weight: 500;
+                        position: relative;
+                        overflow: hidden;
+                        min-width: 150px;
+                        animation: buttonPulse 2s infinite;
                     }
                     
-                    .back-button {
-                        background-color: #f44336;
-                        color: white;
+                    @keyframes buttonPulse {
+                        0% {
+                            box-shadow: 0 4px 15px rgba(0, 156, 222, 0.3);
+                        }
+                        50% {
+                            box-shadow: 0 4px 25px rgba(0, 156, 222, 0.6);
+                        }
+                        100% {
+                            box-shadow: 0 4px 15px rgba(0, 156, 222, 0.3);
+                        }
                     }
                     
-                    .back-button:hover {
-                        background-color: #d32f2f;
+                    .stylish-button i {
+                        font-size: 18px;
+                        transition: transform 0.3s ease;
                     }
                     
-                    .download-button {
-                        background-color: #673AB7;
-                        color: white;
+                    .stylish-button:hover {
+                        transform: translateY(-3px);
+                        box-shadow: 0 8px 20px rgba(0, 156, 222, 0.4);
+                        animation: none;
                     }
                     
-                    .download-button:hover {
-                        background-color: #5e35b1;
+                    .stylish-button:hover i {
+                        transform: scale(1.2) rotate(5deg);
+                        animation: iconWiggle 0.5s ease;
                     }
                     
-                    .font-button {
-                        background-color: #2196F3;
-                        color: white;
+                    @keyframes iconWiggle {
+                        0% { transform: scale(1) rotate(0); }
+                        25% { transform: scale(1.2) rotate(5deg); }
+                        50% { transform: scale(1.1) rotate(-5deg); }
+                        75% { transform: scale(1.2) rotate(3deg); }
+                        100% { transform: scale(1.2) rotate(5deg); }
                     }
                     
-                    .font-button:hover {
-                        background-color: #1976D2;
+                    .stylish-button:active {
+                        transform: translateY(0);
+                        box-shadow: 0 2px 10px rgba(0, 156, 222, 0.3);
+                    }
+                    
+                    .stylish-button::after {
+                        content: '';
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        width: 0;
+                        height: 0;
+                        background: rgba(255, 255, 255, 0.2);
+                        border-radius: 50%;
+                        transform: translate(-50%, -50%);
+                        transition: width 0.5s, height 0.5s;
+                    }
+                    
+                    .stylish-button:hover::after {
+                        width: 200%;
+                        height: 200%;
+                        animation: rippleEffect 0.8s ease-out;
+                    }
+                    
+                    @keyframes rippleEffect {
+                        0% {
+                            width: 0;
+                            height: 0;
+                            opacity: 0.5;
+                        }
+                        100% {
+                            width: 200%;
+                            height: 200%;
+                            opacity: 0;
+                        }
+                    }
+                    
+                    /* Custom cursor styling */
+                    .stylish-button {
+                        cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23009CDE'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"), auto;
                     }
                     
                     .back-btn {
@@ -565,6 +612,117 @@ function generateTemplate() {
                         }
                     }
                     
+                    /* Button styles based on index.html */
+                    .select-btn {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 10px;
+                        padding: 0.9rem 1.5rem;
+                        background-color: #1e88e5;
+                        color: white;
+                        border: none;
+                        border-radius: 50px;
+                        cursor: pointer !important;
+                        font-weight: bold;
+                        font-size: 1rem;
+                        transition: all 0.3s ease;
+                        position: relative;
+                        overflow: hidden;
+                        min-width: 150px;
+                    }
+                    
+                    .select-btn::before {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(255, 255, 255, 0.2);
+                        transform: translateX(-100%);
+                        transition: transform 0.3s ease;
+                    }
+                    
+                    .select-btn:hover {
+                        background-color: #1565c0;
+                        transform: translateY(-3px);
+                        box-shadow: 0 5px 15px rgba(30, 136, 229, 0.4);
+                    }
+                    
+                    .select-btn:hover::before {
+                        transform: translateX(100%);
+                    }
+                    
+                    .select-btn:active {
+                        transform: translateY(0);
+                    }
+                    
+                    /* Button variations */
+                    .home-button {
+                        background-color: #f44336;
+                        color: white;
+                    }
+                    
+                    .home-button:hover {
+                        background-color: #d32f2f;
+                        box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+                    }
+                    
+                    .font-button {
+                        background-color: #FF9800;
+                        color: white;
+                    }
+                    
+                    .font-button:hover {
+                        background-color: #F57C00;
+                        box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+                    }
+                    
+                    .download-button {
+                        background-color: #2196F3;
+                        color: white;
+                    }
+                    
+                    .download-button:hover {
+                        background-color: #1976D2;
+                        box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+                    }
+                    
+                    /* Button animations */
+                    .button-controls {
+                        animation: floatAnimation 3s ease-in-out infinite;
+                    }
+                    
+                    @keyframes floatAnimation {
+                        0% {
+                            transform: translateY(0);
+                        }
+                        50% {
+                            transform: translateY(-5px);
+                        }
+                        100% {
+                            transform: translateY(0);
+                        }
+                    }
+                    
+                    .select-btn i {
+                        font-size: 1.2rem;
+                        transition: transform 0.3s ease;
+                    }
+                    
+                    .select-btn:hover i {
+                        transform: scale(1.2);
+                        animation: iconPop 0.5s ease;
+                    }
+                    
+                    @keyframes iconPop {
+                        0% { transform: scale(1); }
+                        50% { transform: scale(1.3); }
+                        75% { transform: scale(0.9); }
+                        100% { transform: scale(1.2); }
+                    }
+                    
                     @media print {
                         .button-controls, .item-controls {
                             display: none !important;
@@ -592,17 +750,17 @@ function generateTemplate() {
                         </div>
                     </div>
                     
-                    <!-- Button controls at the top -->
-                    <div class="button-controls" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; padding: 10px;">
-                        <div id="backBtn" class="control-button back-button" title="العودة للصفحة الرئيسية">
+                    <!-- Button controls at the top - Styled to match index.html -->
+                    <div class="button-controls" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; padding: 15px;">
+                        <div id="backBtn" class="select-btn home-button" title="العودة للصفحة الرئيسية">
                             <i class="fas fa-home"></i>
                             <span>الصفحة الرئيسية</span>
                         </div>
-                        <div id="fontFamilyBtn" class="control-button font-button" title="تغيير نوع الخط">
+                        <div id="fontFamilyBtn" class="select-btn font-button" title="تغيير نوع الخط">
                             <i class="fas fa-font"></i>
                             <span>تغيير نوع الخط</span>
                         </div>
-                        <div id="downloadImgBtn" class="control-button download-button" title="تحميل صورة">
+                        <div id="downloadImgBtn" class="select-btn download-button" title="تحميل صورة">
                             <i class="fas fa-image"></i>
                             <span>تحميل صورة</span>
                         </div>

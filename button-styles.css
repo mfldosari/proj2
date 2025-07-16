@@ -1,0 +1,96 @@
+                    /* Button variations */
+                    .home-button {
+                        background: linear-gradient(135deg, #FF5722 0%, #E64A19 100%);
+                        box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3);
+                        animation: buttonPulseRed 2s infinite;
+                    }
+                    
+                    @keyframes buttonPulseRed {
+                        0% {
+                            box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3);
+                        }
+                        50% {
+                            box-shadow: 0 4px 25px rgba(255, 87, 34, 0.6);
+                        }
+                        100% {
+                            box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3);
+                        }
+                    }
+                    
+                    .home-button:hover {
+                        box-shadow: 0 8px 20px rgba(255, 87, 34, 0.4);
+                    }
+                    
+                    .font-button {
+                        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+                        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+                        animation: buttonPulseBlue 2s infinite;
+                    }
+                    
+                    @keyframes buttonPulseBlue {
+                        0% {
+                            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+                        }
+                        50% {
+                            box-shadow: 0 4px 25px rgba(33, 150, 243, 0.6);
+                        }
+                        100% {
+                            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+                        }
+                    }
+                    
+                    .font-button:hover {
+                        box-shadow: 0 8px 20px rgba(33, 150, 243, 0.4);
+                    }
+                    
+                    .download-button {
+                        background: linear-gradient(135deg, #673AB7 0%, #512DA8 100%);
+                        box-shadow: 0 4px 15px rgba(103, 58, 183, 0.3);
+                        animation: buttonPulsePurple 2s infinite;
+                    }
+                    
+                    @keyframes buttonPulsePurple {
+                        0% {
+                            box-shadow: 0 4px 15px rgba(103, 58, 183, 0.3);
+                        }
+                        50% {
+                            box-shadow: 0 4px 25px rgba(103, 58, 183, 0.6);
+                        }
+                        100% {
+                            box-shadow: 0 4px 15px rgba(103, 58, 183, 0.3);
+                        }
+                    }
+                    
+                    .download-button:hover {
+                        box-shadow: 0 8px 20px rgba(103, 58, 183, 0.4);
+                    }
+                    
+                    /* Floating animation for buttons */
+                    .button-controls {
+                        animation: floatAnimation 3s ease-in-out infinite;
+                    }
+                    
+                    @keyframes floatAnimation {
+                        0% {
+                            transform: translateY(0);
+                        }
+                        50% {
+                            transform: translateY(-5px);
+                        }
+                        100% {
+                            transform: translateY(0);
+                        }
+                    }
+                    
+                    /* Custom cursors for each button type */
+                    .home-button {
+                        cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23FF5722'%3E%3Cpath d='M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z'/%3E%3C/svg%3E"), auto;
+                    }
+                    
+                    .font-button {
+                        cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%232196F3'%3E%3Cpath d='M9.93 13.5h4.14L12 7.98zM20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-4.05 16.5l-1.14-3H9.17l-1.12 3H5.96l5.11-13h1.86l5.11 13h-2.09z'/%3E%3C/svg%3E"), auto;
+                    }
+                    
+                    .download-button {
+                        cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23673AB7'%3E%3Cpath d='M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z'/%3E%3C/svg%3E"), auto;
+                    }
