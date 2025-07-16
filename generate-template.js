@@ -102,7 +102,7 @@ function generateTemplate() {
                 <title>النموذج المولد</title>
                 <link rel="preconnect" href="https://fonts.googleapis.com">
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-                <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Lateef&family=Reem+Kufi:wght@400;700&family=Scheherazade+New:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+                <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;600;700&family=Lateef&family=Noto+Kufi+Arabic:wght@400;700&family=Reem+Kufi:wght@400;700&family=Scheherazade+New:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
                 <style>
                     html {
@@ -375,39 +375,75 @@ function generateTemplate() {
                     }
                     
                     .font-normal {
-                        font-size: 100%;
+                        font-size: 16px !important;
+                        -webkit-text-size-adjust: 100%;
+                        -moz-text-size-adjust: 100%;
+                        -ms-text-size-adjust: 100%;
+                        text-size-adjust: 100%;
                     }
                     
                     .font-large {
-                        font-size: 120%;
+                        font-size: 19px !important;
+                        -webkit-text-size-adjust: 100%;
+                        -moz-text-size-adjust: 100%;
+                        -ms-text-size-adjust: 100%;
+                        text-size-adjust: 100%;
                     }
                     
                     .font-larger {
-                        font-size: 140%;
+                        font-size: 22px !important;
+                        -webkit-text-size-adjust: 100%;
+                        -moz-text-size-adjust: 100%;
+                        -ms-text-size-adjust: 100%;
+                        text-size-adjust: 100%;
+                    }
+                    
+                    .font-x-large {
+                        font-size: 25px !important;
+                        -webkit-text-size-adjust: 100%;
+                        -moz-text-size-adjust: 100%;
+                        -ms-text-size-adjust: 100%;
+                        text-size-adjust: 100%;
+                    }
+                    
+                    .font-xx-large {
+                        font-size: 28px !important;
+                        -webkit-text-size-adjust: 100%;
+                        -moz-text-size-adjust: 100%;
+                        -ms-text-size-adjust: 100%;
+                        text-size-adjust: 100%;
                     }
                     
                     .font-family-cairo {
-                        font-family: 'Cairo', sans-serif;
+                        font-family: 'Cairo', sans-serif !important;
                     }
                     
                     .font-family-tajawal {
-                        font-family: 'Tajawal', sans-serif;
+                        font-family: 'Tajawal', sans-serif !important;
                     }
                     
                     .font-family-amiri {
-                        font-family: 'Amiri', serif;
+                        font-family: 'Amiri', serif !important;
                     }
                     
                     .font-family-scheherazade {
-                        font-family: 'Scheherazade New', serif;
+                        font-family: 'Scheherazade New', serif !important;
                     }
                     
                     .font-family-lateef {
-                        font-family: 'Lateef', cursive;
+                        font-family: 'Lateef', cursive !important;
                     }
                     
                     .font-family-reem-kufi {
-                        font-family: 'Reem Kufi', sans-serif;
+                        font-family: 'Reem Kufi', sans-serif !important;
+                    }
+                    
+                    .font-family-aref-ruqaa {
+                        font-family: 'Aref Ruqaa', serif !important;
+                    }
+                    
+                    .font-family-noto-kufi {
+                        font-family: 'Noto Kufi Arabic', sans-serif !important;
                     }
                     
                     .tooltip {
@@ -415,51 +451,80 @@ function generateTemplate() {
                         top: 50%;
                         left: 50%;
                         transform: translate(-50%, -50%);
-                        background-color: rgba(0, 0, 0, 0.8);
+                        background-color: rgba(0, 0, 0, 0.9);
                         color: white;
-                        padding: 10px 20px;
-                        border-radius: 5px;
-                        font-size: 16px;
+                        padding: 12px 24px;
+                        border-radius: 8px;
+                        font-size: 18px;
+                        font-weight: bold;
                         z-index: 1000;
                         opacity: 0;
+                        transition: opacity 0.3s ease;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+                        text-align: center;
+                        min-width: 200px;
+                    }
                         transition: opacity 0.3s;
                     }
                     
-                    .style-controls {
+                    .icon-controls {
                         display: flex;
                         justify-content: center;
-                        gap: 10px;
+                        gap: 20px;
                         margin-bottom: 15px;
                         padding: 10px;
-                        background-color: #f9f9f9;
-                        border-radius: 5px;
-                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                     }
                     
-                    .style-btn {
+                    .control-icon {
+                        font-size: 24px;
+                        color: #333;
+                        cursor: pointer;
+                        width: 40px;
+                        height: 40px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 50%;
                         background-color: #f0f0f0;
-                        border: 1px solid #ddd;
+                        transition: all 0.2s ease;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                    }
+                    
+                    .control-icon:hover {
+                        background-color: #e0e0e0;
+                        transform: scale(1.1);
+                    }
+                    
+                    .back-icon {
+                        background-color: #f44336;
+                        color: white;
+                    }
+                    
+                    .back-icon:hover {
+                        background-color: #d32f2f;
+                    }
+                    
+                    .download-icon {
+                        background-color: #673AB7;
+                        color: white;
+                    }
+                    
+                    .back-btn {
+                        background-color: #f44336;
+                        color: white;
+                        border: none;
                         padding: 8px 15px;
                         border-radius: 5px;
                         cursor: pointer;
-                        display: flex;
+                        font-size: 16px;
+                        margin-right: 10px;
+                        display: inline-flex;
                         align-items: center;
                         gap: 5px;
-                        transition: all 0.2s ease;
                     }
                     
-                    .style-btn:hover {
-                        background-color: #e0e0e0;
-                    }
-                    
-                    .img-btn {
-                        background-color: #673AB7;
-                        color: white;
-                        border: none;
-                    }
-                    
-                    .img-btn:hover {
-                        background-color: #5e35b1;
+                    .back-btn:hover {
+                        background-color: #d32f2f;
                     }
                     
                     .reset-btn {
@@ -491,7 +556,7 @@ function generateTemplate() {
                     }
                     
                     @media print {
-                        .style-controls, .item-controls {
+                        .icon-controls, .item-controls {
                             display: none !important;
                         }
                         
@@ -517,17 +582,17 @@ function generateTemplate() {
                         </div>
                     </div>
                     
-                    <!-- Style controls at the top -->
-                    <div class="style-controls">
-                        <button id="fontSizeBtn" class="style-btn">
-                            <i class="fas fa-text-height"></i> تغيير حجم الخط
-                        </button>
-                        <button id="fontFamilyBtn" class="style-btn">
-                            <i class="fas fa-font"></i> تغيير نوع الخط
-                        </button>
-                        <button id="downloadImgBtn" class="action-btn img-btn">
-                            <i class="fas fa-image"></i> تحميل صورة
-                        </button>
+                    <!-- Icon controls at the top -->
+                    <div class="icon-controls">
+                        <div id="backBtn" class="control-icon back-icon" title="العودة للنموذج">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div id="fontFamilyBtn" class="control-icon" title="تغيير نوع الخط">
+                            <i class="fas fa-font"></i>
+                        </div>
+                        <div id="downloadImgBtn" class="control-icon download-icon" title="تحميل صورة">
+                            <i class="fas fa-image"></i>
+                        </div>
                     </div>
                     
                     <div class="template-content-wrapper">
@@ -536,7 +601,7 @@ function generateTemplate() {
                                 <img src="tamplet1.jpg" alt="نموذج الإنتاج الفني" class="template-image">
                             
                             <div class="data-overlay">
-                                <div class="data-field font-family-cairo font-normal" style="top: 20.5%; right: 30%;">
+                                <div class="data-field font-family-cairo font-x-large" style="top: 20.5%; right: 30%;">
                                     ${formValues.subject || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -545,7 +610,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 31%; font-weight: bold;">
+                                <div class="data-field font-family-cairo font-x-large" style="top: 28%; right: 31%; font-weight: bold;">
                                     ${formValues.day || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -554,7 +619,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 28%; right: 70%;">
+                                <div class="data-field font-family-cairo font-x-large" style="top: 28%; right: 70%;">
                                     ${document.getElementById('hijriDateText').textContent.replace('التاريخ الهجري: ', '') || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -563,7 +628,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 35%; right: 31%;">
+                                <div class="data-field font-family-cairo font-x-large" style="top: 35%; right: 31%;">
                                     ${formValues.location || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -572,7 +637,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-cairo font-normal" style="top: 42%; right: 70%;">
+                                <div class="data-field font-family-cairo font-x-large" style="top: 42%; right: 70%;">
                                     ${formValues.hour || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -597,7 +662,7 @@ function generateTemplate() {
                                 ${formValues.photo ? '<div class="requirement-icon" style="top: 55.5%; right: 15%;">✓</div>' : ''}
                                 
                                 <!-- Assignees with individual positioning and controls -->
-                                ${formValues.assignee1 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 13.5%; min-width: 150px;">
+                                ${formValues.assignee1 ? `<div class="assignee-item font-family-cairo font-xx-large" style="position: absolute; top: 71.5%; right: 13.5%; min-width: 150px;">
                                     ${formValues.assignee1}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -606,7 +671,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee2 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 71.5%; right: 51%; min-width: 150px;">
+                                ${formValues.assignee2 ? `<div class="assignee-item font-family-cairo font-xx-large" style="position: absolute; top: 71.5%; right: 51%; min-width: 150px;">
                                     ${formValues.assignee2}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -615,7 +680,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee3 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 13.5%; min-width: 150px;">
+                                ${formValues.assignee3 ? `<div class="assignee-item font-family-cairo font-xx-large" style="position: absolute; top: 76.5%; right: 13.5%; min-width: 150px;">
                                     ${formValues.assignee3}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -624,7 +689,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee4 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 76.5%; right: 51%; min-width: 150px;">
+                                ${formValues.assignee4 ? `<div class="assignee-item font-family-cairo font-xx-large" style="position: absolute; top: 76.5%; right: 51%; min-width: 150px;">
                                     ${formValues.assignee4}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -633,7 +698,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee5 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 13.5%; min-width: 150px;">
+                                ${formValues.assignee5 ? `<div class="assignee-item font-family-cairo font-xx-large" style="position: absolute; top: 81.5%; right: 13.5%; min-width: 150px;">
                                     ${formValues.assignee5}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -642,7 +707,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee6 ? `<div class="assignee-item font-family-cairo font-normal" style="position: absolute; top: 81.5%; right: 51%; min-width: 150px;">
+                                ${formValues.assignee6 ? `<div class="assignee-item font-family-cairo font-xx-large" style="position: absolute; top: 81.5%; right: 51%; min-width: 150px;">
                                     ${formValues.assignee6}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -670,55 +735,10 @@ function generateTemplate() {
                         
                         // Add event listeners for buttons
                         document.getElementById('downloadImgBtn').addEventListener('click', downloadAsImage);
-                        document.getElementById('fontSizeBtn').addEventListener('click', changeFontSize);
                         document.getElementById('fontFamilyBtn').addEventListener('click', changeFontFamily);
                         
                         // Setup item directional controls
                         setupItemControls();
-                        
-                        // Function to change font size for all text elements
-                        function changeFontSize() {
-                            // Get all data fields and assignee items
-                            const textElements = document.querySelectorAll('.data-field, .assignee-item');
-                            
-                            // Current font size classes
-                            const fontSizeClasses = ['font-normal', 'font-large', 'font-larger'];
-                            
-                            // Find current font size class
-                            let currentClassIndex = 0;
-                            if (textElements.length > 0) {
-                                const firstElement = textElements[0];
-                                for (let i = 0; i < fontSizeClasses.length; i++) {
-                                    if (firstElement.classList.contains(fontSizeClasses[i])) {
-                                        currentClassIndex = i;
-                                        break;
-                                    }
-                                }
-                            }
-                            
-                            // Calculate next class index
-                            const nextClassIndex = (currentClassIndex + 1) % fontSizeClasses.length;
-                            
-                            // Update all elements
-                            textElements.forEach(element => {
-                                // Remove all font size classes
-                                fontSizeClasses.forEach(cls => {
-                                    element.classList.remove(cls);
-                                });
-                                
-                                // Add the next font size class
-                                element.classList.add(fontSizeClasses[nextClassIndex]);
-                            });
-                            
-                            // Show tooltip with the current font size
-                            const fontSizeNames = {
-                                'font-normal': 'عادي',
-                                'font-large': 'كبير',
-                                'font-larger': 'أكبر'
-                            };
-                            
-                            showTooltip(fontSizeNames[fontSizeClasses[nextClassIndex]]);
-                        }
                         
                         // Function to change font family for all text elements
                         function changeFontFamily() {
@@ -732,7 +752,9 @@ function generateTemplate() {
                                 'font-family-amiri',
                                 'font-family-scheherazade',
                                 'font-family-lateef',
-                                'font-family-reem-kufi'
+                                'font-family-reem-kufi',
+                                'font-family-aref-ruqaa',
+                                'font-family-noto-kufi'
                             ];
                             
                             // Find current font family class
@@ -768,10 +790,12 @@ function generateTemplate() {
                                 'font-family-amiri': 'أميري',
                                 'font-family-scheherazade': 'شهرزاد',
                                 'font-family-lateef': 'لطيف',
-                                'font-family-reem-kufi': 'ريم كوفي'
+                                'font-family-reem-kufi': 'ريم كوفي',
+                                'font-family-aref-ruqaa': 'عارف رقعة',
+                                'font-family-noto-kufi': 'نوتو كوفي'
                             };
                             
-                            showTooltip(fontFamilyNames[fontFamilyClasses[nextClassIndex]]);
+                            showTooltip('نوع الخط: ' + fontFamilyNames[fontFamilyClasses[nextClassIndex]]);
                         }
                         
                         // Function to setup item controls
@@ -909,10 +933,10 @@ function generateTemplate() {
                             tooltip.textContent = text;
                             tooltip.style.opacity = '1';
                             
-                            // Hide tooltip after 1.5 seconds
+                            // Hide tooltip after 2 seconds
                             setTimeout(() => {
                                 tooltip.style.opacity = '0';
-                            }, 1500);
+                            }, 2000);
                         }
                         
                         // Function to download as PDF
@@ -921,7 +945,7 @@ function generateTemplate() {
                             
                             // Hide buttons before capturing
                             const actions = document.querySelector('.template-actions');
-                            const styleControls = document.querySelector('.style-controls');
+                            const styleControls = document.querySelector('.icon-controls');
                             const originalActionsDisplay = actions.style.display;
                             const originalStyleControlsDisplay = styleControls.style.display;
                             actions.style.display = 'none';
@@ -961,7 +985,7 @@ function generateTemplate() {
                         // Function to download as image
                         function downloadAsImage() {
                             // Hide buttons before capturing
-                            const styleControls = document.querySelector('.style-controls');
+                            const styleControls = document.querySelector('.icon-controls');
                             const originalStyleControlsDisplay = styleControls.style.display;
                             styleControls.style.display = 'none';
                             
@@ -991,6 +1015,11 @@ function generateTemplate() {
                                 styleControls.style.display = originalStyleControlsDisplay;
                             });
                         }
+                        
+                        // Handle back button click
+                        document.getElementById('backBtn').addEventListener('click', function() {
+                            window.history.back();
+                        });
                     });
                     // Function to ensure consistent template sizing on all devices
                     function ensureConsistentTemplateSize() {

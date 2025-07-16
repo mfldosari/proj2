@@ -805,6 +805,22 @@ input[type="text"]:disabled {
     text-size-adjust: 100%;
 }
 
+.font-x-large {
+    font-size: 25px !important; /* 160% of base size */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+.font-xx-large {
+    font-size: 28px !important; /* 180% of base size */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
 .font-family-cairo {
     font-family: 'Cairo', sans-serif !important;
 }
@@ -822,11 +838,19 @@ input[type="text"]:disabled {
 }
 
 .font-family-lateef {
-    font-family: 'Lateef', cursive;
+    font-family: 'Lateef', cursive !important;
 }
 
 .font-family-reem-kufi {
-    font-family: 'Reem Kufi', sans-serif;
+    font-family: 'Reem Kufi', sans-serif !important;
+}
+
+.font-family-aref-ruqaa {
+    font-family: 'Aref Ruqaa', serif !important;
+}
+
+.font-family-noto-kufi {
+    font-family: 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* Style tooltip */
