@@ -791,7 +791,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-noto-kufi font-x-large" style="top: 27.5%; right: 32.9%;">
+                                <div class="data-field font-family-noto-kufi font-large" style="top: 27.5%; right: 32.9%;">
                                     ${formValues.day || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -800,7 +800,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-noto-kufi font-x-large" style="top: 27.5%; right: 67.2%;">
+                                <div class="data-field font-family-noto-kufi font-large" style="top: 28%; right: 69%;">
                                     ${document.getElementById('hijriDateText').textContent.replace('التاريخ الهجري: ', '') || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -818,7 +818,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-noto-kufi font-x-large" style="top: 41%; right: 73.7%;">
+                                <div class="data-field font-family-noto-kufi font-large" style="top: 41.5%; right: 74%;">
                                     ${formValues.hour || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -827,7 +827,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>
-                                <div class="data-field font-family-noto-kufi font-normal" style="top: 42%; right: 30%;">
+                                <div class="data-field font-family-noto-kufi font-large" style="top: 41.7%; right: 30.5%;">
                                     ${formValues.time || ''}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -843,7 +843,7 @@ function generateTemplate() {
                                 ${formValues.photo ? '<div class="requirement-icon" style="top: 56%; right: 15.5%;">✓</div>' : ''}
                                 
                                 <!-- Assignees with individual positioning and controls -->
-                                ${formValues.assignee1 ? `<div class="assignee-item font-family-noto-kufi font-xx-large" style="position: absolute; top: 70.5%; right: 14.5%; min-width: 150px;">
+                                ${formValues.assignee1 ? `<div class="assignee-item font-family-noto-kufi font-large" style="position: absolute; top: 71.5%; right: 14.5%; min-width: 150px;">
                                     ${formValues.assignee1}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -852,7 +852,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee2 ? `<div class="assignee-item font-family-noto-kufi font-xx-large" style="position: absolute; top: 70.5%; right: 51%; min-width: 150px;">
+                                ${formValues.assignee2 ? `<div class="assignee-item font-family-noto-kufi font-large" style="position: absolute; top: 71.5%; right: 51%; min-width: 150px;">
                                     ${formValues.assignee2}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -861,7 +861,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee3 ? `<div class="assignee-item font-family-noto-kufi font-xx-large" style="position: absolute; top: 75.4%; right: 14.5%; min-width: 150px;">
+                                ${formValues.assignee3 ? `<div class="assignee-item font-family-noto-kufi font-large" style="position: absolute; top: 76.4%; right: 14.5%; min-width: 150px;">
                                     ${formValues.assignee3}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -870,7 +870,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee4 ? `<div class="assignee-item font-family-noto-kufi font-xx-large" style="position: absolute; top: 75.4%; right: 51%; min-width: 150px;">
+                                ${formValues.assignee4 ? `<div class="assignee-item font-family-noto-kufi font-large" style="position: absolute; top: 76.4%; right: 51%; min-width: 150px;">
                                     ${formValues.assignee4}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -879,7 +879,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee5 ? `<div class="assignee-item font-family-noto-kufi font-xx-large" style="position: absolute; top: 80%; right: 14.5%; min-width: 150px;">
+                                ${formValues.assignee5 ? `<div class="assignee-item font-family-noto-kufi font-large" style="position: absolute; top: 81%; right: 14.5%; min-width: 150px;">
                                     ${formValues.assignee5}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
@@ -888,7 +888,7 @@ function generateTemplate() {
                                         <button class="item-btn item-left"><i class="fas fa-chevron-left"></i></button>
                                     </div>
                                 </div>` : ''}
-                                ${formValues.assignee6 ? `<div class="assignee-item font-family-noto-kufi font-xx-large" style="position: absolute; top: 80%; right: 51%; min-width: 150px;">
+                                ${formValues.assignee6 ? `<div class="assignee-item font-family-noto-kufi font-large" style="position: absolute; top: 81%; right: 51%; min-width: 150px;">
                                     ${formValues.assignee6}
                                     <div class="item-controls">
                                         <button class="item-btn item-up"><i class="fas fa-chevron-up"></i></button>
